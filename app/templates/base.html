@@ -41,7 +41,7 @@
     <!-- Facebook Open Graph data -->
     <meta property="og:title" content="{{ self.title() }}">
     <meta property="og:type" content="{%- block metaType -%}website{%- endblock -%}">
-    <meta property="og:url" content="https://adicu.com">
+    <meta property="og:url" content="https://adicu.com{{ request.path }}">
     <meta property="og:image" content="{{ self.metaImageUrl() }}">
     <meta property="og:description" content="{{ self.metaDescription() }}">
     {%- endblock meta-%}
