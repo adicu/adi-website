@@ -678,6 +678,7 @@ class EventsHelper(object):
             return False
         return True
 
+    @classmethod
     def _make_event(klass, e_data, d_data):
         """Create a new :class:`Event` object and save it to Mongoengine.
 
