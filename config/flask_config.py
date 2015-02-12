@@ -83,4 +83,4 @@ ALLOWED_UPLOAD_EXTENSIONS = set(['.txt',
     '.gif'
 ])
 
-DEVFEST_BANNER = True
+DEVFEST_BANNER = False
