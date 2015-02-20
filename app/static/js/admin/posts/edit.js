@@ -34,6 +34,15 @@ $(function() {
     }
 
 
+    function addedTag(tag, id){
+        return '<li class="tag" data-tag="' + tag + '">' + tag + ' <a href="#remove-tag" data-tag="' + tag + '">x</a></li>' 
+    }
+
+    function hiddenTag(tag, id){
+        return '<li><input id="' + id + '" name="' + id + '" type="text" value="' + tag + '"></li>'
+    }
+
+
     /* =======================================================================
      * Marked / Epiceditor initialization
      * =====================================================================*/
@@ -155,7 +164,41 @@ $(function() {
 
     });
 
+    /* Add a tag */
+    $('#tag-field').keypress(function(e){
+        var key = e.which;
+        if (key == 13)
+        {
+           e.preventDefault();
+            var i = 0;
+            while (document.getElementById("tags-"+i)) { i++; }
+            var id = "tags-"+i;
+
+           val = $('#tag-field').val()
+            // alert($('#tag-field').val())
+            $('#tags').append(hiddenTag(val, id));
+        // Append the image to the list below the editor
+            $('.tag-list').append(addedTag(val, id));
+            $('#tag-field').val("");
+        }
+
+    });
+
+    /* Remove a tag */
+    $(document).on('click', 'a[href="#remove-tag"]', function(e) {
+        e.preventDefault();
+        var tag = $(this).data('tag');
+       
+        // Remove the hidden input, so it will be removed on the server
+        $('input[value="' + tag + '"]').remove();
+
+        // Remove the tag from the list above the editor
+        $('.tag-list .tag[data-tag="' + tag + '"]').remove();
+
+    });
+
 });
+
 
 
 

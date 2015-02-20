@@ -18,3 +18,18 @@
 .confirm-wrapper {
     display: inline-block;
 }
+
+.tag-list li{
+	border: 2px solid #EBFAFF;
+	background-color: #EBFAFF;
+	font-size: 10px;
+	padding: 5px;
+	margin: 5px;
+	border-radius: 10px;
+
+}
+
+.tag-list li a{
+	font-size: 10px;
+	color: red;
+}
