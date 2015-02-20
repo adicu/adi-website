@@ -23,7 +23,7 @@ nav {
         color: $white;
         text-decoration: none;
     }
-}
+}//when navbar is open, nav item inside it (ham should be hidden, open shown)
 
 .nav-item {
     overflow: hidden;
@@ -88,11 +88,31 @@ $profile-picture-size: 2.5rem;
 }
 
 $w-5: 5.5rem;
+$ham: 5.5rem;
+$close: 5.5rem;
 $w-6: 6rem;
 $w-6-5: 6.5rem;
 $w-7: 7rem;
 $w-8: 8rem;
 $w-9: 9rem;
+.ham {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    display: none;
+}
+.close {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    display: none;
+}
+.open, nav {
+    @include transition(0.2s);
+    left: 0 !important;
+}
 .w-5 {
     &:hover { width: $nav-item-width + $w-5; }
     .nav-label { width: $w-5; } }
@@ -120,6 +140,15 @@ $w-9: 9rem;
     nav {
         @include transition(0.2s);
         left: (-1 * $nav-wide) !important;
+
+        &.open {
+            .ham {
+                display: none;
+            }
+            .close {
+                display: block;
+            }
+        }
     }
 
     .main {
@@ -133,6 +162,10 @@ $w-9: 9rem;
     .content {
         width: 100%;
         margin: 0 auto;
+    }
+
+    .ham {
+        display: block;
     }
 }
 
