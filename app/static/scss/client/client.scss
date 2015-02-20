@@ -70,6 +70,18 @@ $content-padding: 0.625rem;
     }
 }
 
+.projects {
+    h3 {
+        margin-bottom: 2rem;
+    }
+    .image {
+        padding-bottom: 0 !important;
+    }
+    .text {
+        padding-left: 2rem !important;
+    }
+}
+
 .faqs {
 
     .pair:after {
@@ -111,28 +123,24 @@ $hero-height: 38rem;
     padding-top: $navbar-height;
     position: relative;
     height: $hero-height;
+    overflow: hidden;
+
     .scrim {
         @include scrim;
         height: 100%;
         width: 100%;
         position: absolute;
         top: 0;
+        z-index: 3;
     }
 
     i {
+        z-index: 2;
         display: block;
-        margin-top: -$navbar-height;
         height: ($hero-height + $navbar-height);
         width: 100%;
         background-position: center center;
         background-size: cover;
-
-        &.top {
-            background-position: top center;
-        }
-        &.top-offset {
-            background-position: top -4rem center;
-        }
     }
 
     .solid {
@@ -152,26 +160,32 @@ $hero-height: 38rem;
 $section-top: 3.75rem;
 $section-bottom: 1.25rem;
 .main {
-    margin-top: -15rem;
+    margin-top: -18rem;
     height: auto !important;
     height: 100%;
-    padding-bottom: 4rem;
 
     &.no-hero {
         padding-top: ($navbar-height + 3rem);
         margin-top: 0;
     }
-
+    .tagline{
+        background-color: $transparent;
+    }
     .tagline h1 {
+
         color: $white;
         margin: 1.5rem auto;
         width: 95%;
+        z-index: 5;
+        position: relative;
         max-width: $content-width;
         text-align: center;
     }
 
     section {
+        background-color: $white;
         position: relative;
+        z-index: 5;
 
         &:after {
             @include clearfix;
@@ -188,6 +202,10 @@ $section-bottom: 1.25rem;
         .section-header {
             margin-bottom: 2.1875rem;
         }
+
+        &:last-child{
+            padding-bottom: 4rem;
+        }
     }
     .bar {
         width: 3.75rem;
@@ -195,7 +213,7 @@ $section-bottom: 1.25rem;
         display: block;
         background-color: $yellow;
 
-        &.blue { background-color: $blue; }
+        &.blue { background-color: $blue;  }
         &.green { background-color: $green; }
         &.yellow { background-color: $yellow; }
         &.gray { background-color: $gray; }
@@ -210,6 +228,10 @@ $section-bottom: 1.25rem;
         max-width: 95%;
         margin: 0 auto;
         background-color: $white;
+        &+section{
+
+            background-color: $white;
+        }
     }
     .card {
         border-top-left-radius: $radius;
@@ -308,20 +330,20 @@ $section-bottom: 1.25rem;
     }
 }
 .yellow {
-    background-color: $yellow;
-    color: $gray;
+    background-color: $yellow !important;
+    color: $gray !important;
 }
 .blue {
-    background-color: $blue;
-    color: $gray;
+    background-color: $blue !important;
+    color: $gray !important;
 }
 .green {
-    background-color: $green;
-    color: $gray;
+    background-color: $green !important;
+    color: $gray !important;
 }
 .white {
-    background-color: $green;
-    color: $gray;
+    background-color: $green !important;
+    color: $gray !important;
 }
 .yellow, .blue, .green {
     p a {
@@ -355,6 +377,8 @@ $section-bottom: 1.25rem;
         i {
             height: ($hero-height + $navbar-height - 10rem);
         }
+
+
     }
 
     .main .subscribe {
@@ -378,5 +402,88 @@ $section-bottom: 1.25rem;
         li {
             width: 100%;
         }
+    }
+}
+
+$banner-height: 8rem;
+.devfest-banner {
+    height: $banner-height;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: $offgray;
+    @include transition(0.3s);
+
+    & + .ribbon {
+        top: $banner-height;
+        @include transition(0.3s);
+
+        & + .navbar {
+            top: ($banner-height + $ribbon-height);
+            @include transition(0.3s);
+
+            & + .hero {
+                padding-top: ($banner-height + $navbar-height);
+                @include transition(0.3s);
+                & + .no-hero {
+                    @include transition(0.3s);
+                    padding-top: ($banner-height + $navbar-height + 3rem);
+                }
+            }
+        }
+    }
+
+    &.up {
+        top: -$banner-height;
+
+        & + .ribbon {
+            top: 0;
+
+            & + .navbar {
+                top: $ribbon-height;
+
+                & + .hero {
+                    padding-top: ($navbar-height);
+                    & + .no-hero {
+                        padding-top: ($navbar-height + 3rem);
+                    }
+                }
+            }
+        }
+    }
+
+    .devfest-button {
+        border: 2px solid $white;
+        padding: 0.5rem 1rem;
+        @extend .h5;
+        float: right;
+        height: 2rem;
+        line-height: 2rem;
+        margin-top: ($banner-height/2 - 1.5rem);
+        color: $white;
+
+    }
+    img {
+        height: ($banner-height - 1rem);
+        padding: 0.5rem 0;
+        @include border-box;
+        display: inline-block;
+    }
+    .message {
+        text-align: center;
+        position: absolute;
+        top: 2rem;
+        bottom: 2rem;
+        left: 25%;
+        right: 25%;
+        color: $white;
+    }
+}
+
+
+@media screen and (max-width: $phone-max) {
+    .devfest-banner .message {
+        display: none;
     }
 }

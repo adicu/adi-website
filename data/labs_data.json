@@ -1,0 +1,94 @@
+{
+    "projects": [
+        {
+            "title": "Density",
+            "image": "img/density.png",
+            "url": "http://density.adicu.com",
+            "buttons": [
+                {
+                    "title": "Find Study Space",
+                    "url": "http://density.adicu.com"
+                }
+            ],
+            "description": "Using Wi-Fi data acquired thanks to the help of Engineering Student Council and CUIT, we are able to estimate how full certain areas are. What this means it that now you can check if Butler is full without having to actually go to Butler! Density updates every 15 minutes."
+        },
+        {
+            "title": "Courses",
+            "image": "img/courses.png",
+            "url": "http://courses.adicu.com",
+            "buttons": [
+                {
+                    "title": "Plan Your Schedule",
+                    "url": "http://courses.adicu.com"
+                }
+            ],
+            "description": "Courses by ADI is a course scheduler for Columbia students.  Orginally developed in 2011 by ADI's founders, Courses has been taken over by ADI Labs, who is maintaining it using a data pipeline provided by <a href=\"https://cuit.columbia.edu/\">CUIT</a>."
+        },
+        {
+            "title": "Eventum",
+            "image": "img/eventum.png",
+            "url": "https://adicu.com/blog/post/origins-of-eventum",
+            "buttons": [
+                {
+                    "title": "Learn More",
+                    "url": "https://adicu.com/blog/post/origins-of-eventum"
+                }
+            ],
+            "description": "Eventum is the content management system that powers <a href=\"https://adicu.com\">adicu.com</a>, driving the events, blog, and Google Calendar.  Eventum will allow student groups to better organize their events at Columbia, while reducing the organizational effort needed."
+        }
+    ],
+    "faqs": [
+        {
+            "question": "What will I get out of ADI Labs?",
+            "answer": "Experienced developers will have the opportunity to mentor less experienced developers as well as perform architectural work on new projects. Less experienced developers will learn industry standard best practices and how to work in a large project."
+        },
+        {
+            "question": "What is the time commitment for ADI Labs? Will there be homework?",
+            "answer": "You’ll be expected to be at most of the four hour weekly sessions, and the more time you put into the projects the more you will get out of it.  We expect that you will be a part of ADI Labs for the whole semester, and you're welcome to continue in subsequent semesters."
+        },
+        {
+            "question": "Am I qualified enough to be a part of ADI Labs? Is it appropriate for me?",
+            "answer": "We think it will be most useful if you have some programming background. You’ll have the opportunity to learn more about the operations that go into launching software as well as monitoring it.  We also welcome experienced programmers that want to do more industry-style programming."
+        },
+        {
+            "question": "Is 1004, 1006 or 1007 sufficient?",
+            "answer": "If you’ve done prior web/mobile development outside of class or have had an internship in software engineering, you’re definitely qualified. If you haven’t, we suggest that you attend some <a href=\"http://adicu.com/events\">ADI Workshops</a> and learn basic web programming first. If you've done that, feel free to apply!"
+        },
+        {
+            "question": "Will I get course credit for this?  Is this something I can put on my resume?",
+            "answer": "While you can’t get course credit for this, companies love seeing big outside projects on your resume, so go ahead and talk about us!"
+        },
+        {
+            "question": "Is ADI Labs the same as ADI Committee?",
+            "answer":"The ADI Committee organizes ADI events.  ADI Labs mentors and members may be a part of ADI Committee, but are not required to do so."
+        },
+        {
+            "question": "What are you looking for in the application?  Who will be admitted?",
+            "answer": "We’ll be bringing on people of all ability levels, not just the best programmers.  It’s most important that you’re willing to put in the time to participate."
+        },
+        {
+            "question": "What should I put down if I don't have any past projects? Are they mandatory?",
+            "answer": "Past projects are not mandatory, it’s just a way for us get a better idea of your experience level and what you might like to work on."
+        },
+        {
+            "question": "I don't know what GitHub is, or I don't have one.  Can I leave it blank?",
+            "answer": "Yes. We will teach you about Git and GitHub if you’re not familiar."
+        },
+        {
+            "question": "Is the admissions process rolling?",
+            "answer": "Yes, the application process is rolling. The dates serve as a guideline for when we’ll be done accepting applications."
+        },
+        {
+            "question": "Can I work on my own project?",
+            "answer": "Unfortunately not. The purpose of ADI Labs is to provide you with experience working on a project with others. This is easier to accomplish with projects that mentors are familar with."
+        },
+        {
+            "question": "Can I suggest a project?",
+            "answer": "Yes, we are always open to suggestions. We don't have the bandwidth to implement every idea we get, but we love getting new ideas!"
+        },
+        {
+            "question": "When does ADI Labs meet?",
+            "answer": "For Spring 2015, we are meeting during 1:30-5:30pm on Fridays."
+        }
+    ]
+}

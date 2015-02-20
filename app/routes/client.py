@@ -15,7 +15,7 @@ from mongoengine import Q
 client = Blueprint('client', __name__)
 
 _resources = None
-_faqs = None
+_labs_data = None
 _companies = None
 
 @client.route('/', methods=['GET'])
@@ -42,6 +42,17 @@ def index():
                            events=events,
                            blog_post=blog_post)
 
+@client.route('/events/devfest', methods=['GET'])
+@client.route('/devfest', methods=['GET'])
+def devfest():
+    """View the DevFest landing page.
+
+    **Route:** ``/devfest``, ``/events/devfest``
+
+    **Methods:** ``GET``
+    """
+    return redirect("http://devfe.st")
+
 @client.route('/contact', methods=['GET'])
 def contact():
     """View contact information.
@@ -51,6 +62,16 @@ def contact():
     **Methods:** ``GET``
     """
     return render_template('contact.html')
+
+@client.route('/feedback', methods=['GET'])
+def feedback():
+    """Submit feedback on past ADI events.
+
+    **Route:** ``/feedback``
+
+    **Methods:** ``GET``
+    """
+    return render_template('feedback.html')
 
 @client.route('/jobfair', methods=['GET'])
 def jobfair():
@@ -80,15 +101,15 @@ def labs():
     **Methods:** ``GET``
     """
     force = request.args.get('force') is not None
-    faqs = _get_faqs(force=force)
-    return render_template('labs.html', faqs=faqs)
+    labs_data = _get_labs_data(force=force)
+    return render_template('labs.html', data=labs_data)
 
-def _get_faqs(force=False):
-    global _faqs
-    if not _faqs or force:
-        with open(adi['FAQ_PATH']) as f:
-            _faqs = json.loads(f.read()).get('questions')
-    return _faqs
+def _get_labs_data(force=False):
+    global _labs_data
+    if not _labs_data or force:
+        with open(adi['LABS_DATA_PATH']) as f:
+            _labs_data = json.loads(f.read())
+    return _labs_data
 
 @client.route('/learn', methods=['GET'])
 def learn():
@@ -133,11 +154,10 @@ def events():
                                    datetime.min.time())
     next_sunday = datetime.combine(today + timedelta(days=7-today.isoweekday()),
                                    datetime.min.time())
-    recent_and_upcoming = Event.objects(published=True,
-                                        start_date__gt=last_sunday).order_by('start_date',
-                                                                             'start_time')
+    recent_and_upcoming = Event.objects(published=True).order_by('start_date',
+                                                                 'start_time')
 
-    recent_events = recent_and_upcoming.filter(end_date__lt=today)
+    recent_events = recent_and_upcoming.filter(end_date__lt=today)[:6]
 
     events_this_week = recent_and_upcoming.filter(end_date__gte=today,
                                                   start_date__lt=next_sunday)
@@ -172,7 +192,7 @@ def event_archive(index):
                                    datetime.min.time())
 
     past_events=Event.objects(published=True,
-                              start_date__lt=last_sunday).order_by('start_date')
+                              end_date__lt=today).order_by('start_date')
 
     if not past_events:
         return redirect(url_for('.events'))

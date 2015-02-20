@@ -136,7 +136,7 @@ class EventsHelper(object):
             updates = DataBuilder.form_data_from_series(event.parent_series)
             form_data.update(updates)
         form_data = klass._remove_none_fields(form_data)
-        return EditEventForm(request.form, **form_data)
+        return EditEventForm(event, request.form, **form_data)
 
     @classmethod
     def create_event(klass, form, creator):
@@ -646,7 +646,7 @@ class EventsHelper(object):
             raise ValueError('Cannont create recurrence from series data.')
 
         if s_data['frequency'] != 'weekly':
-            raise ValueError('Unknown frequency value "%s"' % s_data.frequency)
+            raise ValueError('Unknown frequency value "{}"'.format(s_data.frequency))
 
     @classmethod
     def _more_events(klass, series, date_data):
@@ -678,6 +678,7 @@ class EventsHelper(object):
             return False
         return True
 
+    @classmethod
     def _make_event(klass, e_data, d_data):
         """Create a new :class:`Event` object and save it to Mongoengine.
 

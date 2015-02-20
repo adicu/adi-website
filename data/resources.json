@@ -291,7 +291,7 @@
         },
         {
           "name": "An Introduction to Python Programming",
-          "url": "http://adicu.github.com/intro-webdev/python/",
+          "url": "http://learn.adicu.com/python/",
           "description": "Written and developed by ADI, this tutorial covers basics of programming in Python.",
           "adi": true
         }
@@ -314,8 +314,14 @@
         },
         {
           "name": "An Accelerated Introduction to Web Development",
-          "url": "http://adicu.github.com/intro-webdev",
+          "url": "http://learn.adicu.com/webdev",
           "description": "Written and developed by ADI, this 5-part tutorial covers basic Python, Flask, HTML, CSS, and API programming.",
+          "adi": true
+        },
+        {
+          "name": "Intermediate Flask",
+          "url": "https://github.com/danrschlosser/intermediate-flask",
+          "description": "Written as a natural extension of the ADI's Accelerated Introduction to Web Development, this tutorial covers advanced topics in Flask, including building large Flask apps, managing dependencies, using a database, and processing form data.",
           "adi": true
         }
       ]
@@ -559,6 +565,28 @@
       ]
     },
     {
+      "name": "Haskell",
+      "id": "haskell",
+      "description": "Haskell is an advanced purely-functional programming language. With strong support for integration with other languages, built-in concurrency and parallelism, debuggers, profilers, rich libraries and an active community, Haskell makes it easier to produce flexible, maintainable, high-quality software.",
+      "resources": [
+        {
+          "name": "Learn You a Haskell for Great Good",
+          "url": "http://learnyouahaskell.com",
+          "description": "A free and fun online resource for learning Haskell. 'The funkiest way to learn Haskell.'"
+        },
+        {
+          "name": "Real World Haskell",
+          "url": "http://book.realworldhaskell.org",
+          "description": "Another high-quality free online resource for learning Haskell, with a bit more serious tone."
+        },
+        {
+          "name": "Haskell Home Page",
+          "url": "https://www.haskell.org/haskellwiki/Haskell",
+          "description": "The main Haskell website, from where you can download the language, visit the very detailed wiki, and explore the many Haskell libraries freely available through Cabal."
+        }
+      ]
+    },
+    {
       "name": "Scala",
       "id": "scala",
       "description": "A powerful and flexible programming language, useful for tackling hard problems.",
@@ -599,6 +627,12 @@
           "name": "Intro to Android by ADI",
           "url": "https://github.com/parthibanloganathan/android-tutorial",
           "description": "If you want to learn Android, ADI's got your back. We have an introductory Android tutorial to help you make a fully functional Android app in a matter of hours.",
+          "adi": true
+        },
+        {
+          "name": "Intro to Android by ADI Slides",
+          "url": "http://slides.com/parthibanloganathan/intro-to-android-development",
+          "description": "In addition to the tutorial on GitHub, check out the slides from our Android workshop.",
           "adi": true
         },
         {
@@ -652,14 +686,21 @@
       "description": "Learn to build an iOS application by learning to code in Objective-C.",
       "resources": [
         {
+          "name": "Diving into iOS Programming Talk",
+          "url": "http://slides.com/mattpiccolella/diving-into-ios-development/",
+          "description": "An introductory talk given by ADI member Matt Piccolella. This explains the key concepts of iOS development and helps you build your first app!",
+          "adi": true
+        },
+        {
+          "name": "SimpleQuizGame",
+          "url": "https://github.com/mjp2220/SimpleQuizGame",
+          "description": "A simple, heavily-commented iOS application that shows the important parts that go into building an app.",
+          "adi": true
+        },
+        {
           "name": "Big Nerd Ranch iOS Programming Guide",
           "url": "http://www.bignerdranch.com/book/ios_programming_the_big_nerd_ranch_guide_rd_edition_",
           "description": "A great book that walks beginners through the basics of iOS.  Best after the Big Nerd Ranch Objective-C book."
-        },
-        {
-          "name": "NSHipster",
-          "url": "http://nshipster.com",
-          "description": "NSHipster is a blog that has great explanations for some of the quirks and \"overlooked bits\" of Objective-C and Cocoa."
         }
       ]
     }

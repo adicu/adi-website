@@ -151,10 +151,10 @@ def edit(event_id):
     try:
         event = Event.objects().get(id=event_id)
     except (DoesNotExist, ValidationError):
-        flash('Cannont find event with id "%s"' % event_id)
+        flash('Cannot find event with id "{}"'.format(event_id))
         return redirect(url_for('.index'))
 
-    form = EditEventForm(request.form) if request.method == 'POST' else \
+    form = EditEventForm(event, request.form) if request.method == 'POST' else \
         EventsHelper.create_form(event, request)
 
     if form.validate_on_submit():

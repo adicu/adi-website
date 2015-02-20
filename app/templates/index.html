@@ -45,6 +45,7 @@
         <h3>The Application Development Initiative seeks to nurture student creativity and technological aptitude by creating a community and resources for student developers of all talents and interests.</h3>
     </div>
 </section>
+{% if events | length  > 0 %}
 <section>
     <div class="content">
         <div class="section-header">
@@ -56,6 +57,8 @@
         {% endif %}
     </div>
 </section>
+{% endif %}
+{% if events | length > 1 %}
 <section>
     <div class="content">
         <div class="section-header">
@@ -71,6 +74,7 @@
         </div>
     </div>
 </section>
+{% endif %}
 <section class="full yellow callout">
     <div class="content">
         <div class="callout-left">
