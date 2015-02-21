@@ -27,10 +27,10 @@ def index():
                            previous_index=previous_index,
                            next_index=next_index)
 
-@blog.route('/blog/<tag>', methods=['GET'])
+@blog.route('/blog/tag/<tag>', methods=['GET'])
 def same_tag(tag):
     """View blog posts with the same tag
-    **Route:** ``/blog/<tag>``
+    **Route:** ``/blog/tag/<tag>``
 
     **Methods:** ``GET``
     """
