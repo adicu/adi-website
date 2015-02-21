@@ -175,11 +175,13 @@ $(function() {
             var id = "tags-"+i;
 
            val = $('#tag-field').val()
+           if (val){
             // alert($('#tag-field').val())
             $('#tags').append(hiddenTag(val, id));
         // Append the image to the list below the editor
             $('.tag-list').append(addedTag(val, id));
             $('#tag-field').val("");
+            }
         }
 
     });
