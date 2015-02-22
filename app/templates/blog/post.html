@@ -50,6 +50,10 @@
         <div class="text">
             {{ post.html_content | safe }}
         </div>
+        Tags:
+        {% for tag in post.tags %}
+            <a href="{{ url_for('blog.same_tag', tag=tag) }}">{{ tag }}</a>{% if loop.index != loop.length %}, {% endif %}
+        {% endfor %}
     </div>
 </section>
 <section>

@@ -54,7 +54,7 @@ def new():
                         images=[Image.objects().get(filename=fn) for fn in form.images.data],
                         markdown_content=form.body.data,
                         author=author,
-                        posted_by=g.user)
+                        posted_by=g.user, tags=form.tags.data)
         post.save()
 
         if form.published.data:
@@ -100,6 +100,7 @@ def edit(post_id):
             post.slug = form.slug.data
             post.markdown_content = form.body.data
             post.images = [Image.objects().get(filename=fn) for fn in form.images.data]
+            post.tags = form.tags.data
             if form.featured_image.data:
                 post.featured_image = Image.objects().get(filename=form.featured_image.data)
             else:
@@ -125,14 +126,14 @@ def edit(post_id):
                               body=post.markdown_content,
                               images=[image.filename for image in post.images],
                               author=str(post.author.id),
-                              featured_image=featured_image)
+                              featured_image=featured_image, tags=post.tags)
     form.author.choices = [
             (str(u.id), u.name + " (You)" if u == g.user else u.name)
             for u in User.objects()]
     form.author.default = str(g.user.id)
     images = [image for image in Image.objects() if image not in post.images]
     return render_template('admin/posts/edit.html', user=g.user, form=form,
-                           post=post, images=images, upload_form=upload_form)
+                           post=post, images=images, upload_form=upload_form, tags=post.tags)
 
 @posts.route('/posts/delete/<post_id>', methods=['POST'])
 def delete(post_id):

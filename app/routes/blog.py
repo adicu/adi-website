@@ -27,6 +27,21 @@ def index():
                            previous_index=previous_index,
                            next_index=next_index)
 
+@blog.route('/blog/tag/<tag>', methods=['GET'])
+def same_tag(tag):
+    """View blog posts with the same tag
+    **Route:** ``/blog/tag/<tag>``
+
+    **Methods:** ``GET``
+    """
+    blog_posts = list(BlogPost.objects(tags=tag).order_by('-date_published')[:10])
+    previous_index = None
+    next_index = 1
+    return render_template('blog/blog.html',
+                            posts=blog_posts,
+                            previous_index=previous_index,
+                            next_index=next_index)
+
 @blog.route('/blog/<int:index>', methods=['GET'])
 def blog_archive(index):
     """View older blog posts.

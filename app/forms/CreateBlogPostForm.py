@@ -52,3 +52,4 @@ class CreateBlogPostForm(Form):
                        [Required("add images!")])
     published = BooleanField('Published')
     featured_image = StringField('Featured Image', [image_with_same_name])
+    tags = FieldList(StringField('Tag'))
