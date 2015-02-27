@@ -35,11 +35,18 @@
 {% block body %}
 {% set active_page = active_page|default('Home') -%}
 <nav class="nav">
+    <div class="ham">
+        <div class="image">
+            <a href="#"><i class="fa fa-bars fa-2x"></i></a>
+        </div>
+        <div class="close">
+            <a href="#"><i class="fa fa-times fa-2x"></i></a>
+        </div>
+    </div>
+    </a>
     <ul>
         {% for href, label, icon, width in [
-            ('/admin/home',       'Home',      'home',        ''),
-            ('#',                 '',          'bars',        'ham'),
-            ('#',                 '',          'times',       'close'),
+            ('/admin/home',       'Home',      'home',        'home'),
             ('/admin/events',     'Events',    'calendar',    'w-6-5'),
             ('/admin/posts',      'Blog',      'quote-right', 'w-5'),
             ('/admin/users',      'Users',     'users',       'w-6'),

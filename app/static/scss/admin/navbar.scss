@@ -10,7 +10,7 @@ $nav-label-width: 8rem;
 $nav-wide: 12rem;
 
 nav {
-    z-index:1;
+    z-index:60;
     width: $nav-item-width;
     position: fixed;
     left: 0;
@@ -23,7 +23,30 @@ nav {
         color: $white;
         text-decoration: none;
     }
-}//when navbar is open, nav item inside it (ham should be hidden, open shown)
+}
+.ham {
+    position: absolute;
+    overflow: hidden;
+    width: $nav-item-width;
+    height: $nav-item-height;
+    left: $nav-wide;
+    top: 0;
+    z-index: 61;
+    display: none;
+    background-color: $darkgray;
+    .image {
+        vertical-align: middle;
+        text-align: center;
+        line-height: $nav-item-width;
+        display: none;
+    }
+    .close {
+        vertical-align: middle;
+        text-align: center;
+        line-height: $nav-item-width;
+        display: none;
+    }
+}
 
 .nav-item {
     overflow: hidden;
@@ -89,30 +112,28 @@ $profile-picture-size: 2.5rem;
 
 $w-5: 5.5rem;
 $ham: 5.5rem;
+$home: 5.5rem;
 $close: 5.5rem;
 $w-6: 6rem;
 $w-6-5: 6.5rem;
 $w-7: 7rem;
 $w-8: 8rem;
 $w-9: 9rem;
-.ham {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    display: none;
-}
-.close {
+/*.home {
     position: fixed;
     top: 0;
     left: 0;
     z-index: 2;
-    display: none;
-}
+    display: block;
+}*/
+
 .open, nav {
     @include transition(0.2s);
     left: 0 !important;
 }
+.home {
+    &:hover { width: $nav-item-width + $home; }
+    .nav-label { width: $home; } }
 .w-5 {
     &:hover { width: $nav-item-width + $w-5; }
     .nav-label { width: $w-5; } }
@@ -142,11 +163,28 @@ $w-9: 9rem;
         left: (-1 * $nav-wide) !important;
 
         &.open {
+            width: $nav-wide; 
             .ham {
-                display: none;
-            }
-            .close {
                 display: block;
+                background-color: $darkgray;
+                .image {
+                    display: none;
+                }
+                .close {
+                    display: block;
+                }
+            }
+            .nav-item {
+                -webkit-transition: none;
+                transition: none;
+                width: $nav-wide !important;
+
+                .nav-label {
+                    padding-left: 0;
+                }
+
+                &:not(.selected):hover { background-color: $gray; }
+                &.selected:hover { background-color: $fadedblue; }
             }
         }
     }
@@ -166,12 +204,22 @@ $w-9: 9rem;
 
     .ham {
         display: block;
+        .image {
+            display: block;
+        }
+        .close {
+            display: none;
+        }
     }
 }
 
 @media screen and (min-width: $xl-desktop-min) {
     nav { 
-        width: $nav-wide; 
+        width: $nav-wide;
+        /*.ham {
+            display: none;
+        }*/
+        /* TODO: some way to reset configs when screen turns large */
     } 
 
     .main > .inner {
@@ -182,7 +230,6 @@ $w-9: 9rem;
             margin: 0 auto;
         }
     }
-
     .me {
         min-width: $profile-picture-size;
         height: $profile-picture-size;

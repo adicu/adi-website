@@ -3,14 +3,23 @@ $(function() {
     /* =======================================================================
      * Buttons
      * ==================================================================== */
-     $('.ham').click(function() {
+    /*$('.ham').click(function() {
         $('nav').addClass('open');
-     });
+    });
 
-     $('.close').click(function() {
+    $('.close').click(function() {
         $('nav').removeClass('open');
-     });
+    });*/
 
+     function handler1() {
+        $('nav').addClass('open');
+        $(this).one("click", handler2);
+     }
+     function handler2() {
+        $('nav').removeClass('open');
+        $(this).one("click", handler1);
+     }
+     $('.ham').one("click", handler1);
     /* =======================================================================
      * Google Plus Logout
      * ==================================================================== */
