@@ -16,6 +16,7 @@ apt-get install -y  libncurses5-dev
 apt-get -y update
 
 pip install -r /vagrant/config/requirements.txt
+pip install -r /vagrant/config/vagrant_requirements.txt
 pip install flake8  # for local testing
 gem install sass
 
