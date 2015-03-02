@@ -121,6 +121,12 @@
           "url": "https://docs.google.com/presentation/d/1-3ctZ2obbnF09CBcc2Q70cSUrwk08HT7zDGHSG3qqR8/edit?usp=sharing",
           "description": "Written and developed by Gilad Penn, covering syntax, Document Object Model manipulation, and a bit of jQuery.",
           "adi": true
+        },
+        {
+          "name": "Advanced Javascript",
+          "url": "https://github.com/freeslugs/advanced-js-talk/",
+          "description": "Written and developed by Gilad Penn, covering asynchronous javascript, callbacks, and promises.",
+          "adi": true
         }
       ]
     },
