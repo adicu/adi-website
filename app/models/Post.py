@@ -68,8 +68,9 @@ class Post(db.Document):
     categories = db.ListField(db.StringField(db_field='category',
                                              max_length=255),
                               default=list)
-    tags = db.ListField(db.StringField(db_field='tag', max_length=255),
-                        default=list)
+   # tags = db.ListField(db.StringField(db_field='tag', max_length=255),
+             #           default=list)
+    post_tags = db.ListField(db.ReferenceField('Tag'))
     published = db.BooleanField(required=True, default=False)
     date_published = db.DateTimeField()
     posted_by = db.ReferenceField(User, required=True)

@@ -102,7 +102,7 @@
         <h6 class="permalink-title">Tags:</h6>
         <input id="tag-field" type="text">
         <ul class="tag-list">
-            {% for tag in tags %}
+            {% for tag in post.post_tags %}
             <li class="tag" data-tag="{{tag}}">{{tag}}  <a href="#remove-tag" data-tag="{{tag}}">x</a></li>
             {% endfor %}
         </ul>

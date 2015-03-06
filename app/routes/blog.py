@@ -7,7 +7,7 @@
 
 from flask import Blueprint, render_template, abort, redirect, url_for
 
-from app.models import BlogPost
+from app.models import BlogPost, Tag
 
 blog = Blueprint('blog', __name__)
 
@@ -38,9 +38,9 @@ def same_tag(tag):
 
     **Methods:** ``GET``
     """
-    blog_posts = list(
-        BlogPost.objects(tags=tag).order_by('-date_published')[:10]
-    )
+
+    tag = Tag.objects().get(tagname=tag)
+    blog_posts = list(BlogPost.objects(post_tags=tag).order_by('-date_published')[:10])
     previous_index = None
     next_index = 1
     return render_template('blog/blog.html',

@@ -12,9 +12,9 @@ from bson.objectid import ObjectId
 from bson.objectid import InvalidId
 
 from mongoengine.errors import DoesNotExist, ValidationError
-
+from datetime import datetime
 from app import app
-from app.models import BlogPost, Image, User
+from app.models import BlogPost, Image, User, Tag
 from app.forms import CreateBlogPostForm, UploadImageForm
 from app.lib.decorators import login_required, requires_privilege
 from app.routes.base import MESSAGE_FLASH, ERROR_FLASH
@@ -54,12 +54,13 @@ def new():
     if form.validate_on_submit():
         author = User.objects().get(id=ObjectId(form.author.data))
         images = [Image.objects().get(filename=fn) for fn in form.images.data]
+        tags = Tag.get_or_create_tags(form.tags.data)
         post = BlogPost(title=form.title.data,
                         slug=form.slug.data,
                         images=images,
                         markdown_content=form.body.data,
                         author=author,
-                        posted_by=g.user, tags=form.tags.data)
+                        posted_by=g.user, tags=tags)
         post.save()
 
         if form.published.data:
@@ -100,6 +101,7 @@ def edit(post_id):
             (str(u.id), u.name + " (You)" if u == g.user else u.name)
             for u in User.objects()]
         form.author.default = str(g.user.id)
+
         if form.validate_on_submit():
             post.title = form.title.data
             post.author = User.objects.get(id=ObjectId(form.author.data))
@@ -108,7 +110,9 @@ def edit(post_id):
             post.images = [
                 Image.objects().get(filename=fn) for fn in form.images.data
             ]
-            post.tags = form.tags.data
+            
+
+            post.post_tags = Tag.get_or_create_tags(form.tags.data)
             if form.featured_image.data:
                 post.featured_image = Image.objects().get(
                     filename=form.featured_image.data)
@@ -135,20 +139,20 @@ def edit(post_id):
                               body=post.markdown_content,
                               images=[image.filename for image in post.images],
                               author=str(post.author.id),
-                              featured_image=feat_img, tags=post.tags)
+                              featured_image=featured_image, tags=post.post_tags)
     form.author.choices = [
         (str(u.id), u.name + " (You)" if u == g.user else u.name)
         for u in User.objects()
     ]
     form.author.default = str(g.user.id)
     images = [image for image in Image.objects() if image not in post.images]
+
     return render_template('admin/posts/edit.html',
                            user=g.user,
                            form=form,
                            post=post,
                            images=images,
-                           upload_form=upload_form,
-                           tags=post.tags)
+                           upload_form=upload_form)
 
 
 @posts.route('/posts/delete/<post_id>', methods=['POST'])
