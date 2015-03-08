@@ -153,6 +153,12 @@
           "name": "Try jQuery",
           "url": "http://try.jquery.com",
           "description": "A combination of videos, interactive console challenges, and writing code in the browser. You'll need about 3 hours of time to make it through everything."
+        },
+        {
+          "name": "Build Modern Websites",
+          "url": "http://learn.adicu.com/websites",
+          "description": "Learn to make parallax scrolling websites with a modern feel.  Requires some knowledge of jQuery.",
+          "adi": true
         }
       ]
     },
