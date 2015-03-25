@@ -102,19 +102,29 @@
                     </div>
                 </div>
             </li>
-                <div class="button-group centered">
-                <h3>Marketing</h3>
-                <p>Advertise your event to the ADI community and send us an event blurb.</p> <br>
-                    <div class="blue button">
-                    <a href="https://docs.google.com/a/adicu.com/forms/d/1jc6ecYYmq5Hicd7cDGuu9fLlZha2U62NGUSIqJN4Y0Y/viewform">
-                        marketing@adicu.com
-                    </a>
-                    </div>
-                </div>
         </ul>
         {% if events %}
         {{ macros.event(events[0]) }}
         {% endif %}
+    </div>
+</section>
+<section>
+    <div class="content">
+        <div class="section-header">
+            <h4>Advertise your event</h4>
+            <span class="bar blue"></span>
+        </div>
+        <h3>Do you have an event that you'd like the tech community at Columbia to know about?
+        Let the us know! Submit a request to
+        add your blurb to our <a href="http://adicu.us4.list-manage.com/subscribe/?u=62d8b690f349b99dd7e0f3205&id=01a495e6ed"> weekly newsletter</a>.
+        </h3>
+        <div class="button-group centered">
+            <div class="blue button">
+                <a href="https://docs.google.com/a/adicu.com/forms/d/1jc6ecYYmq5Hicd7cDGuu9fLlZha2U62NGUSIqJN4Y0Y/viewform">
+                    Submit an event blurb
+                </a>
+            </div>
+        </div>
     </div>
 </section>
 {% endblock main %}
