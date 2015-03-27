@@ -40,7 +40,8 @@ def same_tag(tag):
     """
 
     tag = Tag.objects().get(tagname=tag)
-    blog_posts = list(BlogPost.objects(post_tags=tag).order_by('-date_published')[:10])
+    blog_posts = list(BlogPost.objects(post_tags=tag, published=True)
+                      .order_by('-date_published')[:10])
     previous_index = None
     next_index = 1
     return render_template('blog/blog.html',
@@ -90,8 +91,11 @@ def post(slug):
                                     id__ne=post.id,
                                     featured_image__ne=None).order_by(
                                         '-date_published')[:3]
+
+    related_posts = post.get_related_posts()[:3]
     if not post.published:
         abort(404)
     return render_template('blog/post.html',
                            post=post,
-                           recent_posts=recent_posts)
+                           recent_posts=recent_posts,
+                           related_posts=related_posts)

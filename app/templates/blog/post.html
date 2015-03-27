@@ -58,6 +58,21 @@
         {% endif %}
     </div>
 </section>
+{% if related_posts %}
+<section>
+    <div class="content">
+        <div class="section-header">
+            <h4>Related Posts</h4>
+            <span class="bar blue"></span>
+        </div>
+        <div class="triple">
+            {% for p in related_posts %}
+                {{ macros.small_post(p) }}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
 <section>
     <div class="content">
         <div class="section-header">

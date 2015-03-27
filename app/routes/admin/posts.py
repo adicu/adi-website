@@ -12,7 +12,6 @@ from bson.objectid import ObjectId
 from bson.objectid import InvalidId
 
 from mongoengine.errors import DoesNotExist, ValidationError
-from datetime import datetime
 from app import app
 from app.models import BlogPost, Image, User, Tag
 from app.forms import CreateBlogPostForm, UploadImageForm
@@ -60,7 +59,7 @@ def new():
                         images=images,
                         markdown_content=form.body.data,
                         author=author,
-                        posted_by=g.user, tags=tags)
+                        posted_by=g.user, post_tags=tags)
         post.save()
 
         if form.published.data:
@@ -110,7 +109,6 @@ def edit(post_id):
             post.images = [
                 Image.objects().get(filename=fn) for fn in form.images.data
             ]
-            
 
             post.post_tags = Tag.get_or_create_tags(form.tags.data)
             if form.featured_image.data:
@@ -139,7 +137,7 @@ def edit(post_id):
                               body=post.markdown_content,
                               images=[image.filename for image in post.images],
                               author=str(post.author.id),
-                              featured_image=featured_image, tags=post.post_tags)
+                              featured_image=feat_img, tags=post.post_tags)
     form.author.choices = [
         (str(u.id), u.name + " (You)" if u == g.user else u.name)
         for u in User.objects()

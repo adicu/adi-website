@@ -7,8 +7,14 @@ from Event import Event
 from EventSeries import EventSeries
 from Tag import Tag
 
-<<<<<<< HEAD
 # Silence flake8 by referencing otherwise unused imports
 __all__ = [
-    'BlogPost', 'Event', 'EventSeries', 'Image', 'Post', 'User', 'Whitelist', 'Tag'
+    'BlogPost',
+    'Event',
+    'EventSeries',
+    'Image',
+    'Post',
+    'User',
+    'Whitelist',
+    'Tag'
 ]
