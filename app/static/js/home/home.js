@@ -20,7 +20,6 @@ $(function() {
         var $devfestbanner = $('.devfest-banner');
         var $nav = $('nav');
         var $hero = $('.hero');
-        var didScroll = false;
 
         var scrollHandler = function() {
             var scrolled = $(window).scrollTop();
