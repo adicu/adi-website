@@ -119,6 +119,7 @@ $content-padding: 0.625rem;
 }
 
 $hero-height: 38rem;
+$hero-offset: 10rem;
 .hero {
     padding-top: $navbar-height;
     position: relative;
@@ -137,9 +138,10 @@ $hero-height: 38rem;
     i {
         z-index: 2;
         display: block;
-        height: ($hero-height + $navbar-height);
+        height: ($hero-height + $navbar-height + $hero-offset);
         width: 100%;
-        background-position: center center;
+        background-attachment: fixed;
+        background-position: center (-1 * $hero-offset);
         background-size: cover;
     }
 
