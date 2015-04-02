@@ -16,6 +16,7 @@ $(function() {
 
     var md = new MobileDetect(window.navigator.userAgent);
     if (md.mobile() == null) {
+        var scroll_factor = 0.333333; // Image moves 1/3 as fast as body
         var $image = $('.hero i');
         var $devfestbanner = $('.devfest-banner');
         var $nav = $('nav');
@@ -23,13 +24,12 @@ $(function() {
 
         var scrollHandler = function() {
             var scrolled = $(window).scrollTop();
-            console.log(scrolled);
-            $image.css('transform','translate3d(0px, ' + (scrolled/4) + 'px, 0px)');
+            $image.css('transform','translate3d(0px, ' + (scrolled * scroll_factor) + 'px, 0px)');
 
             if ($devfestbanner !== undefined) {
                 if (scrolled > $hero.height()) {
                     $devfestbanner.addClass('up');
-                } else if (scrolled  <= 0) {
+                } else if (scrolled <= 0) {
                     $devfestbanner.removeClass('up');
                 }
             }
