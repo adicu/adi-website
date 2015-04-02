@@ -43,6 +43,7 @@ def index():
                    .order_by('start_date', 'start_time')
                    .limit(ONE_LARGE_AND_TRIPLE))
 
+    # sort published posts chronologically back in time
     all_blog_posts = (BlogPost.objects(published=True)
                               .order_by('-date_published'))
     latest_blog_post = all_blog_posts[0] if all_blog_posts else None
@@ -167,6 +168,7 @@ def events():
     recent_and_upcoming = Event.objects(published=True).order_by('start_date',
                                                                  'start_time')
 
+    # Sort recent events chronologically backwards in time
     recent_events = (recent_and_upcoming.filter(end_date__lt=today)
                                         .order_by('-start_date')
                                         .limit(NUM_PAST_EVENTS_FOR_FRONTPAGE))
@@ -200,7 +202,8 @@ def event_archive(index):
     if index <= 0:
         return redirect(url_for('.events'))
 
-    # Get all events that occur on this page or on subsequent pages
+    # Get all events that occur on this page or on subsequent pages, and order
+    # them chronologically back in time
     today = date.today()
     events = (Event.objects(published=True, end_date__lt=today)
                    .order_by('-start_date')
