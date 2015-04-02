@@ -18,6 +18,9 @@ _resources = None
 _labs_data = None
 _companies = None
 
+NUM_PAST_EVENTS_FOR_FRONTPAGE = 6
+NUM_EVENTS_PER_PAGE = 10
+
 @client.route('/', methods=['GET'])
 def index():
     """View the ADI homepage.
@@ -33,9 +36,11 @@ def index():
         Q(published=True,
           end_date=date.today(),
           end_time__gt=datetime.now().time())))
-    events = all_events.order_by('start_date', 'start_time')[:4]
+    events = (all_events.order_by('start_date', 'start_time')
+                        .limit(4))
 
-    all_blog_posts = BlogPost.objects(published=True).order_by('-date_published')
+    all_blog_posts = (BlogPost.objects(published=True)
+                              .order_by('-date_published'))
     blog_post = all_blog_posts[0] if all_blog_posts else None
 
     return render_template('index.html',
@@ -150,19 +155,23 @@ def events():
     **Methods:** ``GET``
     """
     today = date.today()
-    last_sunday = datetime.combine(today - timedelta(days=today.isoweekday()+7),
+    weekday = today.isoweekday()
+    last_sunday = datetime.combine(today - timedelta(days=weekday + 7),
                                    datetime.min.time())
-    next_sunday = datetime.combine(today + timedelta(days=7-today.isoweekday()),
+    next_sunday = datetime.combine(today + timedelta(days=7 - weekday),
                                    datetime.min.time())
     recent_and_upcoming = Event.objects(published=True).order_by('start_date',
                                                                  'start_time')
 
-    recent_events = recent_and_upcoming.filter(end_date__lt=today)[:6]
+    recent_events = (recent_and_upcoming.filter(end_date__lt=today)
+                                        .order_by('-start_date')
+                                        .limit(NUM_PAST_EVENTS_FOR_FRONTPAGE))
 
     events_this_week = recent_and_upcoming.filter(end_date__gte=today,
                                                   start_date__lt=next_sunday)
 
-    upcoming_events = recent_and_upcoming.filter(start_date__gt=next_sunday)[:4]
+    upcoming_events = (recent_and_upcoming.filter(start_date__gt=next_sunday)
+                                          .limit(4))
 
     more_past_events = bool(Event.objects(published=True,
                                           start_date__lte=last_sunday).count())
@@ -183,24 +192,28 @@ def event_archive(index):
 
     :param int index: The page to fetch
     """
-    index = int(index)
     if index <= 0:
         return redirect(url_for('.events'))
 
+    # Get all events that occur on this page or on subsequent pages
     today = date.today()
-    last_sunday = datetime.combine(today - timedelta(days=today.weekday()+7),
-                                   datetime.min.time())
+    events = (Event.objects(published=True, end_date__lt=today)
+                   .order_by('-start_date')
+                   .skip(NUM_PAST_EVENTS_FOR_FRONTPAGE +
+                         (index - 1) * NUM_EVENTS_PER_PAGE))
 
-    past_events=Event.objects(published=True,
-                              end_date__lt=today).order_by('start_date')
+    # If there are no such events, redirect to the pevious page
+    if not events:
+        return redirect(url_for('.event_archive', index=index - 1))
 
-    if not past_events:
-        return redirect(url_for('.events'))
-
+    # There is always a previous page, but there is only a next page if there
+    # are more events after this page
     previous_index = index - 1
-    next_index = index + 1 if len(past_events) > 10*index else None
+    next_index = index + 1 if len(events) > NUM_EVENTS_PER_PAGE else None
+
+    # Use .limit() to only show NUM_EVENTS_PER_PAGE events per page
     return render_template('events/archive.html',
-                           events=past_events[10*(index-1):10*(index)],
+                           events=events.limit(NUM_EVENTS_PER_PAGE),
                            previous_index=previous_index,
                            next_index=next_index)
 
@@ -216,38 +229,42 @@ def event(slug):
     :param str slug: The unique slug ID for the post.
     """
     if Event.objects(published=True, slug=slug).count() == 0:
-        abort(404) # Either invalid event ID or duplicate IDs.
+        abort(404)  # Either invalid event ID or duplicate IDs.
 
     event = Event.objects(published=True, slug=slug)[0]
 
-
     if event.is_recurring:
-        upcoming_event_instances = Event.objects(published=True,
-                                                 start_date__gte=date.today(),
-                                                 slug=slug).order_by('start_date')
+        upcoming_event_instances = (Event.objects(published=True,
+                                                  start_date__gte=date.today(),
+                                                  slug=slug)
+                                         .order_by('start_date'))
         if upcoming_event_instances:
             event = upcoming_event_instances[0]
         else:
             event = event.parent_series.events[-1]
 
-        upcoming_events = Event.objects(published=True,
-                                        start_date__gte=date.today(),
-                                        id__ne=event.id).order_by('start_date')[:3]
+        upcoming_events = (Event.objects(published=True,
+                                         start_date__gte=date.today(),
+                                         id__ne=event.id)
+                                .order_by('start_date')
+                                .limit(3))
 
 
         return render_template('events/event.html',
                                event=event,
                                upcoming_events=upcoming_events)
 
-    upcoming_events = Event.objects(published=True,
-                                    start_date__gte=date.today(),
-                                    id__ne=event.id).order_by('start_date')[:3]
+    upcoming_events = (Event.objects(published=True,
+                                     start_date__gte=date.today(),
+                                     id__ne=event.id)
+                            .order_by('start_date')
+                            .limit(3))
 
     return render_template('events/event.html',
                            event=event,
                            upcoming_events=upcoming_events)
 
-@client.route('/events/<slug>/<index>', methods=['GET'])
+@client.route('/events/<slug>/<int:index>', methods=['GET'])
 def recurring_event(slug, index):
     """View a specific instance of a recurring event.
 
@@ -259,22 +276,21 @@ def recurring_event(slug, index):
     :param int index: The instance of the event to fetch.
     """
     if Event.objects(published=True, slug=slug).count() == 0:
-        abort(404) # Either invalid event ID or duplicate IDs.
-
-    index = int(index)
+        abort(404)  # Either invalid event ID or duplicate IDs.
 
     event = Event.objects(published=True, slug=slug)[0]
 
-    upcoming_events = Event.objects(published=True,
-                                    start_date__gte=date.today(),
-                                    id__ne=event.id).order_by('start_date')[:3]
-
+    upcoming_events = (Event.objects(published=True,
+                                     start_date__gte=date.today(),
+                                     id__ne=event.id)
+                            .order_by('start_date')
+                            .limit(3))
 
     if not event.is_recurring or not event.parent_series:
         return redirect(url_for('.event', slug=slug))
 
     if len(event.parent_series.events) <= index:
-      abort(404)
+        abort(404)
 
     event = event.parent_series.events[index]
     return render_template('events/event.html',

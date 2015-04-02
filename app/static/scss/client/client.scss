@@ -197,6 +197,10 @@ $section-bottom: 1.25rem;
             padding-bottom: $section-bottom;
         }
 
+        h3.no-events {
+            margin: 4rem 0;
+        }
+
         h3 + h3 {
             margin-top: 1rem;
         }

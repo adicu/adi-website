@@ -7,8 +7,8 @@
 <section class="tagline">
     <h1>Events</h1>
 </section>
-{% if events_this_week %}
 <section class="card top-card">
+{% if events_this_week %}
     <div class="content">
         <div class="section-header">
             <h4>This Week</h4>
@@ -18,14 +18,12 @@
             {{ macros.event(event) }}
         {% endfor %}
     </div>
-</section>
 {% endif %}
 {% if upcoming_events %}
-{% if events_this_week %}
+    {% if events_this_week %}
+</section>
 <section>
-{% else %}
-<section class="card top-card">
-{% endif %}
+    {% endif %}
     <div class="content">
         <div class="section-header">
             <h4>Upcoming</h4>
@@ -36,7 +34,16 @@
         {% endfor %}
     </div>
 </section>
+{% elif not events_this_week %}
+    <div class="content">
+        <div class="section-header">
+            <h4>Events</h4>
+            <span class="bar blue"></span>
+        </div>
+        <h3 class="no-events">We don't have any events this week.  Stay tooned for more events coming soon!</h3>
+    </div>
 {% endif %}
+</section>
 <section class="full green callout">
     <div class="content">
         <div class="callout-left">
