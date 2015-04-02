@@ -14,23 +14,29 @@ $(function() {
     });
 
 
-    var $image = $('.hero i');
     var md = new MobileDetect(window.navigator.userAgent);
-    var $devfestbanner = $('.devfest-banner');
-    var $nav = $('nav');
-    var $hero = $('.hero');
     if (md.mobile() == null) {
-        $(window).scroll(function(e){
+        var scroll_factor = 0.333333; // Image moves 1/3 as fast as body
+        var $image = $('.hero i');
+        var $devfestbanner = $('.devfest-banner');
+        var $nav = $('nav');
+        var $hero = $('.hero');
+
+        var scrollHandler = function() {
             var scrolled = $(window).scrollTop();
-            console.log(scrolled);
-            $image.css('transform','translateY(' + (scrolled/2) + 'px)');
+            $image.css('transform','translate3d(0px, ' + (scrolled * scroll_factor) + 'px, 0px)');
+
             if ($devfestbanner !== undefined) {
                 if (scrolled > $hero.height()) {
                     $devfestbanner.addClass('up');
-                } else if (scrolled  <= 0) {
+                } else if (scrolled <= 0) {
                     $devfestbanner.removeClass('up');
                 }
             }
+        }
+
+        $(window).on('scroll', function() {
+           window.requestAnimationFrame(scrollHandler);
         });
     }
 });
