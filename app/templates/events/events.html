@@ -29,11 +29,20 @@
             <h4>Upcoming</h4>
             <span class="bar blue"></span>
         </div>
-        {% for event in upcoming_events %}
-            {{ macros.event(event) }}
-        {% endfor %}
+        {{ macros.event(upcoming_events[0]) }}
     </div>
 </section>
+{% if upcoming_events | length > 1 %}
+<section>
+    <div class="content">
+        <div class="triple">
+        {% for idx in range(1,4) %}
+            {{ macros.small_event(upcoming_events[idx]) }}
+        {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
 {% elif not events_this_week %}
     <div class="content">
         <div class="section-header">
