@@ -9,6 +9,7 @@ from app import app
 from flask import url_for, redirect, session, request, g, abort
 from functools import wraps
 
+
 def login_required(f):
     """A decorator requiring a user to be logged in.  Use this to decorate
     routes that require a user logged into Eventum to access.
@@ -21,6 +22,7 @@ def login_required(f):
     :rtype: func
     """
     from app.routes.base import lookup_current_user
+
     @wraps(f)
     def decorated_function(*args, **kwargs):
         """The decorated version of ``f`` (see :method:``login_required``).
@@ -59,8 +61,8 @@ class requires_privilege(object):
         """Create a decorator to limit access to a decorated function to the
         secified privileges.
 
-        :param str privilege: The privilege that the logged in user should have.
-        It can be either ``"edit"``, ``"publish"``, or ``"admin"``.
+        :param str privilege: The privilege that the logged in user should
+        have. It can be either ``"edit"``, ``"publish"``, or ``"admin"``.
         """
         self.privilege = privilege
 
@@ -116,3 +118,45 @@ def development_only(f):
         return f(*args, **kwargs)
 
     return decorated_function
+
+
+class skip_and_return_if(object):
+    """A decorator that will skip the wrapped function and automatically return
+    ``None`` if the passed ``flag`` is ``True``.
+
+    Decorators like this that take parameters themselves must be
+    implemented either as a three nested functions (ugly), or as a class
+    (this implementation).  The ``__init__`` method creates the decorator,
+    and is passed any arguments for how the decorator should behaive, and
+    then the ``__call__`` method
+    """
+
+    def __init__(self, flag):
+        """Create a decorator to skip the decorated function and return
+        ``None`` if ``flag`` is ``True``.
+
+        :param bool flag: Skip the decorated function if this is ``True``.
+        """
+        self.flag = flag
+
+    def __call__(self, f):
+        """Call the decorator, on the decorated function, ``f``.
+
+        :param func f: The decorated function.
+        :returns: The parameter function ``f``, modified to short curcuit to
+        ``None`` if self.flag is true.
+        :rtype: func
+        """
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            """The decorated version of ``f`` (see :method:``__call__``).
+
+            :param args: Arguments for ``f``.
+            :params kwargs: Keyword arguments for ``f``.
+            """
+            print app.config['GOOGLE_AUTH_ENABLED']
+            print self.flag
+            if self.flag:
+                return None
+            return f(*args, **kwargs)
+        return decorated_function
