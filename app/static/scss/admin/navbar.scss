@@ -23,7 +23,7 @@ nav {
         text-decoration: none;
     }
 }
-.ham {
+.toggle {
     position: absolute;
     overflow: hidden;
     width: $nav-item-width;
@@ -33,13 +33,7 @@ nav {
     z-index: 61;
     display: none;
     background-color: $darkgray;
-    .image {
-        vertical-align: middle;
-        text-align: center;
-        line-height: $nav-item-width;
-        display: none;
-    }
-    .close {
+    .ham, .close {
         vertical-align: middle;
         text-align: center;
         line-height: $nav-item-width;
@@ -110,9 +104,6 @@ $profile-picture-size: 2.5rem;
 }
 
 $w-5: 5.5rem;
-$ham: 5.5rem;
-$home: 5.5rem;
-$close: 5.5rem;
 $w-6: 6rem;
 $w-6-5: 6.5rem;
 $w-7: 7rem;
@@ -160,12 +151,11 @@ $w-9: 9rem;
 
         &.open {
             left: 0 !important;
-            .ham {
-
-                .image {
+            .toggle {
+                .ham {
                     display: none;
                 }
-
+                
                 .close {
                     display: block;
                 }
@@ -179,13 +169,13 @@ $w-9: 9rem;
 
     .content {
         width: 100%;
-        margin: 0 auto;
+        margin: 0;
     }
 
-    .ham {
+    .toggle {
         display: block;
         
-        .image {
+        .ham {
             display: block;
         }
 
