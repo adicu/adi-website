@@ -3,57 +3,90 @@ from sys import exit
 import json
 
 try:
-    # basic flask settings
-    HOST = environ.get('HOST', '0.0.0.0')
-    PORT = int(environ.get('PORT', 5000))
-    SECRET_KEY = environ['SECRET_KEY']
-    DEBUG = True if environ['DEBUG'] == 'TRUE' else False
 
-    # credentials that allow the app to modify calendars without using a
-    # without a user's login
-    INSTALLED_APP_SECRET_PATH = environ.get('INSTALLED_APP_CLIENT_SECRET_PATH',
-                                               'client_secrets.json')
-    # where the installed credentials are stored
-    INSTALLED_APP_CREDENTIALS_PATH = environ.get('INSTALLED_APP_CREDENTIALS_PATH',
-                                   'config/credentials.json')
+    # dictionary the flask app configures itself from
+    config = {
+        'HOST': '0.0.0.0',
+        'PORT': None,
+        'SECRET_KEY': None,
+        'INSTALLED_APP_CREDENTIALS_PATH': None,
+        'CREDENTIALS_PATH': None,
+        'GOOGLE_AUTH_ENABLED': None,
+        'CLIENT_SECRETS_PATH': None,
+        'CSRF_ENABLED': None,
+        'CSRF_SESSION_KEY': None,
+        'DEBUG': True if environ.get('DEBUG') == 'TRUE' else False,
+        'PRIVATE_CALENDAR_ID': None,
+        'PUBLIC_CALENDAR_ID': None,
+        'MONGO_DATABASE': None,
+        'LOG_FILE_MAX_SIZE': None,
+        'APP_LOG_NAME': None,
+        'WERKZEUG_LOG_NAME': None
+    }
+
+    # consul_configurations contains equivalent keys that will be used to extract
+    # configuration values from Consul.
+    consul_configurations = [  # consul key --> config key
+        ('flask_port', 'PORT'),
+        ('flask_debug', 'DEBUG'),
+        ('secret_key', 'SECRET_KEY'),
+        ('installed_app_client_secret_path', 'INSTALLED_APP_CLIENT_SECRET_PATH'),
+        ('installed_app_credentials_path', 'INSTALLED_APP_CREDENTIALS_PATH'),
+        ('google_auth_enabled', 'GOOGLE_AUTH_ENABLED'),
+        ('client_secrets_path', 'CLIENT_SECRETS_PATH'),
+        ('csrf_enabled', 'CSRF_ENABLED'),
+        ('csrf_session_key', 'CSRF_SESSION_KEY'),
+        ('private_calendar_id', 'PRIVATE_CALENDAR_ID'),
+        ('public_calendar_id', 'PUBLIC_CALENDAR_ID'),
+        ('mongo_database', 'MONGO_DATABASE'),
+        ('log_file_max_size', 'LOG_FILE_MAX_SIZE'),
+        ('app_log_name', 'APP_LOG_NAME'),
+        ('werkzeug_log_name', 'WERKZEUG_LOG_NAME')
+    ]
+
+    # Config from Consul
+    from consul import Consul
+    kv = Consul().kv  # initalize client to KV store
+
+    for consul_key, config_key in consul_configurations:
+        print consul_key, config_key
+        _, tmp = kv.get("adi-website/{}".format(consul_key))
+        val = tmp.get('Value')
+        config[config_key] = val
+        if not val:
+            raise Exception(("no value found in Consul for key "
+                             "adi-website/{}. Make sure you've run"
+                             "the setup script for Consul").format(consul_key))
+
+    # basic flask settings
+    config['PORT'] = int(config['PORT'])
 
     # Google Auth
     # This is used for the webapp that allows Google+ login
-    GOOGLE_AUTH_ENABLED = True if environ['GOOGLE_AUTH_ENABLED'] == 'TRUE' \
-                            else False
-    CLIENT_SECRETS_PATH = environ.get('GOOGLE_AUTH_SECRETS',
-                                      'config/client_secrets.json')
+    config['GOOGLE_AUTH_ENABLED'] = True if config['GOOGLE_AUTH_ENABLED'] == 'TRUE' \
+                                    else False
+    
     # Setup Google Auth
-    if GOOGLE_AUTH_ENABLED:
+    if config['GOOGLE_AUTH_ENABLED']:
         try:
-            with open(CLIENT_SECRETS_PATH, 'r') as f:
+            with open(config['CLIENT_SECRETS_PATH'], 'r') as f:
                 _secrets_data = json.loads(f.read())['web']
-                GOOGLE_CLIENT_ID = _secrets_data['client_id']
+                config['GOOGLE_CLIENT_ID'] = _secrets_data['client_id']
                 if not _secrets_data.get('client_secret', None):
                     print ('Google Auth config file, %s,'
-                           ' missing client secret', CLIENT_SECRETS_PATH)
+                           ' missing client secret', config['CLIENT_SECRETS_PATH'])
                     exit(1)
 
         except IOError:
             print ("The Google client_secrets file was not found at"
-                   "'{}', check that it exists.".format(CLIENT_SECRETS_PATH))
+                   "'{}', check that it exists.".format(config['CLIENT_SECRETS_PATH']))
             exit(1)
 
     # Cross-site request forgery settings
-    CSRF_ENABLED = True if environ['CSRF_ENABLED'] == 'TRUE' else False
-    CSRF_SESSION_KEY = environ['CSRF_SESSION_KEY']
-
-    # Google Calendar credentials
-    PRIVATE_CALENDAR_ID = environ['PRIVATE_CALENDAR_ID']
-    PUBLIC_CALENDAR_ID =  environ['PUBLIC_CALENDAR_ID']
+    config['CSRF_ENABLED'] = True if config['CSRF_ENABLED'] == 'TRUE' else False
 
     # Mongo configs
-    MONGODB_SETTINGS = {'DB': environ.get('MONGO_DATABASE', 'eventum')}
-
-    # Logging settings
-    LOG_FILE_MAX_SIZE = environ.get("LOG_FILE_MAX_SIZE")
-    APP_LOG_NAME = environ.get("APP_LOG_NAME")
-    WERKZEUG_LOG_NAME = environ.get("WERKZEUG_LOG_NAME")
+    config['MONGODB_SETTINGS'] = {'DB': config['MONGO_DATABASE']}
 
 except KeyError:
     """ Throw an error if a setting is missing """
@@ -67,11 +100,17 @@ except KeyError:
 ############################################################################
 
 # Base directory
+config['BASEDIR'] = path.abspath(path.join(path.dirname(__file__), pardir))
 BASEDIR = path.abspath(path.join(path.dirname(__file__), pardir))
 
+# TODO: clean up this repetition
+config['RELATIVE_UPLOAD_FOLDER'] = 'app/static/img/uploaded/'
 RELATIVE_UPLOAD_FOLDER = 'app/static/img/uploaded/'
+config['UPLOAD_FOLDER'] = path.join(config['BASEDIR'], config['RELATIVE_UPLOAD_FOLDER'])
 UPLOAD_FOLDER = path.join(BASEDIR, RELATIVE_UPLOAD_FOLDER)
+config['RELATIVE_DELETE_FOLDER'] = 'app/static/img/uploaded/deleted/'
 RELATIVE_DELETE_FOLDER = 'app/static/img/uploaded/deleted/'
+config['DELETE_FOLDER'] = path.join(config['BASEDIR'], config['RELATIVE_DELETE_FOLDER'])
 DELETE_FOLDER = path.join(BASEDIR, RELATIVE_DELETE_FOLDER)
 
 # The file extensions that may be uploaded
@@ -83,4 +122,4 @@ ALLOWED_UPLOAD_EXTENSIONS = set(['.txt',
     '.gif'
 ])
 
-DEVFEST_BANNER = False
+config['DEVFEST_BANNER'] = False
