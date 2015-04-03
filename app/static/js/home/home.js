@@ -24,6 +24,7 @@ $(function() {
 
         var scrollHandler = function() {
             var scrolled = $(window).scrollTop();
+            var scrolled = Math.min(scrolled, $image.height());
             $image.css('transform','translate3d(0px, ' + (scrolled * scroll_factor) + 'px, 0px)');
 
             if ($devfestbanner !== undefined) {
