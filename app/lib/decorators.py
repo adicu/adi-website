@@ -154,8 +154,6 @@ class skip_and_return_if(object):
             :param args: Arguments for ``f``.
             :params kwargs: Keyword arguments for ``f``.
             """
-            print app.config['GOOGLE_AUTH_ENABLED']
-            print self.flag
             if self.flag:
                 return None
             return f(*args, **kwargs)
