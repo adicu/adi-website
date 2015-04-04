@@ -103,6 +103,7 @@ $profile-picture-size: 2.5rem;
     }
 }
 
+$home: 5.5rem;
 $w-5: 5.5rem;
 $w-6: 6rem;
 $w-6-5: 6.5rem;
@@ -155,7 +156,7 @@ $w-9: 9rem;
                 .ham {
                     display: none;
                 }
-                
+
                 .close {
                     display: block;
                 }
@@ -174,7 +175,7 @@ $w-9: 9rem;
 
     .toggle {
         display: block;
-        
+
         .ham {
             display: block;
         }
@@ -187,9 +188,9 @@ $w-9: 9rem;
 
 
 @media screen and (min-width: $xl-desktop-min) {
-    nav { 
+    nav {
         width: $nav-wide;
-    } 
+    }
 
     .main > .inner {
         width: 100%;
