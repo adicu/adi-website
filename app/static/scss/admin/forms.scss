@@ -1,5 +1,6 @@
 @import 'base';
 @import 'colors';
+@import '../common/media_queries';
 
 /* Remove inline-block spacing */
 form { font-size: 0; }
@@ -78,6 +79,8 @@ input[type="text"] {
 
 $toggle-speed: 0.3s;
 $toggle-height: 3.5rem;
+$toggle-total-width: 11.5rem;
+$toggle-text-width: 8rem;
 .toggle-wrapper {
     display: inline-block;
     vertical-align: top;
@@ -208,6 +211,42 @@ $toggle-height: 3.5rem;
 
         &.confirm-confirm {
             background-color: $red;
+        }
+    }
+}
+
+
+@media screen and (max-width: $phone-max) {
+    .title-wrapper input[type="text"] {
+        width: 100%;
+    }
+
+    .permalink-base + div {
+        margin-bottom: 0.5rem;
+        width: 100%;
+        input {
+            width: 100%;
+            padding-left: 0.5rem !important;
+        }
+    }
+
+    .toggle-wrapper {
+        width: 7rem;
+        .label {
+            display: none;
+        }
+        .on, .off {
+            left: 0 !important;
+            right: 0 !important;
+            .inner {
+                width: 7rem;
+            }
+        }
+        .on { display: none; }
+        .off { display: block; }
+        &.active {
+            .off { display: none; }
+            .on { display: block; }
         }
     }
 }

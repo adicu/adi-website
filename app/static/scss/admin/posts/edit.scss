@@ -33,3 +33,20 @@
 	font-size: 10px;
 	color: red;
 }
+
+@media only screen and (max-width: $phone-max) {
+	.edit-post-barright {
+        & > a {
+            float: right;
+        }
+        & > div {
+            float: right;
+            margin: 0 1rem 0 0;
+        }
+        float: right;
+        margin-right: -1rem;
+        & > a {
+            display: inline-block;
+        }
+    }
+}
