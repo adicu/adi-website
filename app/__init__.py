@@ -45,16 +45,20 @@ def create_app(**config_overrides):
 
     # Initialize the Google Calendar API Client, but only if the api
     # credentials have been generated first.
-    if app.config.get('GOOGLE_AUTH_ENABLED'):
-        try:
-            from app.lib.google_calendar import GoogleCalendarAPIClient
-            gcal_client = GoogleCalendarAPIClient()
-        except IOError:
-            print ("Failed to find the Google Calendar credentials file at '{}', "
-                   'please create it by running:\n\n'
-                   '    $ python manage.py --authorize\n'
-                    .format(app.config['INSTALLED_APP_CREDENTIALS_PATH']))
-            exit(1)
+    try:
+        from app.lib.google_calendar import GoogleCalendarAPIClient
+        gcal_client = GoogleCalendarAPIClient()
+    except IOError:
+        gae_environ = 'TRUE' if app.config['GOOGLE_AUTH_ENABLED'] else 'FALSE'
+        print ('Failed to find the Google Calendar credentials file at `{}`, '
+               'please create it by running:\n\n'
+               '    $ python manage.py --authorize\n'
+               'The environment variable GOOGLE_AUTH_ENABLED is currently set '
+               'to `{}`.  If set to FALSE, Google Calendar calls will fail '
+               'silently.'
+               .format(app.config['INSTALLED_APP_CREDENTIALS_PATH'],
+                       gae_environ))
+        exit(1)
 
     register_blueprints()
     register_delete_rules()

@@ -2,7 +2,7 @@
 
 {% import "macros.html" as macros %}
 {% block title %}Edit {{ event.title }}{% endblock %}
-{% block pagetitle %}Edit Post{% endblock %}
+{% block pagetitle %}<span class="no-mobile">Edit Post</span{% endblock %}
 {% block pagelink %}{{ url_for('events.index') }}{% endblock %}
 
 {% block action %}

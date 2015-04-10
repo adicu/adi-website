@@ -15,7 +15,7 @@ try:
         'CLIENT_SECRETS_PATH': None,
         'CSRF_ENABLED': None,
         'CSRF_SESSION_KEY': None,
-        'DEBUG': True if environ.get('DEBUG') == 'TRUE' else False,
+        'DEBUG': False,
         'PRIVATE_CALENDAR_ID': None,
         'PUBLIC_CALENDAR_ID': None,
         'MONGO_DATABASE': None,
@@ -44,7 +44,7 @@ try:
         ('werkzeug_log_name', 'WERKZEUG_LOG_NAME')
     ]
 
-    # Config from Consul
+
     from consul import Consul
     kv = Consul().kv  # initalize client to KV store
 
@@ -55,8 +55,7 @@ try:
         config[config_key] = val
         if not val:
             raise Exception(("no value found in Consul for key "
-                             "adi-website/{}. Make sure you've run"
-                             "the setup script for Consul").format(consul_key))
+                             "adi-website/{}").format(consul_key))
 
     # basic flask settings
     config['PORT'] = int(config['PORT'])
@@ -65,6 +64,7 @@ try:
     # This is used for the webapp that allows Google+ login
     config['GOOGLE_AUTH_ENABLED'] = True if config['GOOGLE_AUTH_ENABLED'] == 'TRUE' \
                                     else False
+    GOOGLE_AUTH_ENABLED = config['GOOGLE_AUTH_ENABLED'] 
     
     # Setup Google Auth
     if config['GOOGLE_AUTH_ENABLED']:
@@ -78,8 +78,8 @@ try:
                     exit(1)
 
         except IOError:
-            print ("The Google client_secrets file was not found at"
-                   "'{}', check that it exists.".format(config['CLIENT_SECRETS_PATH']))
+            print ("The Google client_secrets file was not found at '{}', "
+                   "check that it exists.".format(config['CLIENT_SECRETS_PATH']))
             exit(1)
 
     # Cross-site request forgery settings
@@ -87,6 +87,7 @@ try:
 
     # Mongo configs
     config['MONGODB_SETTINGS'] = {'DB': config['MONGO_DATABASE']}
+
 
 except KeyError:
     """ Throw an error if a setting is missing """
@@ -103,7 +104,6 @@ except KeyError:
 config['BASEDIR'] = path.abspath(path.join(path.dirname(__file__), pardir))
 BASEDIR = path.abspath(path.join(path.dirname(__file__), pardir))
 
-# TODO: clean up this repetition
 config['RELATIVE_UPLOAD_FOLDER'] = 'app/static/img/uploaded/'
 RELATIVE_UPLOAD_FOLDER = 'app/static/img/uploaded/'
 config['UPLOAD_FOLDER'] = path.join(config['BASEDIR'], config['RELATIVE_UPLOAD_FOLDER'])
@@ -114,6 +114,7 @@ config['DELETE_FOLDER'] = path.join(config['BASEDIR'], config['RELATIVE_DELETE_F
 DELETE_FOLDER = path.join(BASEDIR, RELATIVE_DELETE_FOLDER)
 
 # The file extensions that may be uploaded
+# config['ALLOWED_UPLOAD_EXTENSIONS'] = set(['.txt',
 ALLOWED_UPLOAD_EXTENSIONS = set(['.txt',
     '.pdf',
     '.png',

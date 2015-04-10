@@ -1,5 +1,6 @@
 @import 'colors';
 @import '../common/media_queries';
+@import '../common/utils';
 
 $nav-item-width: 4rem;
 $nav-item-height: 3.5rem;
@@ -7,7 +8,7 @@ $nav-label-width: 8rem;
 $nav-wide: 12rem;
 
 nav {
-    z-index:1;
+    z-index:60;
     width: $nav-item-width;
     position: fixed;
     left: 0;
@@ -15,10 +16,28 @@ nav {
     bottom: 0;
     background-color: $darkgray;
     color: $white;
+    @include transition(0.2s);
 
     a, a:hover {
         color: $white;
         text-decoration: none;
+    }
+}
+.toggle {
+    position: absolute;
+    overflow: hidden;
+    width: $nav-item-width;
+    height: $nav-item-height;
+    right: (-$nav-item-width);
+    top: 0;
+    z-index: 61;
+    display: none;
+    background-color: $darkgray;
+    .ham, .close {
+        vertical-align: middle;
+        text-align: center;
+        line-height: $nav-item-width;
+        display: none;
     }
 }
 
@@ -84,12 +103,21 @@ $profile-picture-size: 2.5rem;
     }
 }
 
+$home: 5.5rem;
 $w-5: 5.5rem;
 $w-6: 6rem;
 $w-6-5: 6.5rem;
 $w-7: 7rem;
 $w-8: 8rem;
 $w-9: 9rem;
+
+.open, nav {
+    left: 0;
+}
+.home {
+    &:hover { width: $nav-item-width + $home; }
+    background-color: $darkgray !important;
+    .nav-label { width: $home; } }
 .w-5 {
     &:hover { width: $nav-item-width + $w-5; }
     .nav-label { width: $w-5; } }
@@ -113,8 +141,56 @@ $w-9: 9rem;
     font-size: 2.5em;
 }
 
+@media screen and (max-width: $phone-max) {
+    nav {
+        left: (-1 * $nav-wide) !important;
+        width: $nav-wide;
+
+        .nav-item {
+            width: $nav-wide !important;
+        }
+
+        &.open {
+            left: 0 !important;
+            .toggle {
+                .ham {
+                    display: none;
+                }
+
+                .close {
+                    display: block;
+                }
+            }
+        }
+    }
+
+    .main {
+        margin-left: 0 !important;
+    }
+
+    .content {
+        width: 100%;
+        margin: 0;
+    }
+
+    .toggle {
+        display: block;
+
+        .ham {
+            display: block;
+        }
+
+        .close {
+            display: none;
+        }
+    }
+}
+
+
 @media screen and (min-width: $xl-desktop-min) {
-    nav { width: $nav-wide; }
+    nav {
+        width: $nav-wide;
+    }
 
     .main > .inner {
         width: 100%;
@@ -122,9 +198,9 @@ $w-9: 9rem;
         .content {
             width: 90%;
             margin: 0 auto;
+            box-sizing: border-box;
         }
     }
-
     .me {
         min-width: $profile-picture-size;
         height: $profile-picture-size;

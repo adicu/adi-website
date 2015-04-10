@@ -45,14 +45,40 @@
                 <i class="fa fa-map-marker"></i>
                 {{ event.location }}
             </p>
+            {% if event.end_datetime() > now %}
+            <p>
+                <i class="fa fa-comment"></i>
+                <a href="https://adicu.com/feedback?event={{event.title}}">
+                    Feedback
+                </a>
+            </p>
             {% if event.facebook_url %}
             <a href="{{event.facebook_url}}">
                 <div class="button blue">
-                    <i class="fa fa-facebook"></i>
-                    RSVP on Facebook
+                    <div class="icon-facebook">
+                        <i class="fa fa-facebook"></i>
+                        RSVP on Facebook
+                    </div>
                 </div>
             </a>
-
+            {% endif %}
+            {% else %}
+            {% if event.facebook_url %}
+            <p>
+                <i class="fa fa-facebook"></i>
+                <a href="{{event.facebook_url}}">
+                    View on Facebook
+                </a>
+            </p>
+            {% endif %}
+            <a href="https://adicu.com/feedback?event={{event.title}}">
+                <div class="button blue">
+                    <div class="icon-comment">
+                        <i class="fa fa-comment"></i>
+                        Feedback
+                    </div>
+                </div>
+            </a>
             {% endif %}
         </div>
         <div class="text">
