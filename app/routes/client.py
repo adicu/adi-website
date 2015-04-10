@@ -18,6 +18,8 @@ _resources = None
 _labs_data = None
 _companies = None
 
+now = datetime.now()
+
 ONE_TRIPLE = 3  # One set of three small events
 ONE_LARGE_AND_TRIPLE = 4  # One large event and one set of three small events
 NUM_PAST_EVENTS_FOR_FRONTPAGE = 6  # Two triples
@@ -253,6 +255,7 @@ def event(slug):
 
     return render_template('events/event.html',
                            event=event,
+                           now=now,
                            upcoming_events=_upcoming_events_triple(event))
 
 @client.route('/events/<slug>/<int:index>', methods=['GET'])
@@ -280,6 +283,7 @@ def recurring_event(slug, index):
     event = event.parent_series.events[index]
     return render_template('events/event.html',
                            event=event,
+                           now=now,
                            upcoming_events=_upcoming_events_triple(event))
 
 def _upcoming_events_triple(event):
