@@ -16,24 +16,19 @@
     }
 
     .display-feature-table {
+        table, th, td {
+                border: 1px solid #e0e0e0;
+        }
         table {
-            width: 75%;
-            td.privilege {
-                text-align: left;
-            }
-            tr.blue {
-                background-color: #6C9AD9;
-            }
-            tr.light {
-                background-color: #C0D6F3;
+            width: 100%;
+            th:hover {
+                background-color: #efefef;
             }
             th {
                 padding: 15px;
-                color: white;
                 text-align: center;
                 left-padding: 5px;
                 right-padding: 5px;
-                background-color: #3878CC;
             }
             td {
                 padding: 15px;

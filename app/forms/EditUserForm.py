@@ -32,4 +32,4 @@ class EditUserForm(Form):
                            choices=[('editor', "Editor"),
                                     ('publisher', "Publisher"),
                                     ('admin', "Admin"),
-                                    ("fake_user", "Fake User")])
+                                    ("fake_user", "Guest Writer")])
