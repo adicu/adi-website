@@ -14,6 +14,41 @@
         margin-top: 1rem;
         display: block;
     }
+
+    .display-feature-table {
+        table {
+            width: 75%;
+            td.privilege {
+                text-align: left;
+            }
+            tr.blue {
+                background-color: #6C9AD9;
+            }
+            tr.light {
+                background-color: #C0D6F3;
+            }
+            th {
+                padding: 15px;
+                color: white;
+                text-align: center;
+                left-padding: 5px;
+                right-padding: 5px;
+                background-color: #3878CC;
+            }
+            td {
+                padding: 15px;
+                text-align: center;
+                left-padding: 5px;
+                right-padding: 5px; 
+                .fa-times {
+                    color: red;
+                }
+                .fa-check {
+                    color: green;
+                }
+            }
+        }
+    }
 }
 
 .for-fake-user {

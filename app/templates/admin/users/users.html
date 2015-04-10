@@ -43,6 +43,56 @@
         </ul>
         {% endfor %}
     </div>
+    <div class="display-feature-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>Guest Writer</th>
+                    <th>Editor</th>
+                    <th>Publisher</th>
+                    <th>Admin</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="blue">
+                    <td class="privilege">Create and edit blog posts</td>
+                    <td><i class="fa fa-times"></i></td>
+                    <td><i class="fa fa-check"></i></td>
+                    <td><i class="fa fa-check"></i></td>
+                    <td><i class="fa fa-check"></i></td>
+                </tr>
+                <tr class="light">
+                    <td class="privilege">Create and edit events</td>
+                    <td><i class="fa fa-times"></i></td>
+                    <td><i class="fa fa-check"></i></td>
+                    <td><i class="fa fa-check"></i></td>
+                    <td><i class="fa fa-check"></i></td>
+                </tr>
+                <tr class="blue">
+                    <td class="privilege">Publish blog posts and events</td>
+                    <td><i class="fa fa-times"></i></td>
+                    <td><i class="fa fa-times"></i></td>
+                    <td><i class="fa fa-check"></i></td>
+                    <td><i class="fa fa-check"></i></td>
+                </tr>
+                <tr class="light">
+                    <td class="privilege">View and manage users</td>
+                    <td><i class="fa fa-times"></i></td>
+                    <td><i class="fa fa-times"></i></td>
+                    <td><i class="fa fa-times"></i></td>
+                    <td><i class="fa fa-check"></i></td>
+                </tr>
+                <tr class="blue">
+                    <td class="privilege">Add users to the whitelist</td>
+                    <td><i class="fa fa-times"></i></td>
+                    <td><i class="fa fa-times"></i></td>
+                    <td><i class="fa fa-times"></i></td>
+                    <td><i class="fa fa-check"></i></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     <div class="for-whitelist hidden">
     {{ macros.render_field(whitelist_form.email, placeholder="Email Address", autofocus="", label=False)}}
     </div>
