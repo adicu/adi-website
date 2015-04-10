@@ -2,7 +2,7 @@
 
 {% import "macros.html" as macros %}
 {% block title %}Edit {{ event.title }}{% endblock %}
-{% block pagetitle %}<span class="no-mobile">Edit Post</span{% endblock %}
+{% block pagetitle %}<span class="no-mobile">Edit Post</span>{% endblock %}
 {% block pagelink %}{{ url_for('events.index') }}{% endblock %}
 
 {% block action %}
@@ -10,30 +10,32 @@ action="{{ url_for('events.edit', event_id=event.id) }}"
 {% endblock %}
 
 {% block barright %}
-{% if event.is_recurring %}
-    <a class="text-button save-button" href="#show-modal" data-modal="save-options">
-        {% if event.published %}
-            Save
-        {% else %}
-            Save Draft
-        {% endif %}
-    </a>
-{% else %}
-    <a class="text-button save-button" href="#save">
-        {% if event.published %}
-            Save
-        {% else %}
-            Save Draft
-        {% endif %}
-    </a>
-{% endif %}
-{% if current_user.can("publish") %}
-    {% if event.published %}
-        {{ macros.toggle("Publish", "Unpublish")}}
+<div class="create-barright">
+    {% if event.is_recurring %}
+        <a class="text-button save-button" href="#show-modal" data-modal="save-options">
+            {% if event.published %}
+                Save
+            {% else %}
+                Save Draft
+            {% endif %}
+        </a>
     {% else %}
-        {{ macros.toggle("Publish", "Unpublish", start_on=False)}}
+        <a class="text-button save-button" href="#save">
+            {% if event.published %}
+                Save
+            {% else %}
+                Save Draft
+            {% endif %}
+        </a>
     {% endif %}
-{% endif %}
+    {% if current_user.can("publish") %}
+        {% if event.published %}
+            {{ macros.toggle("Publish", "Unpublish")}}
+        {% else %}
+            {{ macros.toggle("Publish", "Unpublish", start_on=False)}}
+        {% endif %}
+    {% endif %}
+</div>
 {% endblock %}
 
 {% block toolbar %}
