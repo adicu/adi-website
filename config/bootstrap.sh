@@ -68,4 +68,7 @@ mkdir -p /vagrant/log
 # TODO: setup database and insert any data that is necessary
 # service mongodb start
 
+# start Consul
+/vagrant/config/run_consul.sh
+
 exit 0
