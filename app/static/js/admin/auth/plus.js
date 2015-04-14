@@ -39,25 +39,17 @@ var helper = (function() {
                 url: '/admin/store-token?state=' + STATE + '&next=' + NEXT,
                 contentType: 'application/octet-stream; charset=utf-8',
                 success: function(result) {
-                    window.location.href = result;
+                    window.location.href = result.data.redirect_url;
                 },
                 error: function(xhr, status, err) {
-                    if (xhr.status == 200) {
-                        window.location.href = xhr.responseText;
-                    }
                     /*
                      * Set window.error, to be parsed in displayErrors(). See
                      * below for further explination.
                      */
 
                     if (xhr.responseText) {
-                        console.log(xhr.responseText);
-                        try {
-                            window.error = JSON.parse(xhr.responseText);
-                        }
-                        catch (ex) {
-                            window.error = xhr.responseText;
-                        }
+                        window.error = JSON.parse(xhr.responseText).error;
+                        console.log(window.error);
                     } else {
                         console.log("Unhandled response: ", xhr);
                     }
@@ -70,7 +62,6 @@ var helper = (function() {
 })();
 
 
-var WHITELIST_CODE = 1;
 /**
  * Constantly be checking for window.error, and load messages.
  *
@@ -84,14 +75,14 @@ $(function() {
     function displayErrors() {
         if (window.error !== undefined){
             $('#plus-button-wrapper').hide();
-            if (window.error.code && window.error.code == WHITELIST_CODE) {
+            if (window.error.data.whitelisted === false) {
                 $('#unknown-error').addClass('hidden');
                 $('#not-whitelisted').removeClass('hidden');
-                $('#email').html(window.error.email);
+                $('#email').html(window.error.data.email);
             } else {
                 $('#not-whitelisted').addClass('hidden');
                 $('#unknown-error').removeClass('hidden');
-                $('#error-msg').html(window.error);
+                $('#error-msg').html(window.error.message);
             }
         } else {
             $('#plus-button-wrapper').show();

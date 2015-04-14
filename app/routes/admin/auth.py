@@ -9,7 +9,7 @@ import string
 import random
 import httplib2
 from app import app
-from app.lib.networking import json_response
+from app.lib.ajax import ajax_success, ajax_error_message
 from app.models import User, Whitelist
 from app.forms import CreateProfileForm
 from apiclient.discovery import build
@@ -22,6 +22,7 @@ from oauth2client.client import (FlowExchangeError,
 auth = Blueprint('auth', __name__)
 
 gplus_service = build('plus', 'v1')
+
 
 @auth.route('/login', methods=['GET'])
 def login():
@@ -46,7 +47,6 @@ def login():
                            # reauthorize=True,
                            next=next)
 
-WHITELIST_CODE = 1
 
 @auth.route('/store-token', methods=['POST'])
 def store_token():
@@ -61,7 +61,7 @@ def store_token():
     .. code:: javascript
 
         success: function(response) {
-            window.location.href = response;
+            window.location.href = response.data.redirect_url;
         }
 
     **Route:** ``/admin/store-token``
@@ -69,7 +69,7 @@ def store_token():
     **Methods:** ``POST``
     """
     if request.args.get('state', '') != session.get('state'):
-        return json_response('Invalid state parameter.', 401)
+        return ajax_error_message('Invalid state parameter.', 401)
 
     del session['state']
     code = request.data
@@ -81,7 +81,7 @@ def store_token():
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
     except FlowExchangeError:
-        return json_response('Failed to upgrade the authorization code.',
+        return ajax_error_message('Failed to upgrade the authorization code.',
                                   401)
 
     gplus_id = credentials.id_token['sub']
@@ -102,18 +102,17 @@ def store_token():
         # The user must be whitelisted in order to create an account.
         email = people_document['emails'][0]['value']
         if Whitelist.objects(email=email).count() != 1:
-            return json_response({
-                'code': WHITELIST_CODE,
-                'title': 'User has not been whitelisted.',
-                'email': email
-                }, 401)
+            return ajax_error_message('User has not been whitelisted.',
+                                      401,
+                                      {'whitelisted': False, 'email': email})
 
-        return json_response(url_for(
-            '.create_profile',
-            next=request.args.get('next'),
-            name=people_document['displayName'],
-            email=email,
-            image_url=people_document['image']['url']), 200)
+        return ajax_success({
+            'redirect_url': url_for('.create_profile',
+                                    next=request.args.get('next'),
+                                    name=people_document['displayName'],
+                                    email=email,
+                                    image_url=people_document['image']['url'])
+        })
 
     user = User.objects().get(gplus_id=gplus_id)
     user.register_login()
@@ -122,8 +121,8 @@ def store_token():
     # The user already exists.  Redirect to the next url or
     # the root of the application ('/')
     if request.args.get('next'):
-        return json_response(request.args.get('next'), 200)
-    return json_response(request.url_root, 200)
+        return ajax_success({'redirect_url': request.args.get('next')})
+    return ajax_success({'redirect_url': request.url_root})
 
 
 @auth.route('/create-profile', methods=['GET', 'POST'])
@@ -178,7 +177,6 @@ def create_profile():
                            image_url=request.args.get('image_url'), form=form)
 
 
-
 @auth.route('/logout', methods=['GET'])
 def logout():
     """Logs out the current user.
@@ -213,7 +211,7 @@ def disconnect():
     credentials = AccessTokenCredentials(
         session.get('credentials'), request.headers.get('User-Agent'))
     if credentials is None:
-        return json_response('Current user not connected.', 401)
+        return ajax_error_message('Current user not connected.', 401)
 
     # Execute HTTP GET request to revoke current token.
     access_token = credentials.access_token
@@ -229,9 +227,9 @@ def disconnect():
         # Reset the user's session.
         del session['credentials']
 
-        # use code=303 to avoid POSTing to the next page.
-        return redirect(url_for('.login'), code=303)
     else:
         # For whatever reason, the given token was invalid.
-        return json_response('Failed to revoke token for given user.',
-                                  400)
+        app.logger.error('Failed to revoke token for given user.')
+
+    # use code=303 to avoid POSTing to the next page.
+    return redirect(url_for('.login'), code=303)
