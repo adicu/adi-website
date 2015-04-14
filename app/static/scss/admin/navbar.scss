@@ -13,7 +13,7 @@ nav {
     position: fixed;
     left: 0;
     top: 0;
-    bottom: 0;
+    height: 100%;
     background-color: $darkgray;
     color: $white;
     @include transition(0.2s);
