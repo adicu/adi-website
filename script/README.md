@@ -1,8 +1,8 @@
 # `/script`
 
-Helper scripts.
+Helper scripts. These are all run by `../manage.py`
 
-## Notable files
+## Notable Folders
 
-- `backfill_blog.py`: A script to backfill the `eventum` mongo database from the old blog posts. To get the old website data, run `git submodule update --init`.  To run, run `python manage.py --backfill-blog`.
-- `backfill_blog.py`: A script to backfill the `eventum` mongo database from the old images. To get the old website data, run `git submodule update --init`.  To run, run `python manage.py --import-images`.
+- `site_migration`: Scripts to migrate from Jekyll to Eventum.
+- `db`: Scripts to populate the database with test data.

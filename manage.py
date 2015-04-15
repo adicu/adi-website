@@ -1,36 +1,45 @@
-import argparse
 from sys import argv, exit
 
-import gflags
-from oauth2client.file import Storage
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.tools import run_flow
-from oauth2client import tools
+from script.migrate import backfill_blog, import_images
+from script.db import gen
 
-from config import flask_config
-from script import backfill_blog, import_images
+USAGE = """Usage:
 
-parser = argparse.ArgumentParser(parents=[tools.argparser])
-FLAGS = parser.parse_args()
+    python {exe} migrate blog|images
 
-def authorize_google_calendar():
-    FLOW = flow_from_clientsecrets(flask_config.INSTALLED_APP_SECRET_PATH,
-                   scope='https://www.googleapis.com/auth/calendar')
+        Migrates Jekyll data.  This can be run with:
+        - blog: Backfills blog posts from data/old-website-data/posts.
+        - images: Imports images from data/old-website-data/images.
 
-    # Save the credentials file here for use by the app
-    storage = Storage(flask_config.INSTALLED_APP_CREDENTIALS_PATH)
-    run_flow(FLOW, storage, FLAGS)
+    python {exe} db images|events|posts|all <options>
+
+        Populates the database with test data. This can be run with:
+        - images: Downloads several dummy images and adds them to Eventum.
+        - events: Creates several events, with images if any exist.
+        - posts: Creates several blog posts, with images if any exist.
+        - all: All of the above.
+"""
+
 
 def print_usage():
-    print "Usage:"
-    print "%s --authorize (-a)     Authorize the Google Calendar API Client" % argv[0]
-    print "%s --backfill-blog (-b) Backfill blog posts from data/jekyll-posts" % argv[0]
-    print "%s --import-images (-i) Import images from data/jekyll-images" % argv[0]
+    print USAGE.format(exe=argv[0])
+    exit(1)
+
 
 if __name__ == '__main__':
-    if '--backfill-blog' in argv or '-b' in argv:
-        backfill_blog.backfill_from_jekyll('data/old-website-data/posts')
-    elif '--import-images' in argv or '-i' in argv:
-        import_images.import_from_directory('data/old-website-data/images')
-    else:
-        authorize_google_calendar()
+
+    if len(argv) < 2 or argv[1] not in ('migrate', 'db'):
+        print_usage()
+
+    if argv[1] == 'migrate':
+        if len(argv) != 3 or argv[2] not in ('blog', 'images'):
+            print_usage()
+
+        if argv[2] == 'blog':
+            backfill_blog.backfill_from_jekyll('data/old-website-data/posts')
+        if argv[2] == 'images':
+            import_images.import_from_directory('data/old-website-data/images')
+
+    if argv[1] == 'db':
+        # Call gen.main with ["<argv0> db", "<argv2>", "<argv3>", ...]
+        gen.main([argv[0] + ' db'] + argv[2:])
