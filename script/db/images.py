@@ -3,16 +3,14 @@ from os.path import exists
 
 from app.models import Image
 from config.flask_config import UPLOAD_FOLDER
-from app.lib.cli import CLIColor
 
 BASE_URL = "http://lorempixel.com/{}/{}/"
 BASE_FILENAME = "test_photo_{}x{}.jpeg"
-WIDTH = 40
 
 
-def create_images(num_images, superuser, force=False):
+def create_images(num_images, superuser, printer, force=False):
     print "Downloading images..."
-    print "-" * WIDTH
+    printer.line()
     successes = []
     failures = []
     skips = []
@@ -22,39 +20,26 @@ def create_images(num_images, superuser, force=False):
         path = UPLOAD_FOLDER + filename
         url = BASE_URL.format(width, height)
 
-        print filename + (" " * (WIDTH - 8 - len(filename))),
+        printer.begin_status_line(filename)
         if force or not exists(path):
             try:
                 urllib.urlretrieve(url, path)
             except IOError:
                 failures.append((filename, ''))
-                print " Failed"
+                printer.status_fail()
                 continue  # Failed to download, move on to the next image.
 
         if Image.objects(filename=filename).count() == 0:
-            successes.append((filename, path))
             image = Image(filename=filename,
                           default_path=path,
                           creator=superuser)
             image.save()
-            print "Success"
+            successes.append((filename, path))
+            printer.status_success()
         else:
             skips.append((filename, path))
-            print "   Skip"
+            printer.status_skip()
 
-    print "-" * WIDTH
-    print "Done. ",
-
-    if successes:
-        print CLIColor.ok_green("{} successful,".format(len(successes))),
-    else:
-        print "0 successful,",
-
-    print "{} skipped,".format(len(skips)),
-
-    if failures:
-        print CLIColor.ok_green("{} failed.".format(len(failures))),
-    else:
-        print "0 failed."
-
+    printer.line()
+    printer.results(successes, skips, failures)
     return successes + skips

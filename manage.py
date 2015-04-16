@@ -14,10 +14,17 @@ USAGE = """Usage:
     python {exe} db images|events|posts|all <options>
 
         Populates the database with test data. This can be run with:
-        - images: Downloads several dummy images and adds them to Eventum.
-        - events: Creates several events, with images if any exist.
-        - posts: Creates several blog posts, with images if any exist.
-        - all: All of the above.
+            images: Downloads several dummy images and adds them to Eventum.
+            events: Creates several events, with images if any exist.
+            posts: Creates several blog posts, with images if any exist.
+            all: All of the above.
+
+        Available options:
+            --quiet  (-q): Runs with minimal output
+            --wipe   (-w): Wipes related databases.  If ommitted, records that
+                           already exist will not be updated.
+            --force  (-f): Doesn't ask before wiping database.  Only relevant
+                           if the --wipe option is used.
 """
 
 
