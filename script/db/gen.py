@@ -126,7 +126,7 @@ class TestDataGenerator(object):
                 self.warn('BlogPost')
                 print CLIColor.warning('Wiping BlogPost database.')
                 BlogPost.drop_collection()
-            create_posts(superuser, printer)
+            create_posts(10, superuser, printer)
 
         # Events and event series
         if self.should_gen_events:
