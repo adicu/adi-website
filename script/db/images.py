@@ -9,7 +9,7 @@ BASE_FILENAME = "test_photo_{}x{}.jpeg"
 
 
 def create_images(num_images, superuser, printer, force=False):
-    print "Downloading images..."
+    print "Generating images..."
     printer.line()
     successes = []
     failures = []

@@ -75,7 +75,13 @@ fringilla libero vulputate. Nulla sed ligula eget turpis fermentum
 sollicitudin. Duis egestas metus vitae lacus feugiat, a fringilla mi rutrum.
 Sed id ex non sapien dictum consectetur eu maximus turpis. Phasellus nulla
 elit, mollis eu dolor in, sollicitudin convallis nunc. Maecenas nibh massa,
-sollicitudin in pretium et, tempus et felis."""
+sollicitudin in pretium et, tempus et felis.
+"""
 
+# blog posts have images in the description.
+LOREM_BLOG_POST = LOREM_MARKDOWN.format('![]({})\n\n![]({})')
+# events do not
 LOREM_EVENT = LOREM_MARKDOWN.format('')
-LOREM_BLOG_POST = LOREM_MARKDOWN.format('![]({image})')
+
+LOREM_ADJECTIVES = ['Awesome', 'Amazing', 'Exciting', 'Educational', 'Fun',
+                    'Incredible', 'Splendorous', 'Zany']

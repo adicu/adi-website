@@ -1,7 +1,7 @@
 from mongoengine import connect
 from mongoengine.queryset import DoesNotExist
 from sys import argv, exit
-from app.models import User, Event, EventSeries
+from app.models import User, Event, EventSeries, Image, BlogPost
 from app.lib.cli import CLIColor
 from config.flask_config import MONGODB_SETTINGS
 from images import create_images
@@ -84,15 +84,15 @@ class TestDataGenerator(object):
             if self.wipe:
                 self.warn("Image")
                 print CLIColor.warning("Wiping Image database.")
-                # Image.drop_collection()
+                Image.drop_collection()
             create_images(12, superuser, printer)
 
         if self.should_gen_posts:
             if self.wipe:
                 self.warn("BlogPost")
                 print CLIColor.warning("Wiping BlogPost database.")
-                # BlogPost.drop_collection()
-            create_posts()
+                BlogPost.drop_collection()
+            create_posts(superuser, printer)
 
         if self.should_gen_events:
             if self.wipe:
