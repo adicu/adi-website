@@ -13,7 +13,7 @@ from app.models import Image, Event, EventSeries
 from lorem import LOREM_EVENT, LOREM_SNIPPET, LOREM_ADJECTIVES
 
 TIMEDELTAS = [timedelta(hours=4),   # upcoming
-              timedelta(hours=4),   # same time
+              timedelta(hours=4),   # same time as ^
               timedelta(hours=-4),  # just happend
               ] + [timedelta(days=offset) for offset in range(-6, 6)]
 RECURRING_SLUG = 'recurring'
