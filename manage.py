@@ -21,7 +21,7 @@ USAGE = """Usage:
 
         Available options:
             --quiet  (-q): Runs with minimal output
-            --wipe   (-w): Wipes related databases.  If ommitted, records that
+            --wipe   (-w): Wipes related databases.  If omitted, records that
                            already exist will not be updated.
             --force  (-f): Doesn't ask before wiping database.  Only relevant
                            if the --wipe option is used.

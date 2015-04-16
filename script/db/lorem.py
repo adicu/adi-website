@@ -1,7 +1,16 @@
+"""
+.. module:: lorem
+    :synopsis: This module contains dummy text variables for creating fake
+        entries in the database.
+
+.. moduleauthor:: Dan Schlosser <dan@schlosser.io>
+"""
+
 
 LOREM_SNIPPET = """Lorem ipsum **dolor sit amet**, consectetur *adipiscing*
 elit. In sed ligula dolor. Morbi at mauris euismod, tincidunt dui eget, tempor
-[augue](https://adicu.com)."""
+[augue](https://adicu.com).
+"""
 
 LOREM_MARKDOWN = """Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 In sed ligula dolor. **Maecenas ultrices eros id nisl mollis, sit amet tempor
@@ -80,6 +89,7 @@ sollicitudin in pretium et, tempus et felis.
 
 # blog posts have images in the description.
 LOREM_BLOG_POST = LOREM_MARKDOWN.format('![]({})\n\n![]({})')
+
 # events do not
 LOREM_EVENT = LOREM_MARKDOWN.format('')
 

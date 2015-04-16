@@ -1,6 +1,13 @@
+"""
+.. module:: images
+    :synopsis: This module facilitates the generation of test image objects in
+        the database.
+
+.. moduleauthor:: Dan Schlosser <dan@schlosser.io>
+"""
+
 import urllib
 from os.path import exists
-
 from app.models import Image
 from config.flask_config import UPLOAD_FOLDER
 
@@ -8,9 +15,22 @@ BASE_URL = "http://lorempixel.com/{}/{}/"
 BASE_FILENAME = "test_photo_{}x{}.jpeg"
 
 
-def create_images(num_images, superuser, printer, force=False):
+def create_images(num_images, superuser, printer):
+    """Creates ``num_images`` image objects in the database.  It will download
+    sample images from http://lorempixel.com, and add database entries.
+
+    :param int num_images: The number of images to create
+    :param superuser: The superuser object to associate with the images.
+    :type superuser: :class:`~app.models.User`
+    :param printer: The object to manage progress printing.
+    :type printer: :class:`~script.cli.ProgressPrinter`
+
+    :returns: A list of images that now exist.
+    :rtype: list(:class:`~app.models.Image`)
+    """
     print "Generating images..."
     printer.line()
+
     successes = []
     failures = []
     skips = []
@@ -21,7 +41,9 @@ def create_images(num_images, superuser, printer, force=False):
         url = BASE_URL.format(width, height)
 
         printer.begin_status_line(filename)
-        if force or not exists(path):
+
+        # Download image if it doesn't exist already
+        if not exists(path):
             try:
                 urllib.urlretrieve(url, path)
             except IOError:
@@ -29,6 +51,7 @@ def create_images(num_images, superuser, printer, force=False):
                 printer.status_fail()
                 continue  # Failed to download, move on to the next image.
 
+        # Insert or fetch image from database
         if Image.objects(filename=filename).count() == 0:
             image = Image(filename=filename,
                           default_path=path,
@@ -41,5 +64,5 @@ def create_images(num_images, superuser, printer, force=False):
             printer.status_skip()
 
     printer.line()
-    printer.results(successes, skips, failures)
+    printer.results(len(successes), len(skips), len(failures))
     return successes + skips
