@@ -27,6 +27,8 @@ $(function() {
     $('input[name="user_type"]:radio').on('click', function() {
         all_td.removeClass('clicked');
         $(this).closest('td').addClass('clicked');
+        var t = parseInt($(this).closest('td').index()) + 1;
+        $('td:nth-child(' + t + ')').addClass('clicked');
     });
 
     /* =======================================================================

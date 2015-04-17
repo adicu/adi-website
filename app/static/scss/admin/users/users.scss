@@ -20,13 +20,14 @@
             border: 1px solid #e0e0e0;
         }
         .highlighted {
-            background-color: #efefef;
+            background-color: #f5f5f5;
         }
         .clicked {
-            background-color: #e0e0e0;
+            background-color: #efefef;
         }  
         th, td {
-            padding: 15px;
+            padding: 5px;
+            font: 85%;
             text-align: center;
         }
         td {
