@@ -3,28 +3,22 @@ from sys import exit
 import json
 
 # dictionary the flask app configures itself from
+# several variables initialized to defaults
 config = {
-    'HOST': '0.0.0.0',
-    'PORT': None,
-    'SECRET_KEY': None,
-    'INSTALLED_APP_CREDENTIALS_PATH': None,
-    'CREDENTIALS_PATH': None,
-    'GOOGLE_AUTH_ENABLED': None,
-    'CLIENT_SECRETS_PATH': None,
-    'CSRF_ENABLED': None,
-    'CSRF_SESSION_KEY': None,
-    'DEBUG': False,
-    'PRIVATE_CALENDAR_ID': None,
-    'PUBLIC_CALENDAR_ID': None,
-    'MONGO_DATABASE': None,
-    'LOG_FILE_MAX_SIZE': None,
-    'APP_LOG_NAME': None,
-    'WERKZEUG_LOG_NAME': None
+    'HOST': 'localhost',
+    'PORT': 5000,
+    'INSTALLED_APP_CLIENT_SECRET_PATH': 'client_secrets.json',
+    'INSTALLED_APP_CREDENTIALS_PATH': 'config/credentials.json',
+    'CLIENT_SECRETS_PATH': 'config/client_secrets.json',
+    'MONGO_DATABASE': 'eventum',
+    'LOG_FILE_MAX_SIZE': '256',
+    'APP_LOG_NAME': 'app.log',
+    'WERKZEUG_LOG_NAME': 'werkzeug.log'
 }
 
 # consul_configurations contains equivalent keys that will be used to extract
 # configuration values from Consul.
-consul_configurations = [  # consul key --> config key
+consul_configurations = [  # (consul key, config key)
     ('flask_port', 'PORT'),
     ('flask_debug', 'DEBUG'),
     ('secret_key', 'SECRET_KEY'),
@@ -42,20 +36,16 @@ consul_configurations = [  # consul key --> config key
     ('werkzeug_log_name', 'WERKZEUG_LOG_NAME')
 ]
 
-# config variables that must be set for the app to work
-critical_config_vars = [
-    'SECRET_KEY',
-    'GOOGLE_AUTH_ENABLED',
-    'CSRF_ENABLED',
-    'CSRF_SESSION_KEY',
-    'PRIVATE_CALENDAR_ID',
-    'PUBLIC_CALENDAR_ID'
-]
-
 if environ.get('USE_ENV_VARS') == 'TRUE':  # use env variables
-    for env_key, value in config.iteritems():
-        if not value:
-            config[env_key] = environ.get(env_key)
+    for _, key in consul_configurations:
+        if key in environ:
+            config[key] = environ[key]
+        elif key not in config:  # fail if there is not a default for the key
+            raise Exception("Critical config variable {} is missing. "
+                            "You probably need to run either: \n\n\tsource "
+                            "config/<your settings file> \n\tor \n\t"
+                            "./config/setup_consul_<environment>.sh".format(key))
+
 else:
     from consul import Consul
     kv = Consul().kv  # initalize client to KV store
@@ -64,26 +54,20 @@ else:
     # value retrieved from Consul.
     for consul_key, config_key in consul_configurations:
         _, consul_value = kv.get("adi-website/{}".format(consul_key))
-        val = consul_value.get('Value')
-        config[config_key] = val
-        if not val:
+        # fail if there is value cannot be found or it is an empty string
+        if not consul_value or not consul_value.get('Value'):
             raise Exception(("No value found in Consul for key "
-                             "adi-website/{}").format(consul_key))
-
-
-# make sure critical config variables are set
-for config_var in critical_config_vars:
-    if config[config_var] is None or config[config_var] == '':
-        raise Exception("Critical config variable {} has not been "
-                        "set".format(config_var))
+                             "adi-website/{}. You probably need to run: \n\n\t"
+                             "./config/setup_consul_<environment>.sh")
+                            .format(consul_key))
+        config[config_key] = consul_value.get('Value')
 
 # basic flask settings
 config['PORT'] = int(config['PORT'])
 
 # Google Auth
 # This is used for the webapp that allows Google+ login
-config['GOOGLE_AUTH_ENABLED'] = True if config['GOOGLE_AUTH_ENABLED'] == 'TRUE' \
-                                else False
+config['GOOGLE_AUTH_ENABLED'] = (config['GOOGLE_AUTH_ENABLED'] == 'TRUE')
 
 # Setup Google Auth
 if config['GOOGLE_AUTH_ENABLED']:
@@ -102,7 +86,7 @@ if config['GOOGLE_AUTH_ENABLED']:
         exit(1)
 
 # Cross-site request forgery settings
-config['CSRF_ENABLED'] = True if config['CSRF_ENABLED'] == 'TRUE' else False
+config['CSRF_ENABLED'] = (config['CSRF_ENABLED'] == 'TRUE')
 
 # Mongo configs
 config['MONGODB_SETTINGS'] = {'DB': config['MONGO_DATABASE']}

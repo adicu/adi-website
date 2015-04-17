@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # flask settings
-curl -X PUT -d 'localhost' http://localhost:8500/v1/kv/adi-website/flask_host
+curl -X PUT -d '0.0.0.0' http://localhost:8500/v1/kv/adi-website/flask_host
 curl -X PUT -d '5000' http://localhost:8500/v1/kv/adi-website/flask_port
 curl -X PUT -d 'TRUE' http://localhost:8500/v1/kv/adi-website/flask_debug
 curl -X PUT -d 'INSERT_YOUR_KEY' http://localhost:8500/v1/kv/adi-website/secret_key
