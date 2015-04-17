@@ -34,22 +34,27 @@ $(function() {
             //Ajax events
             success: function(data, textStatus, jqXHR) {
                 var response = jQuery.parseJSON(jqXHR.responseText);
-                if (response.extension == null){
+                if (response.extension == null && response.filename == null){
                     $('#images-ajax-loadpoint').load("/admin/media/view", function(response, status){
                         if (status == "error"){
-                            alert("Sorry, there was an error loading the images.");
+                            $('error-message').text("Sorry, there was an error loading the images.");
                         }
                     });
                     $('.error-message').hide();
                 }
                 else {
-                    $('.error-message').text(response.extension);
+                    if (response.extension == null)
+                        $('.error-message').text(response.filename);
+                    else if (response.filename == null)
+                        $('.error-message').text(response.extension);
+                    else
+                        $('.error-message').text(response.extension + "; " + response.filename);
                     $('.error-message').show();
                     $('.error-message').addClass('active');
                 }
             },
             error: function(jqXHR, textStatus, error) {
-                $('.error-mesage').text("An unknown error occured.");
+                $('.error-mesage').text("An unknown error occurred.");
                 $('.error-message').addClass('active');
             },
             // Form data

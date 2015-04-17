@@ -7,7 +7,7 @@
 
 from flask.ext.wtf import Form
 from wtforms import StringField, FileField
-from wtforms.validators import Regexp, Required
+from wtforms.validators import Regexp, Required, NoneOf
 from app.forms.validators import UniqueImage
 from app.lib.regex import FILENAME_REGEX
 from app.lib.regex import EXTENSION_REGEX
@@ -29,7 +29,7 @@ class UploadImageForm(Form):
     image = FileField('Image file')
     uploaded_from = StringField('Uploaded from')
     filename = StringField('Filename', [
-        Regexp(FILENAME_REGEX),
+        Regexp(FILENAME_REGEX, message='Invalid filename.'),
         Required('Please submit a filename'),
         UniqueImage()])
     extension = StringField('Extension', [
