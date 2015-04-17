@@ -27,7 +27,9 @@ def create_app(**config_overrides):
 
     # Load config then apply overrides
     app.config.update(config_overrides)
-    app.config.from_object('config.flask_config')
+
+    from config import flask_config
+    app.config.update(**flask_config.config)
     app.config.update(config_overrides)
 
     # load ADI specific configurations (ignore built-in methods)

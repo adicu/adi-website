@@ -15,7 +15,7 @@ from app.lib.error import (GoogleCalendarAPIError,
                            GoogleCalendarAPIEventAlreadyDeleted,
                            GoogleCalendarAPIErrorNotFound)
 
-from config.flask_config import GOOGLE_AUTH_ENABLED
+from config.flask_config import config
 
 
 class GoogleCalendarAPIClient():
@@ -49,7 +49,7 @@ class GoogleCalendarAPIClient():
             return self.public_calendar_id
         return self.private_calendar_id
 
-    @skip_and_return_if(not GOOGLE_AUTH_ENABLED)
+    @skip_and_return_if(not config['GOOGLE_AUTH_ENABLED'])
     def _get_service(self):
         """Create and return the Google Calendar service object, using the
         credentials file generated through the command::
@@ -77,7 +77,7 @@ class GoogleCalendarAPIClient():
 
         return build('calendar', 'v3', http=http)
 
-    @skip_and_return_if(not GOOGLE_AUTH_ENABLED)
+    @skip_and_return_if(not config['GOOGLE_AUTH_ENABLED'])
     def create_event(self, event):
         """Creates the event in Google Calendar.
 
@@ -109,7 +109,7 @@ class GoogleCalendarAPIClient():
         # Return the Google Calendar response dict
         return created_event
 
-    @skip_and_return_if(not GOOGLE_AUTH_ENABLED)
+    @skip_and_return_if(not config['GOOGLE_AUTH_ENABLED'])
     def update_event(self, stale_event, as_exception=False):
         """Updates the event in Google Calendar.
 
@@ -183,7 +183,7 @@ class GoogleCalendarAPIClient():
         # Return the Google Calendar response dict
         return updated_event
 
-    @skip_and_return_if(not GOOGLE_AUTH_ENABLED)
+    @skip_and_return_if(not config['GOOGLE_AUTH_ENABLED'])
     def publish_event(self, stale_event):
         """Publish an event, moving it to the public calendar.
 
@@ -212,7 +212,7 @@ class GoogleCalendarAPIClient():
         return self.move_event(event, from_id=self.private_calendar_id,
                                to_id=self.public_calendar_id)
 
-    @skip_and_return_if(not GOOGLE_AUTH_ENABLED)
+    @skip_and_return_if(not config['GOOGLE_AUTH_ENABLED'])
     def unpublish_event(self, stale_event):
         """Unpublish an event, moving it to the private calendar.
 
@@ -241,7 +241,7 @@ class GoogleCalendarAPIClient():
         return self.move_event(event, from_id=self.public_calendar_id,
                                to_id=self.private_calendar_id)
 
-    @skip_and_return_if(not GOOGLE_AUTH_ENABLED)
+    @skip_and_return_if(not config['GOOGLE_AUTH_ENABLED'])
     def move_event(self, event, from_id, to_id):
         """Move an event between calendars.
 
@@ -273,7 +273,7 @@ class GoogleCalendarAPIClient():
             app.logger.warning('[GOOGLE_CALENDAR]: ' + message)
             raise GoogleCalendarAPIErrorNotFound(message, uri=e.uri)
 
-    @skip_and_return_if(not GOOGLE_AUTH_ENABLED)
+    @skip_and_return_if(not config['GOOGLE_AUTH_ENABLED'])
     def delete_event(self, event, as_exception=False):
         """Delete an event or series from Google Calendar, or cancel a single
         event from a series.

@@ -1,5 +1,5 @@
 from app.models import Image, User
-from config.flask_config import RELATIVE_UPLOAD_FOLDER, UPLOAD_FOLDER
+from config.flask_config import config
 from mongoengine import connect
 from mongoengine import ValidationError
 
@@ -23,10 +23,10 @@ def import_from_directory(path_to_images):
             img.delete()
 
         old_path = os.path.join(path_to_images, filename)
-        shutil.copy(old_path, UPLOAD_FOLDER)
+        shutil.copy(old_path, config['UPLOAD_FOLDER'])
 
 
-        default_path = RELATIVE_UPLOAD_FOLDER + filename
+        default_path = config['RELATIVE_UPLOAD_FOLDER'] + filename
         image = Image(filename=filename,
                       default_path=default_path,
                       creator=creator)

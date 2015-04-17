@@ -8,7 +8,7 @@
 from flask import url_for
 from mongoengine import ValidationError, signals
 from app import db
-from config.flask_config import BASEDIR, RELATIVE_DELETE_FOLDER
+from config.flask_config import config
 from app.lib.regex import FULL_FILENAME_REGEX
 from datetime import datetime
 import PIL, re, os
@@ -69,10 +69,10 @@ class Image(db.Document):
 
         :raises: :class:`wtforms.validators.ValidationError`
         """
-        VALID_PATHS = re.compile("^(" + BASEDIR + "|http://|https://).*$")
+        VALID_PATHS = re.compile("^(" + config['BASEDIR'] + "|http://|https://).*$")
         self.date_modified = now()
         if not VALID_PATHS.match(self.default_path):
-            self.default_path = os.path.join(BASEDIR, self.default_path)
+            self.default_path = os.path.join(config['BASEDIR'], self.default_path)
         if self.default_path and self.default_path not in self.versions.values():
             try:
                 width, height = PIL.Image.open(self.default_path).size
@@ -107,7 +107,7 @@ class Image(db.Document):
         """
         for size, old_path in document.versions.iteritems():
             _, filename = os.path.split(old_path)
-            delete_folder = RELATIVE_DELETE_FOLDER
+            delete_folder = config['RELATIVE_DELETE_FOLDER']
             if not os.path.isdir(delete_folder):
                 os.mkdir(delete_folder)
             new_path = os.path.join(delete_folder, filename)

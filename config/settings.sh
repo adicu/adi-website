@@ -27,3 +27,6 @@ export MONGO_DATABASE=eventum
 export LOG_FILE_MAX_SIZE=256   # in MB
 export APP_LOG_NAME=log/app.log
 export WERKZEUG_LOG_NAME=log/werkzeug.log
+
+# tell flask to use env vars instead of Consul
+export USE_ENV_VARS=TRUE

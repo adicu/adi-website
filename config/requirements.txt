@@ -26,7 +26,6 @@ misaka==1.0.2
 mongoengine==0.8.7
 pep8==1.5.7
 pyRFC3339==0.2
-pycurl==7.19.0
 pyflakes==0.8.1
 pymongo==2.7.2
 python-gflags==2.0
@@ -34,3 +33,6 @@ pytz==2015.2
 requests==2.3.0
 webassets==0.8
 wsgiref==0.1.2
+gunicorn==19.2.1
+python-consul==0.3.10
+
