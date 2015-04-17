@@ -34,72 +34,6 @@
 <h2>Choose Your User Type:</h2>
 <form class="whitelist-add-form" method="POST" action="{{ url_for('whitelist.add') }}">
     {{ whitelist_form.csrf_token }}
-    <div class="display-feature-table">
-        <table>
-            <colgroup>
-                <col class="privileges"></col>
-                <col class="guest"></col>
-                <col class="editor"></col>
-                <col class="publisher"></col>
-                <col class="admin"></col>
-            </colgroup>
-            <thead>
-                <tr>
-                    <th>&nbsp;</th>
-                    {% for subfield in whitelist_form.user_type %}
-                        <th>{{ subfield }}
-                        {{ subfield.label }}</th>
-                    {% endfor %}
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="privilege">Authorship
-                        <small>Can be set as author on blog posts</small></td>
-                    <td><i class="fa fa-check"></i></td>
-                    <td><i class="fa fa-check"></i></td>
-                    <td><i class="fa fa-check"></i></td>
-                    <td><i class="fa fa-check"></i></td>
-                </tr>
-                <tr>
-                    <td class="privilege">Blogging
-                        <small>Create and edit blog posts</small></td>
-                    <td><i class="fa fa-times"></i></td>
-                    <td><i class="fa fa-check"></i></td>
-                    <td><i class="fa fa-check"></i></td>
-                    <td><i class="fa fa-check"></i></td>
-                </tr>
-                <tr>
-                    <td class="privilege">Event Creation <small>Create and edit events</small></td>
-                    <td><i class="fa fa-times"></i></td>
-                    <td><i class="fa fa-check"></i></td>
-                    <td><i class="fa fa-check"></i></td>
-                    <td><i class="fa fa-check"></i></td>
-                </tr>
-                <tr>
-                    <td class="privilege">Publishing <small>Publish blog posts and events</small></td>
-                    <td><i class="fa fa-times"></i></td>
-                    <td><i class="fa fa-times"></i></td>
-                    <td><i class="fa fa-check"></i></td>
-                    <td><i class="fa fa-check"></i></td>
-                </tr>
-                <tr>
-                    <td class="privilege">View and manage users</td>
-                    <td><i class="fa fa-times"></i></td>
-                    <td><i class="fa fa-times"></i></td>
-                    <td><i class="fa fa-times"></i></td>
-                    <td><i class="fa fa-check"></i></td>
-                </tr>
-                <tr>
-                    <td class="privilege">Add users to the whitelist</td>
-                    <td><i class="fa fa-times"></i></td>
-                    <td><i class="fa fa-times"></i></td>
-                    <td><i class="fa fa-times"></i></td>
-                    <td><i class="fa fa-check"></i></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
     <div class="for-whitelist hidden">
     {{ macros.render_field(whitelist_form.email, placeholder="Email Address", autofocus="", label=False)}}
     </div>
@@ -116,6 +50,68 @@
                 <i></i>
             </a>
         </div>
+    </div>
+    <div class="display-feature-table">
+        <table>
+            <colgroup>
+                <col class="privileges"></col>
+                <col class="guest"></col>
+                <col class="editor"></col>
+                <col class="publisher"></col>
+                <col class="admin"></col>
+            </colgroup>
+            <tr>
+                <th>&nbsp;</th>
+                {% for subfield in whitelist_form.user_type %}
+                    <td>{{ subfield }}
+                    {{ subfield.label }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <th>Authorship
+                    <small>Can author blog posts</small></th>
+                <td><i class="fa fa-check"></i></td>
+                <td><i class="fa fa-check"></i></td>
+                <td><i class="fa fa-check"></i></td>
+                <td><i class="fa fa-check"></i></td>
+            </tr>
+            <tr>
+                <th>Blogging
+                    <small>Create and edit blog posts</small></th>
+                <td><i class="fa fa-times"></i></td>
+                <td><i class="fa fa-check"></i></td>
+                <td><i class="fa fa-check"></i></td>
+                <td><i class="fa fa-check"></i></td>
+            </tr>
+            <tr>
+                <th>Event Creation <small>Create and edit events</small></th>
+                <td><i class="fa fa-times"></i></td>
+                <td><i class="fa fa-check"></i></td>
+                <td><i class="fa fa-check"></i></td>
+                <td><i class="fa fa-check"></i></td>
+            </tr>
+            <tr>
+                <th>Publishing <small>Publish blog posts and events</small></th>
+                <td><i class="fa fa-times"></i></td>
+                <td><i class="fa fa-times"></i></td>
+                <td><i class="fa fa-check"></i></td>
+                <td><i class="fa fa-check"></i></td>
+            </tr>
+            <tr>
+                <th>View and manage users</th>
+                <td><i class="fa fa-times"></i></td>
+                <td><i class="fa fa-times"></i></td>
+                <td><i class="fa fa-times"></i></td>
+                <td><i class="fa fa-check"></i></td>
+            </tr>
+            <tr>
+                <th>Add users to the whitelist</th>
+                <td><i class="fa fa-times"></i></td>
+                <td><i class="fa fa-times"></i></td>
+                <td><i class="fa fa-times"></i></td>
+                <td><i class="fa fa-check"></i></td>
+            </tr>
+        </table>
     </div>
     <input class="big" type="submit" value="Add">
 </form>
