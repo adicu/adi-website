@@ -14,28 +14,60 @@
         margin-top: 1rem;
         display: block;
     }
-    .display-feature-table {
-        table, td, th {
-            overflow: hidden;
-            border: 1px solid #e0e0e0;
-        }
-        .highlighted {
-            background-color: #f5f5f5;
-        }
-        .clicked {
-            background-color: #efefef;
-        }  
-        th, td {
-            padding: 5px;
-            font: 85%;
-            text-align: center;
-        }
-        td {
-            .fa-times {
-                color: red;
+    @media screen and (min-width: 641px) {
+        .display-feature-table {
+            table, td, th {
+                overflow: hidden;
+                border: 1px solid #e0e0e0;
             }
-            .fa-check {
-                color: green;
+            .highlighted {
+                background-color: #f5f5f5;
+            }
+            .clicked {
+                background-color: #efefef;
+            }  
+            th, td {
+                padding: 5px;
+                text-align: center;
+            }
+            td {
+                .fa-times {
+                    color: red;
+                }
+                .fa-check {
+                    color: green;
+                }
+            }
+        }
+    }
+    @media screen and (max-width: 641px) {
+        .display-feature-table {
+            overflow-x: scroll;
+            width: 100%;
+            table {
+                min-width: 642px;
+            }
+            table, td, th {
+                overflow: hidden;
+                border: 1px solid #e0e0e0;
+            }
+            .highlighted {
+                background-color: #f5f5f5;
+            }
+            .clicked {
+                background-color: #efefef;
+            }  
+            th, td {
+                padding: 5px;
+                text-align: center;
+            }
+            td {
+                .fa-times {
+                    color: red;
+                }
+                .fa-check {
+                    color: green;
+                }
             }
         }
     }

@@ -53,59 +53,50 @@
     </div>
     <div class="display-feature-table">
         <table>
-            <colgroup>
-                <col class="privileges"></col>
-                <col class="guest"></col>
-                <col class="editor"></col>
-                <col class="publisher"></col>
-                <col class="admin"></col>
-            </colgroup>
             <tr>
                 <th>&nbsp;</th>
                 {% for subfield in whitelist_form.user_type %}
                     <td>{{ subfield }}
-                    {{ subfield.label }}</td>
+                    {{subfield.label}}</td>
                 {% endfor %}
             </tr>
             <tr>
-                <th>Authorship
-                    <small>Can author blog posts</small></th>
+                <th><small>Author blog posts</small></th>
                 <td><i class="fa fa-check"></i></td>
                 <td><i class="fa fa-check"></i></td>
                 <td><i class="fa fa-check"></i></td>
                 <td><i class="fa fa-check"></i></td>
             </tr>
             <tr>
-                <th>Blogging
-                    <small>Create and edit blog posts</small></th>
+                <th><small>Create and edit blog posts</small></th>
                 <td><i class="fa fa-times"></i></td>
                 <td><i class="fa fa-check"></i></td>
                 <td><i class="fa fa-check"></i></td>
                 <td><i class="fa fa-check"></i></td>
             </tr>
             <tr>
-                <th>Event Creation <small>Create and edit events</small></th>
+                <th><small>Create and edit events</small></th>
                 <td><i class="fa fa-times"></i></td>
                 <td><i class="fa fa-check"></i></td>
                 <td><i class="fa fa-check"></i></td>
                 <td><i class="fa fa-check"></i></td>
             </tr>
             <tr>
-                <th>Publishing <small>Publish blog posts and events</small></th>
+                <th><small>Publish blog posts and events</small></th>
                 <td><i class="fa fa-times"></i></td>
                 <td><i class="fa fa-times"></i></td>
                 <td><i class="fa fa-check"></i></td>
                 <td><i class="fa fa-check"></i></td>
             </tr>
             <tr>
-                <th>View and manage users</th>
+                <th><small>View and manage users</small></th>
                 <td><i class="fa fa-times"></i></td>
                 <td><i class="fa fa-times"></i></td>
                 <td><i class="fa fa-times"></i></td>
                 <td><i class="fa fa-check"></i></td>
             </tr>
             <tr>
-                <th>Add users to the whitelist</th>
+                <th><small>Add users to the whitelist</small></th>
                 <td><i class="fa fa-times"></i></td>
                 <td><i class="fa fa-times"></i></td>
                 <td><i class="fa fa-times"></i></td>
