@@ -93,10 +93,10 @@ table.table {
 }
 
 @media screen and (max-width: $phone-max) {
-    table thead {
+    table.table thead {
         display: none;
     }
-    table tr td {
+    table.table tr td {
         display: inline-block;
         width: 100% !important;
         padding-left: 0.5rem;
