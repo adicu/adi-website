@@ -5,6 +5,7 @@ from media import media
 from posts import posts
 from users import users
 from whitelist import whitelist
+from api import api
 
 # note: silences pyflakes unused variables
 assert (admin,
@@ -13,4 +14,5 @@ assert (admin,
         media,
         posts,
         users,
-        whitelist)
+        whitelist,
+        api)

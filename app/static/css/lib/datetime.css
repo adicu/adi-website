@@ -135,7 +135,7 @@
   user-select: none;
 }
 
-/* line 101 */
+/* line 100 */
 .datepicker td,
 .datepicker th {
   text-align: center;
@@ -144,26 +144,26 @@
   border: none;
 }
 
-/* line 108 */
+/* line 107 */
 .table-striped .datepicker table tr td,
 .table-striped .datepicker table tr th {
   background-color: transparent;
 }
 
-/* line 112 */
+/* line 111 */
 .datepicker table tr td.day:hover,
 .datepicker table tr td.day.focused {
   background: #eeeeee;
   cursor: pointer;
 }
 
-/* line 117 */
+/* line 116 */
 .datepicker table tr td.old,
 .datepicker table tr td.new {
   color: #999999;
 }
 
-/* line 121 */
+/* line 120 */
 .datepicker table tr td.disabled,
 .datepicker table tr td.disabled:hover {
   background: none;
@@ -171,7 +171,7 @@
   cursor: default;
 }
 
-/* line 129 */
+/* line 126 */
 .datepicker table tr td.today,
 .datepicker table tr td.today:hover,
 .datepicker table tr td.today.disabled,
@@ -191,7 +191,7 @@
   color: #fff;
 }
 
-/* line 143 */
+/* line 140 */
 .datepicker table tr td.range,
 .datepicker table tr td.range:hover,
 .datepicker table tr td.range.disabled,
@@ -199,7 +199,7 @@
   background: #eeeeee;
 }
 
-/* line 149 */
+/* line 146 */
 .datepicker table tr td.range.today,
 .datepicker table tr td.range.today:hover,
 .datepicker table tr td.range.today.disabled,
@@ -207,7 +207,7 @@
   background-color: #f3d17a;
 }
 
-/* line 171 */
+/* line 152 */
 .datepicker table tr td.range.today:hover,
 .datepicker table tr td.range.today:hover:hover,
 .datepicker table tr td.range.today.disabled:hover,
@@ -231,7 +231,7 @@
   background-color: #f3e97a;
 }
 
-/* line 181 */
+/* line 174 */
 .datepicker table tr td.range.today:active,
 .datepicker table tr td.range.today:hover:active,
 .datepicker table tr td.range.today.disabled:active,
@@ -243,7 +243,7 @@
   background-color: #efe24b \9;
 }
 
-/* line 187 */
+/* line 184 */
 .datepicker table tr td.selected,
 .datepicker table tr td.selected:hover,
 .datepicker table tr td.selected.disabled,
@@ -253,7 +253,7 @@
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 
-/* line 211 */
+/* line 192 */
 .datepicker table tr td.selected:hover,
 .datepicker table tr td.selected:hover:hover,
 .datepicker table tr td.selected.disabled:hover,
@@ -277,7 +277,7 @@
   background-color: #808080;
 }
 
-/* line 221 */
+/* line 214 */
 .datepicker table tr td.selected:active,
 .datepicker table tr td.selected:hover:active,
 .datepicker table tr td.selected.disabled:active,
@@ -289,17 +289,17 @@
   background-color: #666666 \9;
 }
 
-/* line 227 */
+/* line 224 */
 .datepicker table tr td.active,
 .datepicker table tr td.active:hover,
 .datepicker table tr td.active.disabled,
 .datepicker table tr td.active.disabled:hover {
-  background-color: #3878cc;
+  background-color: #3878CC;
   color: #fff;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 
-/* line 251 */
+/* line 232 */
 .datepicker table tr td.active:hover,
 .datepicker table tr td.active:hover:hover,
 .datepicker table tr td.active.disabled:hover,
@@ -320,10 +320,10 @@
 .datepicker table tr td.active:hover[disabled],
 .datepicker table tr td.active.disabled[disabled],
 .datepicker table tr td.active.disabled:hover[disabled] {
-  background-color: #3878cc;
+  background-color: #3878CC;
 }
 
-/* line 261 */
+/* line 254 */
 .datepicker table tr td.active:active,
 .datepicker table tr td.active:hover:active,
 .datepicker table tr td.active.disabled:active,
@@ -351,7 +351,7 @@
   background: #eeeeee;
 }
 
-/* line 277 */
+/* line 276 */
 .datepicker table tr td span.disabled,
 .datepicker table tr td span.disabled:hover {
   background: none;
@@ -359,17 +359,17 @@
   cursor: default;
 }
 
-/* line 285 */
+/* line 282 */
 .datepicker table tr td span.active,
 .datepicker table tr td span.active:hover,
 .datepicker table tr td span.active.disabled,
 .datepicker table tr td span.active.disabled:hover {
-  background-color: #3878cc;
+  background-color: #3878CC;
   color: #fff;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 
-/* line 309 */
+/* line 290 */
 .datepicker table tr td span.active:hover,
 .datepicker table tr td span.active:hover:hover,
 .datepicker table tr td span.active.disabled:hover,
@@ -390,10 +390,10 @@
 .datepicker table tr td span.active:hover[disabled],
 .datepicker table tr td span.active.disabled[disabled],
 .datepicker table tr td span.active.disabled:hover[disabled] {
-  background-color: #3878cc;
+  background-color: #3878CC;
 }
 
-/* line 319 */
+/* line 312 */
 .datepicker table tr td span.active:active,
 .datepicker table tr td span.active:hover:active,
 .datepicker table tr td span.active.disabled:active,
@@ -405,7 +405,7 @@
   background-color: #003399 \9;
 }
 
-/* line 323 */
+/* line 322 */
 .datepicker table tr td span.old,
 .datepicker table tr td span.new {
   color: #999999;
@@ -416,13 +416,13 @@
   width: 145px;
 }
 
-/* line 330 */
+/* line 329 */
 .datepicker thead tr:first-child th,
 .datepicker tfoot tr th {
   cursor: pointer;
 }
 
-/* line 334 */
+/* line 333 */
 .datepicker thead tr:first-child th:hover,
 .datepicker tfoot tr th:hover {
   background: #eeeeee;
@@ -474,7 +474,7 @@
   line-height: 20px;
 }
 
-/* line 376 */
+/* line 375 */
 .datepicker.dropdown-menu th,
 .datepicker.dropdown-menu td {
   padding: 4px 5px;
@@ -534,21 +534,21 @@
   color: #000;
 }
 
-/* line 50 */
+/* line 48 */
 li.ui-timepicker-selected,
 .ui-timepicker-list li:hover,
 .ui-timepicker-list .ui-timepicker-selected:hover {
-  background: #3878cc;
+  background: #3878CC;
   color: #fff;
 }
 
-/* line 55 */
+/* line 54 */
 li.ui-timepicker-selected .ui-timepicker-duration,
 .ui-timepicker-list li:hover .ui-timepicker-duration {
   color: #ccc;
 }
 
-/* line 61 */
+/* line 59 */
 .ui-timepicker-list li.ui-timepicker-disabled,
 .ui-timepicker-list li.ui-timepicker-disabled:hover,
 .ui-timepicker-list li.ui-timepicker-selected.ui-timepicker-disabled {
@@ -556,7 +556,7 @@ li.ui-timepicker-selected .ui-timepicker-duration,
   cursor: default;
 }
 
-/* line 67 */
+/* line 66 */
 .ui-timepicker-list li.ui-timepicker-disabled:hover,
 .ui-timepicker-list li.ui-timepicker-selected.ui-timepicker-disabled {
   background: #f2f2f2;

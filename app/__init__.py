@@ -87,9 +87,9 @@ def register_blueprints():
     calls, as it can also result in circular dependancies.
     """
     from app.routes.admin import (admin, auth, events, media, posts,
-                                  users, whitelist)
+                                  users, whitelist, api)
     admin_blueprints = [admin, auth, events, media, posts, users,
-                        whitelist]
+                        whitelist, api]
 
     for bp in admin_blueprints:
         app.register_blueprint(bp, url_prefix="/admin")

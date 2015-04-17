@@ -167,6 +167,7 @@ class Event(db.Document):
                                   "time. Got (%r,%r)" % (self.start_time,
                                                          self.end_time))
 
+    @property
     def start_datetime(self):
         """A convenience method to combine ``start_date`` and ``start_time``
         into one :class:`datetime`.
@@ -180,6 +181,7 @@ class Event(db.Document):
             return None
         return datetime.combine(self.start_date, self.start_time)
 
+    @property
     def end_datetime(self):
         """A convenience method to combine ``end_date`` and ``end_time``
         into one :class:`datetime`.
@@ -222,8 +224,8 @@ class Event(db.Document):
             self.title,
             self.creator,
             self.location,
-            self.start_datetime(),
-            self.end_datetime(),
+            self.start_datetime,
+            self.end_datetime,
             self.short_description,
             self.long_description,
             self.image
@@ -324,6 +326,15 @@ class Event(db.Document):
                 self.end_time is not None and
                 self.start_time.strftime("%p")==self.end_time.strftime("%p"))
 
+    def to_jsonifiable(self):
+        attrs = ['date_created', 'date_modified', 'title', 'location', 'slug',
+                'start_datetime', 'end_datetime', 'short_description',
+                'long_description', 'short_description_markdown',
+                'long_description_markdown', 'published', 'date_published',
+                'is_recurring']
+
+        return dict(zip(list(attrs), [ getattr(self, attr) for attr in attrs ]))
+
     def __unicode__(self):
         """This event, as a unicode string.
 
@@ -340,5 +351,5 @@ class Event(db.Document):
         """
         return 'Event(title=%r, location=%r, creator=%r, start=%r, end=%r, ' \
             'published=%r)' % (self.title, self.location, self.creator,
-                             self.start_datetime(), self.end_datetime(),
-                             self.published)
+                             self.start_datetime, self.end_datetime,
+                            self.published)
