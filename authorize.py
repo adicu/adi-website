@@ -10,7 +10,7 @@ parser = argparse.ArgumentParser(parents=[tools.argparser])
 FLAGS = parser.parse_args()
 SCOPE = 'https://www.googleapis.com/auth/calendar'
 
-FLOW = flow_from_clientsecrets(config['INSTALLED_APP_SECRET_PATH'],
+FLOW = flow_from_clientsecrets(config['INSTALLED_APP_CLIENT_SECRET_PATH'],
                                scope=SCOPE)
 
 # Save the credentials file here for use by the app
