@@ -137,6 +137,14 @@ class ProgressPrinter(object):
 
     """
 
+    # Each of these status messages has to be the same width, so that they can
+    # be right-aligned in the table.
+    STATUS_SUCCESS = 'Success'
+    STATUS_FAIL = '   Fail'
+    STATUS_SKIP = '   Skip'
+    # Amount of room to leave for status message, plus a 1-character space.
+    SPACE = len(STATUS_SUCCESS) + 1
+
     def __init__(self, quiet=False, width=40):
         """Sets up new ProgressPrinter.
 
@@ -189,7 +197,7 @@ class ProgressPrinter(object):
         :param str item: The text to print on the left half of the status line.
         """
         if not self.quiet:
-            print item + (" " * (self.width - 8 - len(item))),
+            print item + (" " * (self.width - self.SPACE - len(item))),
 
     def status_success(self):
         """Print out "Success" to the end of a status line.  It is expected
@@ -197,18 +205,18 @@ class ProgressPrinter(object):
         :func:`begin_status_line`.
         """
         if not self.quiet:
-            print "Success"
+            print self.STATUS_SUCCESS
 
     def status_skip(self):
         """Print out "Skip" to the end of a status line.  It is expected that
         this function is only called after a call to :func:`begin_status_line`.
         """
         if not self.quiet:
-            print "   Skip"
+            print self.STATUS_SKIP
 
     def status_fail(self):
         """Print out "Fail" to the end of a status line.  It is expected that
         this function is only called after a call to :func:`begin_status_line`.
         """
         if not self.quiet:
-            print "   Fail"
+            print self.STATUS_FAIL
