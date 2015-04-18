@@ -12,7 +12,7 @@ from mongoengine.queryset import DoesNotExist
 from sys import argv, exit
 from app.models import User, Event, EventSeries, Image, BlogPost
 from script.cli import CLIColor, ProgressPrinter
-from config.flask_config import MONGODB_SETTINGS
+from config.flask_config import config
 from images import create_images
 from events import create_events
 from posts import create_posts
@@ -83,7 +83,7 @@ class TestDataGenerator(object):
         """
 
         # Setup: db connection, superuser, and printer.
-        connect(MONGODB_SETTINGS['DB'])
+        connect(config['MONGODB_SETTINGS']['DB'])
         try:
             superuser = User.objects().get(gplus_id='super')
         except DoesNotExist:

@@ -9,7 +9,7 @@
 import urllib
 from os.path import exists
 from app.models import Image
-from config.flask_config import UPLOAD_FOLDER
+from config.flask_config import config
 
 BASE_URL = "http://lorempixel.com/{}/{}/"
 BASE_FILENAME = "test_photo_{}x{}.jpeg"
@@ -37,7 +37,7 @@ def create_images(num_images, superuser, printer):
     for width in range(400, 1600, (1600 - 400) / num_images):
         height = width / 2
         filename = BASE_FILENAME.format(width, height)
-        path = UPLOAD_FOLDER + filename
+        path = config['UPLOAD_FOLDER'] + filename
         url = BASE_URL.format(width, height)
 
         printer.begin_status_line(filename)
