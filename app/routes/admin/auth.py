@@ -9,7 +9,7 @@ import string
 import random
 import httplib2
 from app import app
-from app.lib.json import json_success, json_error_message
+from app.lib.json_response import json_success, json_error_message
 from app.models import User, Whitelist
 from app.forms import CreateProfileForm
 from apiclient.discovery import build

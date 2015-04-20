@@ -9,10 +9,8 @@ from datetime import datetime, date, timedelta
 
 from flask import Blueprint
 
-from bson import json_util
-import json
-
 from app.models import Event
+from app.lib.json_response import json_success
 
 api = Blueprint('api', __name__)
 
@@ -35,4 +33,4 @@ def events_this_week():
                            start_date__lt=next_sunday).order_by('start_date')
     event_dicts = [event.to_jsonifiable() for event in events]
 
-    return json.dumps(event_dicts, default = json_util.default)
+    return json_success(event_dicts)
