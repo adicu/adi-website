@@ -71,9 +71,11 @@ def create_app(**config_overrides):
                        gae_environ))
         exit(1)
 
-    register_blueprints()
     register_delete_rules()
     register_blueprints()
+
+    from app.routes.base import register_error_handlers
+    register_error_handlers(app)
     register_logger()
     return app
 
