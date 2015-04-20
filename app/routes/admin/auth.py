@@ -12,6 +12,7 @@ from app import app
 from app.lib.networking import json_response
 from app.models import User, Whitelist
 from app.forms import CreateProfileForm
+from app.routes.base import MESSAGE_FLASH
 from apiclient.discovery import build
 from flask import Blueprint, render_template, request, \
     flash, session, g, redirect, url_for
@@ -148,7 +149,8 @@ def create_profile():
             user = User.objects.get(email=form.email.data)
             user.openid = session['openid']
             user.name = form.name.data
-            flash('Account with this email already exists.  Overridden.')
+            flash('Account with this email already exists.  Overridden.',
+                  MESSAGE_FLASH)
             user.register_login()
             user.save()
         else:
@@ -163,7 +165,7 @@ def create_profile():
                         gplus_id=session['gplus_id'],
                         user_type=user_type,
                         image_url=request.args.get('image_url'))
-            flash('Account created successfully.')
+            flash('Account created successfully.', MESSAGE_FLASH)
             user.register_login()
             user.save()
 

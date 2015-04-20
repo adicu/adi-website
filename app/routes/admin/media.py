@@ -15,6 +15,7 @@ from app import app
 from app.lib.decorators import login_required, requires_privilege
 from app.forms import UploadImageForm
 from app.models import Image
+from app.routes.base import ERROR_FLASH
 
 media = Blueprint('media', __name__)
 
@@ -76,9 +77,9 @@ def upload():
                           creator=g.user)
             image.save()
             return redirect(url_for('.index'))
-        flash("Filename {} is invalid".format(f.filename))
+        flash("Filename {} is invalid".format(f.filename), ERROR_FLASH)
     if form.errors:
-        flash(form.errors)
+        flash(form.errors, ERROR_FLASH)
     if uploaded_from:
         return redirect(uploaded_from)
     return render_template('admin/media/upload.html', form=form)
@@ -109,6 +110,5 @@ def delete(filename):
         image = Image.objects().get(filename=filename)
         image.delete()
     else:
-        flash('Invalid filename')
-        pass
+        flash('Invalid filename', ERROR_FLASH)
     return redirect(url_for('.index'))
