@@ -342,7 +342,7 @@ class Event(db.Document):
                 'long_description_markdown', 'published', 'date_published',
                 'is_recurring']
 
-        return dict(zip(list(attrs), [ getattr(self, attr) for attr in attrs ]))
+        return dict(zip(list(attrs), [getattr(self, attr) for attr in attrs]))
 
     def __unicode__(self):
         """This event, as a unicode string.
