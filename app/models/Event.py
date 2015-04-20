@@ -331,7 +331,6 @@ class Event(db.Document):
         Returns a jsonifiable dictionary of event attributes to values. The
         dictionary only contains attributes whose types are jsonifiable.
 
-
         :returns: A jsonifiable dictionary of event attributes to values. 
         :rtype: dict
         """

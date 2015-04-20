@@ -335,7 +335,7 @@ class GoogleCalendarAPIClient():
         """
         calendar_id = self._calendar_id_for_event(event)
         event_start_date = (GoogleCalendarResourceBuilder
-                            .rfc3339(event.start_datetime()))
+                            .rfc3339(event.start_datetime))
         page_token = None
         while True:
             # Find more instances

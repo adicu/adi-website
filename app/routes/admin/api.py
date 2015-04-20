@@ -32,7 +32,7 @@ def events_this_week():
                                    datetime.min.time())
     next_sunday = last_sunday + timedelta(days=7)
     events = Event.objects(start_date__gte=last_sunday,
-                              start_date__lt=next_sunday).order_by('start_date')
+                           start_date__lt=next_sunday).order_by('start_date')
     event_dicts = [event.to_jsonifiable() for event in events]
 
     return json.dumps(event_dicts, default = json_util.default)
