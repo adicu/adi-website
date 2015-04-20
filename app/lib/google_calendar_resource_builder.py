@@ -32,8 +32,8 @@ class GoogleCalendarResourceBuilder():
         if for_update:
             resource['sequence'] = event.gcal_sequence + 1
 
-        rfc3339_start_dt = klass.rfc3339(event.start_datetime())
-        rfc3339_end_dt = klass.rfc3339(event.end_datetime())
+        rfc3339_start_dt = klass.rfc3339(event.start_datetime)
+        rfc3339_end_dt = klass.rfc3339(event.end_datetime)
 
         resource['start'] = {}
         resource['start']['dateTime'] = rfc3339_start_dt

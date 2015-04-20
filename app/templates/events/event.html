@@ -45,7 +45,7 @@
                 <i class="fa fa-map-marker"></i>
                 {{ event.location }}
             </p>
-            {% if event.end_datetime() > now %}
+            {% if event.end_datetime > now %}
             <p>
                 <i class="fa fa-comment"></i>
                 <a href="https://adicu.com/feedback?event={{event.title}}">

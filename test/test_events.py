@@ -93,47 +93,47 @@ class TestEvents(base.TestingTemplate):
 
     def test_event_start_datetimes(self):
         """Test that when events are created with both start_date and
-        start_time, start_datetime() is their value combined.
+        start_time, start_datetime is their value combined.
         """
         e = Event(title=self.TITLE, creator=self.USER,
                   start_date=self.START.date(),
                   start_time=self.START.time())
-        self.assertEqual(e.start_datetime(), self.START)
+        self.assertEqual(e.start_datetime, self.START)
 
 
     def test_event_end_datetimes(self):
         """Test that when events are created with both end_date and
-        end_time, end_datetime() is their value combined.
+        end_time, end_datetime is their value combined.
         """
         e = Event(title=self.TITLE, creator=self.USER,
                   end_date=self.END.date(),
                   end_time=self.END.time())
-        self.assertEqual(e.end_datetime(), self.END)
+        self.assertEqual(e.end_datetime, self.END)
 
 
     def test_event_start_datetimes_none_with_incomplete_data(self):
         """Test that when events are created without both of start_date and
-        start_time, start_datetime() returns None.
+        start_time, start_datetime returns None.
         """
         e = Event(title=self.TITLE, creator=self.USER,
                   start_date=self.START.date())
-        self.assertIsNone(e.start_datetime())
+        self.assertIsNone(e.start_datetime)
 
         f = Event(title=self.TITLE, creator=self.USER,
                   start_time=self.START.time())
-        self.assertIsNone(f.start_datetime())
+        self.assertIsNone(f.start_datetime)
 
     def test_event_end_datetimes_none_with_incomplete_data(self):
         """Test that when events are created without both of end_date and
-        end_time, end_datetime() returns None.
+        end_time, end_datetime returns None.
         """
         e = Event(title=self.TITLE, creator=self.USER,
                   end_date=self.END.date())
-        self.assertIsNone(e.end_datetime())
+        self.assertIsNone(e.end_datetime)
 
         f = Event(title=self.TITLE, creator=self.USER,
                   end_time=self.END.time())
-        self.assertIsNone(f.end_datetime())
+        self.assertIsNone(f.end_datetime)
 
     def test_create_event_model(self):
         """Test creating an event with the proper data"""
