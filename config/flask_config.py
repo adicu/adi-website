@@ -19,7 +19,7 @@ config = {
 # consul_configurations contains equivalent keys that will be used to extract
 # configuration values from Consul.
 consul_configurations = [  # (consul key, config key)
-    ('host', 'HOST'),
+    ('flask_host', 'HOST'),
     ('flask_port', 'PORT'),
     ('flask_debug', 'DEBUG'),
     ('secret_key', 'SECRET_KEY'),
