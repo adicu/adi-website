@@ -327,6 +327,15 @@ class Event(db.Document):
                 self.start_time.strftime("%p")==self.end_time.strftime("%p"))
 
     def to_jsonifiable(self):
+        """
+        Returns a jsonifiable dictionary of event attributes to values. The
+        dictionary only contains attributes whose types are jsonifiable.
+
+
+        :returns: A jsonifiable dictionary of event attributes to values. 
+        :rtype: dict
+        """
+
         attrs = ['date_created', 'date_modified', 'title', 'location', 'slug',
                 'start_datetime', 'end_datetime', 'short_description',
                 'long_description', 'short_description_markdown',

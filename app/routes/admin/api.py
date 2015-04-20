@@ -26,6 +26,15 @@ api = Blueprint('api', __name__)
 
 @api.route('/api/events/this_week', methods=['GET'])
 def events_this_week():
+    """
+    Get a json object containing information about all the events for the
+    current week (Sunday to Sunday).
+    
+    **Route:** ``/admin/api/events/this_week
+
+    **Methods:** ``GET`` 
+    """
+
     today = date.today()
     last_sunday = datetime.combine(today - timedelta(days=(today.isoweekday() % 7)),
                                    datetime.min.time())
