@@ -7,7 +7,8 @@ from oauth2client.file import Storage
 
 from app import app
 from app.models import Event
-from app.lib.google_calendar_resource_builder import GoogleCalendarResourceBuilder
+from app.lib.google_calendar_resource_builder import (
+    GoogleCalendarResourceBuilder)
 from app.lib.decorators import skip_and_return_if
 from app.lib.error import (GoogleCalendarAPIError,
                            GoogleCalendarAPIMissingID,
@@ -15,7 +16,7 @@ from app.lib.error import (GoogleCalendarAPIError,
                            GoogleCalendarAPIEventAlreadyDeleted,
                            GoogleCalendarAPIErrorNotFound)
 
-from config.flask_config import GOOGLE_AUTH_ENABLED
+from config.flask_config import config
 
 
 class GoogleCalendarAPIClient():
@@ -28,8 +29,14 @@ class GoogleCalendarAPIClient():
     """
 
     def __init__(self):
-        """Initialize the Google Calendar API Client, with a private and public
-        calendar to publish to.
+        """Initialize the Google Calendar API Client
+        """
+        self.service = None
+
+    def before_request(self):
+        """Refreshes the Google Calendar Service.  It is better practice to
+        refresh the service before every request, as opposed to just at the
+        beginning of running the app.
         """
         self.service = self._get_service()
         self.private_calendar_id = app.config['PRIVATE_CALENDAR_ID']
@@ -49,7 +56,7 @@ class GoogleCalendarAPIClient():
             return self.public_calendar_id
         return self.private_calendar_id
 
-    @skip_and_return_if(not GOOGLE_AUTH_ENABLED)
+    @skip_and_return_if(not config['GOOGLE_AUTH_ENABLED'])
     def _get_service(self):
         """Create and return the Google Calendar service object, using the
         credentials file generated through the command::
@@ -69,7 +76,7 @@ class GoogleCalendarAPIClient():
         if credentials is None:
             raise IOError
 
-        if credentials.invalid == True:
+        if credentials.invalid is True:
             raise NotImplementedError
 
         http = httplib2.Http()
@@ -77,7 +84,7 @@ class GoogleCalendarAPIClient():
 
         return build('calendar', 'v3', http=http)
 
-    @skip_and_return_if(not GOOGLE_AUTH_ENABLED)
+    @skip_and_return_if(not config['GOOGLE_AUTH_ENABLED'])
     def create_event(self, event):
         """Creates the event in Google Calendar.
 
@@ -90,6 +97,7 @@ class GoogleCalendarAPIClient():
         :returns: The Google Calendar API response.
         :rtype: dict
         """
+        self.before_request()
 
         resource = None
         resource = GoogleCalendarResourceBuilder.event_resource(event)
@@ -109,7 +117,7 @@ class GoogleCalendarAPIClient():
         # Return the Google Calendar response dict
         return created_event
 
-    @skip_and_return_if(not GOOGLE_AUTH_ENABLED)
+    @skip_and_return_if(not config['GOOGLE_AUTH_ENABLED'])
     def update_event(self, stale_event, as_exception=False):
         """Updates the event in Google Calendar.
 
@@ -134,6 +142,7 @@ class GoogleCalendarAPIClient():
         :returns: The Google Calendar API response.
         :rtype: dict
         """
+        self.before_request()
 
         # Freshen up stale_event
         event = Event.objects().get(id=stale_event.id)
@@ -147,8 +156,8 @@ class GoogleCalendarAPIClient():
                                              'fell back to create.')
 
         resource = None
-        resource = GoogleCalendarResourceBuilder.event_resource(event,
-                                                                for_update=True)
+        resource = GoogleCalendarResourceBuilder.event_resource(
+            event, for_update=True)
 
         calendar_id = self._calendar_id_for_event(event)
 
@@ -183,7 +192,7 @@ class GoogleCalendarAPIClient():
         # Return the Google Calendar response dict
         return updated_event
 
-    @skip_and_return_if(not GOOGLE_AUTH_ENABLED)
+    @skip_and_return_if(not config['GOOGLE_AUTH_ENABLED'])
     def publish_event(self, stale_event):
         """Publish an event, moving it to the public calendar.
 
@@ -202,17 +211,19 @@ class GoogleCalendarAPIClient():
         :returns: The Google Calendar API response.
         :rtype: dict
         """
+        self.before_request()
 
         # Freshen up stale_event
         event = Event.objects().get(id=stale_event.id)
 
         if not event.published:
-            raise GoogleCalendarAPIError('Event must have published as `True` before publishing')
+            raise GoogleCalendarAPIError('Event must have published as `True`'
+                                         ' before publishing')
 
         return self.move_event(event, from_id=self.private_calendar_id,
                                to_id=self.public_calendar_id)
 
-    @skip_and_return_if(not GOOGLE_AUTH_ENABLED)
+    @skip_and_return_if(not config['GOOGLE_AUTH_ENABLED'])
     def unpublish_event(self, stale_event):
         """Unpublish an event, moving it to the private calendar.
 
@@ -231,17 +242,19 @@ class GoogleCalendarAPIClient():
         :returns: The Google Calendar API response.
         :rtype: dict
         """
+        self.before_request()
 
         # Freshen up stale_event
         event = Event.objects().get(id=stale_event.id)
 
         if event.published:
-            raise GoogleCalendarAPIError('Event must have published as `False` before unpublishing')
+            raise GoogleCalendarAPIError('Event must have published as `False`'
+                                         ' before unpublishing')
 
         return self.move_event(event, from_id=self.public_calendar_id,
                                to_id=self.private_calendar_id)
 
-    @skip_and_return_if(not GOOGLE_AUTH_ENABLED)
+    @skip_and_return_if(not config['GOOGLE_AUTH_ENABLED'])
     def move_event(self, event, from_id, to_id):
         """Move an event between calendars.
 
@@ -260,9 +273,9 @@ class GoogleCalendarAPIClient():
             raise GoogleCalendarAPIMissingID()
 
         app.logger.info('[GOOGLE_CALENDAR]: Move Event')
-        request =  self.service.events().move(calendarId=from_id,
-                                              eventId=event.gcal_id,
-                                              destination=to_id)
+        request = self.service.events().move(calendarId=from_id,
+                                             eventId=event.gcal_id,
+                                             destination=to_id)
 
         # Execute the request
         try:
@@ -273,7 +286,7 @@ class GoogleCalendarAPIClient():
             app.logger.warning('[GOOGLE_CALENDAR]: ' + message)
             raise GoogleCalendarAPIErrorNotFound(message, uri=e.uri)
 
-    @skip_and_return_if(not GOOGLE_AUTH_ENABLED)
+    @skip_and_return_if(not config['GOOGLE_AUTH_ENABLED'])
     def delete_event(self, event, as_exception=False):
         """Delete an event or series from Google Calendar, or cancel a single
         event from a series.
@@ -291,6 +304,7 @@ class GoogleCalendarAPIClient():
         :returns: The Google Calendar API response.
         :rtype: dict
         """
+        self.before_request()
 
         if not event.gcal_id:
             raise GoogleCalendarAPIMissingID()
@@ -400,11 +414,13 @@ class GoogleCalendarAPIClient():
         try:
             return request.execute()
         except httplib.BadStatusLine as e:
-            app.logger.warning('[GOOGLE_CALENDAR]: Got BadStatusLine.  Retrying...')
+            app.logger.warning('[GOOGLE_CALENDAR]: Got BadStatusLine. '
+                               'Retrying...')
             try:
                 return request.execute()
             except httplib.BadStatusLine as e:
-                app.logger.error('[GOOGLE_CALENDAR]: Got BadStatusLine again! Raising.')
+                app.logger.error('[GOOGLE_CALENDAR]: Got BadStatusLine again! '
+                                 'Raising.')
                 message = ('Line: {eline}, Message: {emessage}'
                            .format(eline=e.line, emessage=e.message))
                 raise GoogleCalendarAPIBadStatusLine(message)

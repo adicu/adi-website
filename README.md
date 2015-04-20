@@ -86,8 +86,8 @@ vagrant ssh
 # enter your project directory
 cd /vagrant
 
-# add application settings to your environment
-source config/settings.sh
+# populate Consul with values
+./config/setup_consul_dev.sh
 
 # run the application
 python run.py

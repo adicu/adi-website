@@ -8,3 +8,4 @@ distribute==0.6.24dev-r0
 language-selector==0.1
 ufw==0.31.1-1
 unattended-upgrades==0.1
+pycurl==7.19.0
