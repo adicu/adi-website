@@ -37,7 +37,9 @@
     <div class="content">
         <div class="triple">
         {% for idx in range(1,4) %}
+            {% if upcoming_events | length > idx %}
             {{ macros.small_event(upcoming_events[idx]) }}
+            {% endif %}
         {% endfor %}
         </div>
     </div>
