@@ -1,5 +1,6 @@
 from flask import make_response
 import json
+from bson import json_util
 
 
 def json_response(data, code):
@@ -12,13 +13,13 @@ def json_response(data, code):
     :returns: the response object
     :rtype: :class:`flask.Response`
     """
-    text = json.dumps(data)
+    text = json.dumps(data, default=json_util.default)
     response = make_response(text, code)
     response.headers['Content-Type'] = 'application/json'
     return response
 
 
-def ajax_success(data, code=200):
+def json_success(data, code=200):
     """Return a :class:`flask.Response` with a JSON error message in the body,
     of the format::
 
@@ -40,7 +41,7 @@ def ajax_success(data, code=200):
     }, code)
 
 
-def ajax_error_message(error_message, code=400, error_data=None):
+def json_error_message(error_message, code=400, error_data=None):
     """Return a :class:`flask.Response` with a JSON error message in the body,
     of the format::
 
@@ -55,14 +56,14 @@ def ajax_error_message(error_message, code=400, error_data=None):
         }
 
     :param string error_message: A plaintext, user-facing error message to be
-    displayed by the ajax handler.
+    displayed.
     :param int code: The HTTP status code for the response.
     :param dict error_data: Any additional details about the error.
 
     :returns: the response object
     :rtype: :class:`flask.Response`
     """
-    if not error_data:
+    if error_data is None:
         error_data = {}  # error_data should always be a dictionary
 
     return json_response({

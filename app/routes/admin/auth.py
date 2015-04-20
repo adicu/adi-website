@@ -9,7 +9,7 @@ import string
 import random
 import httplib2
 from app import app
-from app.lib.ajax import ajax_success, ajax_error_message
+from app.lib.json import json_success, json_error_message
 from app.models import User, Whitelist
 from app.forms import CreateProfileForm
 from apiclient.discovery import build
@@ -69,7 +69,7 @@ def store_token():
     **Methods:** ``POST``
     """
     if request.args.get('state', '') != session.get('state'):
-        return ajax_error_message('Invalid state parameter.', 401)
+        return json_error_message('Invalid state parameter.', 401)
 
     del session['state']
     code = request.data
@@ -81,7 +81,7 @@ def store_token():
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
     except FlowExchangeError:
-        return ajax_error_message('Failed to upgrade the authorization code.',
+        return json_error_message('Failed to upgrade the authorization code.',
                                   401)
 
     gplus_id = credentials.id_token['sub']
@@ -102,11 +102,11 @@ def store_token():
         # The user must be whitelisted in order to create an account.
         email = people_document['emails'][0]['value']
         if Whitelist.objects(email=email).count() != 1:
-            return ajax_error_message('User has not been whitelisted.',
+            return json_error_message('User has not been whitelisted.',
                                       401,
                                       {'whitelisted': False, 'email': email})
 
-        return ajax_success({
+        return json_success({
             'redirect_url': url_for('.create_profile',
                                     next=request.args.get('next'),
                                     name=people_document['displayName'],
@@ -121,8 +121,8 @@ def store_token():
     # The user already exists.  Redirect to the next url or
     # the root of the application ('/')
     if request.args.get('next'):
-        return ajax_success({'redirect_url': request.args.get('next')})
-    return ajax_success({'redirect_url': request.url_root})
+        return json_success({'redirect_url': request.args.get('next')})
+    return json_success({'redirect_url': request.url_root})
 
 
 @auth.route('/create-profile', methods=['GET', 'POST'])
@@ -211,7 +211,7 @@ def disconnect():
     credentials = AccessTokenCredentials(
         session.get('credentials'), request.headers.get('User-Agent'))
     if credentials is None:
-        return ajax_error_message('Current user not connected.', 401)
+        return json_error_message('Current user not connected.', 401)
 
     # Execute HTTP GET request to revoke current token.
     access_token = credentials.access_token
