@@ -1,3 +1,13 @@
+"""
+.. module:: __init__
+    :synopsis: This is where all our global variables and instantiation
+        happens. If there is simple app setup to do, it can be done here, but
+        more complex work should be farmed off elsewhere, in order to keep
+        this file readable.
+
+.. moduleauthor:: Dan Schlosser <dan@danrs.ch>
+"""
+
 import json
 import logging
 
@@ -12,6 +22,7 @@ app = None
 adi = dict()
 assets = None
 gcal_client = None
+
 
 def create_app(**config_overrides):
     """This is normal setup code for a Flask app, but we give the option
@@ -62,24 +73,31 @@ def create_app(**config_overrides):
 
     register_blueprints()
     register_delete_rules()
-
-    # Logging
-    maxBytes = int(app.config["LOG_FILE_MAX_SIZE"]) * 1024 * 1024   # MB to B
-    Handler = logging.handlers.RotatingFileHandler
-    fStr = "%(levelname)s @ %(asctime)s @ %(filename)s %(funcName)s %(lineno)d: %(message)s"
-
-    accessHandler = Handler(app.config["WERKZEUG_LOG_NAME"], maxBytes=maxBytes)
-    accessHandler.setLevel(logging.INFO)
-    logging.getLogger("werkzeug").addHandler(accessHandler)
-
-    appHandler = Handler(app.config["APP_LOG_NAME"], maxBytes=maxBytes)
-    formatter = logging.Formatter(fStr)
-    appHandler.setLevel(logging.INFO)
-    appHandler.setFormatter(formatter)
-
-    app.logger.addHandler(appHandler)
-
+    register_blueprints()
+    register_logger()
     return app
+
+
+def register_logger():
+    """Create an error logger and attach it to ``app``."""
+
+    max_bytes = int(app.config["LOG_FILE_MAX_SIZE"]) * 1024 * 1024   # MB to B
+    Handler = logging.handlers.RotatingFileHandler
+    f_str = ('%(levelname)s @ %(asctime)s @ %(filename)s '
+             '%(funcName)s %(lineno)d: %(message)s')
+
+    access_handler = Handler(app.config["WERKZEUG_LOG_NAME"],
+                             maxBytes=max_bytes)
+    access_handler.setLevel(logging.INFO)
+    logging.getLogger("werkzeug").addHandler(access_handler)
+
+    app_handler = Handler(app.config["APP_LOG_NAME"], maxBytes=max_bytes)
+    formatter = logging.Formatter(f_str)
+    app_handler.setLevel(logging.INFO)
+    app_handler.setFormatter(formatter)
+
+    app.logger.addHandler(app_handler)
+
 
 def register_blueprints():
     """Registers all the Blueprints (modules) in a function, to avoid
@@ -96,11 +114,12 @@ def register_blueprints():
     for bp in admin_blueprints:
         app.register_blueprint(bp, url_prefix="/admin")
 
-    from app.routes import blog, client, base
-    blueprints = [blog, client, base]
+    from app.routes import blog, client
+    blueprints = [blog, client]
 
     for bp in blueprints:
         app.register_blueprint(bp)
+
 
 def register_delete_rules():
     """Registers rules for how Mongoengine handles the deletion of objects
@@ -127,6 +146,7 @@ def register_delete_rules():
     User.register_delete_rule(Post, 'author', DENY)
     User.register_delete_rule(Post, 'posted_by', DENY)
 
+
 def register_scss():
     """Registers the Flask-Assets rules for scss compilation.  This reads from
     ``config/scss.json`` to make these rules.
@@ -143,6 +163,7 @@ def register_scss():
                                 depends=depends,
                                 filters='scss')
                 assets.register(bundle_name, bundle)
+
 
 def run():
     """Runs the app."""
