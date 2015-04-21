@@ -65,6 +65,7 @@ else:
 
 # basic flask settings
 config['PORT'] = int(config['PORT'])
+config['DEBUG'] = (config['DEBUG'] == 'TRUE')
 
 # Google Auth
 # This is used for the webapp that allows Google+ login

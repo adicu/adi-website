@@ -17,6 +17,7 @@ from app import app
 from app.models import BlogPost, Image, User
 from app.forms import CreateBlogPostForm, UploadImageForm
 from app.lib.decorators import login_required, requires_privilege
+from app.routes.base import MESSAGE_FLASH, ERROR_FLASH
 
 posts = Blueprint('posts', __name__)
 
@@ -85,7 +86,7 @@ def edit(post_id):
     try:
         post = BlogPost.objects().with_id(object_id)
     except (DoesNotExist, ValidationError):
-        flash('Cannot find blog post with id {}.'.format(post_id))
+        flash('Cannot find blog post with id {}.'.format(post_id), ERROR_FLASH)
         return redirect(url_for('.index'))
 
     if request.method == 'POST':
@@ -110,10 +111,10 @@ def edit(post_id):
             if post.published != form.published.data:
                 if form.published.data:
                     post.publish()
-                    flash('Blogpost published')
+                    flash('Blogpost published', MESSAGE_FLASH)
                 else:
                     post.unpublish()
-                    flash('Blogpost unpublished')
+                    flash('Blogpost unpublished', MESSAGE_FLASH)
 
             return redirect(url_for('.index'))
 
@@ -150,8 +151,7 @@ def delete(post_id):
         post = BlogPost.objects().with_id(object_id)
         post.delete()
     else:
-        flash('Invalid event id')
-        pass
+        flash('Invalid event id', ERROR_FLASH)
     return redirect(url_for('.index'))
 
 @posts.route('/posts/edit/epiceditor/themes/<folder>/<path>', methods=['GET'])

@@ -8,6 +8,7 @@
 from app.models import User, Whitelist, Image
 from app.forms import AddToWhitelistForm, EditUserForm, UploadImageForm
 from app.lib.decorators import login_required, development_only
+from app.routes.base import MESSAGE_FLASH, ERROR_FLASH
 from apiclient.discovery import build
 from mongoengine import DoesNotExist
 from flask import Blueprint, render_template, request, \
@@ -80,9 +81,9 @@ def delete(user_id):
 
     # Log out if a user is attempting to delete themselves
     if 'gplus_id' in session and user.gplus_id == session['gplus_id']:
-        flash('You deleted yourself successfully. Logging out.')
+        flash('You deleted yourself successfully. Logging out.', MESSAGE_FLASH)
         return redirect(url_for('.logout'), 303)
-    flash('User deleted successfully.')
+    flash('User deleted successfully.', MESSAGE_FLASH)
 
     return redirect(url_for('.index'), code=303)
 
@@ -98,7 +99,7 @@ def user(slug):
     try:
         user = User.objects().get(slug=slug)
     except DoesNotExist:
-        flash("Invalid user slug '{}'".format(slug))
+        flash("Invalid user slug '{}'".format(slug), ERROR_FLASH)
         return redirect(url_for('.index'))
 
     form = EditUserForm(request.form,
@@ -115,7 +116,7 @@ def user(slug):
             user.save()
             return redirect(url_for('.index'))
         else:
-            flash("Your Form had errors: {}".format(form.errors))
+            flash("Your Form had errors: {}".format(form.errors), ERROR_FLASH)
 
     return render_template('admin/users/user.html', user=user, form=form,
                            current_user=g.user)

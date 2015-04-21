@@ -16,6 +16,7 @@ from mongoengine.errors import DoesNotExist, ValidationError
 from app.models import Event, Image
 from app.forms import CreateEventForm, EditEventForm, DeleteEventForm, UploadImageForm
 from app.lib.decorators import login_required, requires_privilege
+from app.routes.base import ERROR_FLASH, MESSAGE_FLASH
 
 from app.lib.error import GoogleCalendarAPIError
 from app.lib.events import EventsHelper
@@ -121,13 +122,13 @@ def create():
         try:
             EventsHelper.create_event(form, g.user)
         except GoogleCalendarAPIError as e:
-            flash(e.message)
+            flash(e.message, ERROR_FLASH)
 
         return redirect(url_for('.index'))
     if form.errors:
         for error in form.errors:
             for message in form.errors[error]:
-                flash(message)
+                flash(message, ERROR_FLASH)
 
     upload_form = UploadImageForm()
     delete_form = DeleteEventForm()
@@ -151,7 +152,7 @@ def edit(event_id):
     try:
         event = Event.objects().get(id=event_id)
     except (DoesNotExist, ValidationError):
-        flash('Cannot find event with id "{}"'.format(event_id))
+        flash('Cannot find event with id "{}"'.format(event_id), ERROR_FLASH)
         return redirect(url_for('.index'))
 
     form = EditEventForm(event, request.form) if request.method == 'POST' else \
@@ -161,13 +162,13 @@ def edit(event_id):
         try:
             EventsHelper.update_event(event, form)
         except GoogleCalendarAPIError as e:
-            flash(e.message)
+            flash(e.message, ERROR_FLASH)
 
         return redirect(url_for('.index'))
     if form.errors:
         for error in form.errors:
             for message in form.errors[error]:
-                flash(message)
+                flash(message, ERROR_FLASH)
 
     delete_form = DeleteEventForm()
     upload_form = UploadImageForm()
@@ -195,9 +196,9 @@ def delete(event_id):
         try:
             EventsHelper.delete_event(event, form)
         except GoogleCalendarAPIError as e:
-            flash(e.message)
+            flash(e.message, ERROR_FLASH)
     else:
-        flash('Invalid event id')
+        flash('Invalid event id', ERROR_FLASH)
     return redirect(url_for('.index'))
 
 def set_published_status(event_id, status):
@@ -210,15 +211,16 @@ def set_published_status(event_id, status):
             # TODO Actually publish/unpublish the event here
             if event.published:
                 event.date_published = datetime.now()
-                flash('Event published')
+                flash('Event published', MESSAGE_FLASH)
             else:
                 event.date_published = None
-                flash('Event unpublished')
+                flash('Event unpublished', MESSAGE_FLASH)
             event.save()
         else:
-            flash("The event had not been published.  No changes made.")
+            flash("The event had not been published.  No changes made.",
+                  MESSAGE_FLASH)
     else:
-        flash('Invalid event id')
+        flash('Invalid event id', ERROR_FLASH)
     return redirect(url_for('.index'))
 
 @events.route('/events/publish/<event_id>', methods=['POST'])

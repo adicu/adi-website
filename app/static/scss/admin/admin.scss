@@ -113,6 +113,10 @@ $content-padding-small: 0.5rem;
             top: 50%;
             margin-top: -0.5rem;
         }
+
+        &.cat-error {
+            background-color: $red;
+        }
     }
 }
 

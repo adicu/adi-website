@@ -7,13 +7,16 @@
 """
 
 import sys
-from flask import g, session, render_template, request, redirect
+from flask import (g, session, render_template, request, redirect, flash,
+                   url_for)
 from mongoengine.queryset import DoesNotExist
 import requests
 
 from app.models import User
 
 SUPER_USER_GPLUS_ID = 'super'
+ERROR_FLASH = 'error'
+MESSAGE_FLASH = 'message'
 
 
 def lookup_current_user():
@@ -50,6 +53,10 @@ def register_error_handlers(app):
     def exception_handler(error):
         """Handle uncaught exceptions."""
         app.logger.error("Uncaught Exception", exc_info=sys.exc_info())
+        if not app.config['DEBUG'] and request.path.startswith('/admin'):
+            flash('An uncaught error occured: {}'.format(error.strerror),
+                  ERROR_FLASH)
+            return redirect(url_for('admin.index'))
         app.handle_exception(error)  # default error handler
 
     @app.errorhandler(400)
@@ -99,13 +106,18 @@ def register_error_handlers(app):
         lookup_current_user()
 
     @app.context_processor
-    def inject_user():
-        """Injects a variable named ``current_user`` into all of the Jinja
-        templates, so that it can be used at will.
+    def inject_helpers():
+        """Injects a dictionary of helper variables and functions into Jinja
+        templates.
         """
+        helpers = {
+            'current_user': None
+        }
+
         if hasattr(g, 'user'):
-            return dict(current_user=g.user)
-        return dict(current_user=None)
+            helpers['current_user'] = g.user
+
+        return helpers
 
     @app.after_request
     def add_header(response):

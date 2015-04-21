@@ -13,6 +13,7 @@ from app import app
 from app.models import User, Whitelist, Image
 from app.forms import AddToWhitelistForm
 from app.lib.decorators import login_required
+from app.routes.base import MESSAGE_FLASH, ERROR_FLASH
 
 whitelist = Blueprint('whitelist', __name__)
 
@@ -29,9 +30,9 @@ def delete(email):
     """
     if Whitelist.objects(email=email).count() > 0:
         Whitelist.objects.get(email=email).delete()
-        flash("Whitelist entry revoked successfully.")
+        flash("Whitelist entry revoked successfully.", MESSAGE_FLASH)
         return redirect(url_for('users.index'))
-    flash('No such user in the database.')
+    flash('No such user in the database.', ERROR_FLASH)
     return redirect(url_for('users.index'))
 
 

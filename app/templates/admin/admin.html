@@ -105,12 +105,12 @@
         {% endblock %}
 
         {% block flashes %}
-        {% with messages = get_flashed_messages() %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
             <div class="flashes">
-            {% for message in messages %}
+            {% for category, message in messages %}
                 <div class="flash-wrapper">
-                    <div class="flash">
+                    <div class="flash cat-{{ category }}">
                         <p>{{ message }}</p>
                         <a href="#dismiss-flash">
                             <i class="fa fa-times"></i>
