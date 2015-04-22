@@ -22,10 +22,8 @@ install:
   - pip install -r config/requirements.txt
   - pip install flake8
 
-before_script: "flake8 pyramid_genshi --ignore=E501,W291,W293"
+before_script: "flake8 app/"
 # command to run tests
 
-
 script:
-  - flake8 app/
   - nosetests
