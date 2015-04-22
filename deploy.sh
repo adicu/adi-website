@@ -50,6 +50,13 @@ fi
 
 # Startup the new container
 docker build -t $NEW_NAME .
+
+# --net: Use the local network stack
+# -v: mount a volume, to ensure that created or edited files are not sandboxed
+#     to the server (one for logs, one for images)
+# -d: detach after running, instead of entering the container
+# --name: Set the name of the container
+
 docker run \
     --net=host \
     -v $ADI_WWW/../logs:/opt/logs \
