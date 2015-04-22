@@ -27,6 +27,11 @@ else
     exit
 fi
 
+# Validate nginx configurations
+if [ ! nginx -t ]; then
+    echo "Nginx config failed!"
+    exit
+fi
 
 # Determine the new and old container names
 NEW_NAME=""
