@@ -5,7 +5,6 @@ ADI_WWWW=/srv/adi-website/www
 DOCKERFILE=Dockerfile
 PORT1=7000
 PORT2=6000
-IMAGE_NAME=adi-website
 NAME1="adi-website-1"
 NAME2="adi-website-2"
 
@@ -32,7 +31,7 @@ fi
 # Determine the new and old container names
 NEW_NAME=""
 OLD_NAME=""
-CURRENT_NAME="$(docker ps -a | grep adi-website: | awk 'NF>1{print $NF}')"
+CURRENT_NAME="$(docker ps -a | grep adi-website | awk 'NF>1{print $NF}')"
 if [ "$CURRENT_NAME" == "$NAME1" ]; then
     OLD_NAME=$NAME1
     NEW_NAME=$NAME2
