@@ -1,0 +1,17 @@
+python:
+  - "2.7"
+# env:
+#   - PYRAMID_VERSION="pyramid&gt;=1.2,&lt;1.3"
+#   - PYRAMID_VERSION="pyramid&gt;=1.3,&lt;1.4"
+#   - PYRAMID_VERSION="pyramid&gt;=1.4,&lt;1.5"
+
+# command to install dependencies
+install:
+  - "pip install flake8 --use-mirrors"
+  # - "pip install $PYRAMID_VERSION"
+  - "pip install -r config/requirements.txt --use-mirrors"
+  - "source config/settings.sh"
+before_script: "flake8 pyramid_genshi --ignore=E501,W291,W293"
+# command to run tests
+
+script: "nosetests"
