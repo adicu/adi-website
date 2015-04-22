@@ -3,6 +3,9 @@ language: python
 python:
     - "2.7"
 
+sudo: false  # Use container-based infrastructure
+cache: pip   # Cache pip requirements
+
 env:
   global:
     # general settings
@@ -11,19 +14,18 @@ env:
     - DEBUG=TRUE
     - SECRET_KEY=abc123
 
-git:
+git:  # We need custom git configurations
     submodules: false
-# Use sed to replace the SSH URL with the public URL, then initialize submodules
-before_install:
+before_install:  # Use sed to replace the SSH URL with the public URL
     - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
     - git submodule update --init --recursive
 
 install:
   - pip install -r config/requirements.txt
   - pip install flake8
-
-before_script: "flake8 app/"
-# command to run tests
-
+before_script:
+  - flake8 app/
+  - flake8 script/
+  - flake8 test/
 script:
   - nosetests
