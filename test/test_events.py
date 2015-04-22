@@ -1,9 +1,11 @@
+
 import base
 from mongoengine import ValidationError
 from datetime import datetime, timedelta
 from bson.objectid import ObjectId
 
 from app.models import Event, User
+
 
 class TestEvents(base.TestingTemplate):
 
@@ -13,6 +15,7 @@ class TestEvents(base.TestingTemplate):
     TITLE = 'Some Title'
     LOCATION = 'Some Location'
     SLUG = 'my-cool-event'
+
     def make_event(self):
         return Event(title=self.TITLE,
                      creator=self.USER,
@@ -23,7 +26,8 @@ class TestEvents(base.TestingTemplate):
                      end_date=self.END.date(),
                      end_time=self.END.time())
 
-    def setUp(self):
+    # Need "# noqa" to avoid flake8 complaining about this fn name
+    def setUp(self):  # noqa
         for e in Event.objects():
             e.delete()
         super(TestEvents, self).setUp()
@@ -100,7 +104,6 @@ class TestEvents(base.TestingTemplate):
                   start_time=self.START.time())
         self.assertEqual(e.start_datetime, self.START)
 
-
     def test_event_end_datetimes(self):
         """Test that when events are created with both end_date and
         end_time, end_datetime is their value combined.
@@ -109,7 +112,6 @@ class TestEvents(base.TestingTemplate):
                   end_date=self.END.date(),
                   end_time=self.END.time())
         self.assertEqual(e.end_datetime, self.END)
-
 
     def test_event_start_datetimes_none_with_incomplete_data(self):
         """Test that when events are created without both of start_date and
@@ -160,9 +162,9 @@ class TestEvents(base.TestingTemplate):
 
         self.assertEqual(Event.objects(location="45 Some Location").count(), 0)
         resp = self.request_with_role('/admin/events/create',
-            method='POST',
-            data=query_string_data,
-            follow_redirects=True)
+                                      method='POST',
+                                      data=query_string_data,
+                                      follow_redirects=True)
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(Event.objects(location="45 Some Location").count(), 1)
 
@@ -183,9 +185,9 @@ class TestEvents(base.TestingTemplate):
 
         self.assertEqual(Event.objects(location="45 Some Location").count(), 0)
         resp = self.request_with_role('/admin/events/create',
-            method='POST',
-            data=bad_data,
-            follow_redirects=True)
+                                      method='POST',
+                                      data=bad_data,
+                                      follow_redirects=True)
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(Event.objects(location="45 Some Location").count(), 0)
 
@@ -198,11 +200,11 @@ class TestEvents(base.TestingTemplate):
         print str(Event.objects())
         self.assertEqual(Event.objects(creator=e.creator).count(), 1)
         _id = e.id
-        resp = self.request_with_role('/admin/events/delete/%s' % _id, method="POST",
-                               follow_redirects=True)
+        resp = self.request_with_role('/admin/events/delete/%s' % _id,
+                                      method="POST",
+                                      follow_redirects=True)
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(Event.objects(creator=e.creator).count(), 0)
-
 
     def test_delete_event_when_event_does_not_exist(self):
         """Test that when an event with id `_id` exists in the database and the
@@ -211,8 +213,9 @@ class TestEvents(base.TestingTemplate):
         e = self.make_event()
         e.save()
         other_id = ObjectId()
-        resp = self.request_with_role('/admin/events/delete/%s' % other_id, method="POST",
-                               follow_redirects=True)
+        resp = self.request_with_role('/admin/events/delete/%s' % other_id,
+                                      method="POST",
+                                      follow_redirects=True)
         self.assertIn('Invalid event id', resp.data)
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(Event.objects(creator=e.creator).count(), 1)
@@ -224,8 +227,9 @@ class TestEvents(base.TestingTemplate):
         e = self.make_event()
         e.save()
         event_id = e.id
-        resp = self.request_with_role('/admin/events/publish/%s' % event_id, role='publisher',
-                               method='POST', follow_redirects=True)
+        resp = self.request_with_role('/admin/events/publish/%s' % event_id,
+                                      role='publisher',
+                                      method='POST', follow_redirects=True)
         self.assertIn('Event published', resp.data)
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(Event.objects(published=True).count(), 1)
@@ -237,8 +241,9 @@ class TestEvents(base.TestingTemplate):
         e = self.make_event()
         e.save()
         other_id = ObjectId()
-        resp = self.request_with_role('/admin/events/publish/%s' % other_id, role='publisher',
-                               method='POST', follow_redirects=True)
+        resp = self.request_with_role('/admin/events/publish/%s' % other_id,
+                                      role='publisher',
+                                      method='POST', follow_redirects=True)
         self.assertIn('Invalid event id', resp.data)
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(Event.objects(published=True).count(), 0)
@@ -250,8 +255,9 @@ class TestEvents(base.TestingTemplate):
         e = self.make_event()
         e.save()
         event_id = e.id
-        resp = self.request_with_role('/admin/events/publish/%s' % event_id, role='editor',
-                               method='POST')
+        resp = self.request_with_role('/admin/events/publish/%s' % event_id,
+                                      role='editor',
+                                      method='POST')
         self.assertEqual(resp.status_code, 401)
         self.assertEqual(Event.objects(published=True).count(), 0)
 
@@ -260,10 +266,11 @@ class TestEvents(base.TestingTemplate):
         to by a publisher the event with that id is unpublished.
         """
         e = self.make_event()
-        e.published=True
+        e.published = True
         e.save()
-        resp = self.request_with_role('/admin/events/unpublish/%s' % e.id, role='publisher',
-                               method='POST', follow_redirects=True)
+        resp = self.request_with_role('/admin/events/unpublish/%s' % e.id,
+                                      role='publisher',
+                                      method='POST', follow_redirects=True)
         self.assertIn('Event unpublished', resp.data)
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(Event.objects(published=False).count(), 1)
@@ -273,11 +280,12 @@ class TestEvents(base.TestingTemplate):
         to with no such event_id in the database, no events are unpublished.
         """
         e = self.make_event()
-        e.published=True
+        e.published = True
         e.save()
         other_id = ObjectId()
-        resp = self.request_with_role('/admin/events/unpublish/%s' % other_id, role='publisher',
-                               method='POST', follow_redirects=True)
+        resp = self.request_with_role('/admin/events/unpublish/%s' % other_id,
+                                      role='publisher',
+                                      method='POST', follow_redirects=True)
         self.assertIn('Invalid event id', resp.data)
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(Event.objects(published=False).count(), 0)
@@ -287,10 +295,11 @@ class TestEvents(base.TestingTemplate):
         to by a non-unpublisher an error is thrown.
         """
         e = self.make_event()
-        e.published=True
+        e.published = True
         e.save()
-        resp = self.request_with_role('/admin/events/unpublish/%s' % e.id, role='editor',
-                               method='POST')
+        resp = self.request_with_role('/admin/events/unpublish/%s' % e.id,
+                                      role='editor',
+                                      method='POST')
         self.assertEqual(resp.status_code, 401)
         self.assertEqual(Event.objects(published=False).count(), 0)
 

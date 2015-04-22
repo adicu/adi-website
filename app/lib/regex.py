@@ -9,5 +9,6 @@ from config.flask_config import config
 
 SLUG_REGEX = r'[0-9a-zA-Z-]+'
 FILENAME_REGEX = r'[\w\-@\|\(\)]+'
-FULL_FILENAME_REGEX = "{fname}({ext})".format(fname=FILENAME_REGEX,
-        ext="|".join(config['ALLOWED_UPLOAD_EXTENSIONS']))
+FULL_FILENAME_REGEX = "{fname}({ext})".format(
+    fname=FILENAME_REGEX,
+    ext="|".join(config['ALLOWED_UPLOAD_EXTENSIONS']))

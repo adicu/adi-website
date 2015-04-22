@@ -14,20 +14,22 @@ from app.lib.json_response import json_success
 
 api = Blueprint('api', __name__)
 
+
 @api.route('/api/events/this_week', methods=['GET'])
 def events_this_week():
     """
     Get a json object containing information about all the events for the
     current week (Sunday to Sunday).
-    
+
     **Route:** ``/admin/api/events/this_week
 
-    **Methods:** ``GET`` 
+    **Methods:** ``GET``
     """
 
     today = date.today()
-    last_sunday = datetime.combine(today - timedelta(days=(today.isoweekday() % 7)),
-                                   datetime.min.time())
+    last_sunday = datetime.combine(
+        today - timedelta(days=(today.isoweekday() % 7)),
+        datetime.min.time())
     next_sunday = last_sunday + timedelta(days=7)
     events = Event.objects(start_date__gte=last_sunday,
                            start_date__lt=next_sunday).order_by('start_date')

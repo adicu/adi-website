@@ -37,6 +37,7 @@ USER_TYPES = {
 }
 USER_TYPE_REGEX = "({})".format('|'.join(USER_TYPES.keys()))
 
+
 class User(db.Document):
     """A user model.
 
@@ -117,7 +118,8 @@ class User(db.Document):
         if self.image:
             return self.image.url()
         if not self.image_url:
-            return 'https://lh6.googleusercontent.com/-K9HZ5Z5vOU8/AAAAAAAAAAI/AAAAAAAAAAA/yRoMtBSXoxQ/s48-c/photo.jpg'
+            return ('https://lh6.googleusercontent.com/-K9HZ5Z5vOU8/'
+                    'AAAAAAAAAAI/AAAAAAAAAAA/yRoMtBSXoxQ/s48-c/photo.jpg')
         if "googleusercontent.com" in self.image_url:
             return self.image_url + str(size)
         return self.image_url

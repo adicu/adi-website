@@ -9,6 +9,7 @@ from app.models import Image
 from wtforms.validators import ValidationError
 from app.models import Whitelist
 
+
 def image_with_same_name(form, field):
     """A validator that ensures that there is an image in the database with the
     filename that is the same as the field's data.
@@ -21,6 +22,7 @@ def image_with_same_name(form, field):
     if Image.objects(filename=field.data).count() != 1:
         return ValidationError(
             message="Can't find image '{}' in the database".format(field.data))
+
 
 class UniqueEvent(object):
     """A validator that ensures that an event slug is unique.
@@ -60,7 +62,9 @@ class UniqueEvent(object):
 
 
 class UniqueEditEvent(UniqueEvent):
-    def __init__(self, original, message="An event with that slug already exists."):
+    SLUG_MESSAGE = "An event with that slug already exists."
+
+    def __init__(self, original, message=None):
         """Ensures that edited slugs are unique in the :class:`Event` and
         :class:`EventSeries` collections.
 
@@ -68,7 +72,7 @@ class UniqueEditEvent(UniqueEvent):
         :param str message: An alternate message to be raised.
         """
         self.original = original
-        self.message = message
+        self.message = message if message else self.SLUG_MESSAGE
 
     def __call__(self, form, field):
         """Called internally by :mod:`wtforms` on validation of the field.

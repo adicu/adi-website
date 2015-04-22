@@ -10,6 +10,7 @@
 from mongoengine.fields import DateTimeField
 from datetime import datetime, date
 
+
 class DateField(DateTimeField):
     """A datetime.date field.
 
@@ -21,8 +22,8 @@ class DateField(DateTimeField):
         """Convert from :class:``datetime.datetime`` to
         :class:``datetime.date``.
 
-        This overwrites the :class:`mongoengine.fields.DateTimeField`` method for
-        accessing the value of this field.
+        This overwrites the :class:`mongoengine.fields.DateTimeField`` method
+        for accessing the value of this field.
 
         :param value: The date from mongo
         :type value: :class:`datetime.datetime` or :class:`datetime.date`
@@ -34,4 +35,4 @@ class DateField(DateTimeField):
             return value.date()
         if isinstance(value, date):
             return value
-        raise ValueError("Unkown type '%r' of variable %r",type(value), value)
+        raise ValueError("Unkown type '%r' of variable %r", type(value), value)

@@ -5,6 +5,7 @@
 .. moduleauthor:: Dan Schlosser <dan@danrs.ch>
 """
 
+
 class GoogleCalendarAPIError(Exception):
     """Something went wrong with Google Calendar."""
     DEFAULT_MESSAGE = 'Something went wrong with Google Calendar.'
@@ -42,4 +43,3 @@ class GoogleCalendarAPIErrorNotFound(GoogleCalendarAPIError):
         if not message:
             message = self.DEFAULT_MESSAGE + uri
         GoogleCalendarAPIError.__init__(self, message=message)
-

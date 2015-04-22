@@ -9,6 +9,7 @@
 from mongoengine.base import BaseField
 from datetime import time
 
+
 class TimeField(BaseField):
     """A datetime.time field.
 
@@ -55,9 +56,9 @@ class TimeField(BaseField):
         """
         if isinstance(value, (int, float)):
             value = int(value)
-            return time(hour=value/3600,
-                        minute=(value%3600)/60,
-                        second=value%60)
+            return time(hour=value / 3600,
+                        minute=(value % 3600) / 60,
+                        second=value % 60)
         return value
 
     def prepare_query_value(self, op, value):
@@ -72,9 +73,9 @@ class TimeField(BaseField):
         if value is None:
             return value
         if isinstance(value, time):
-            return value.hour * 3600 + \
-                   value.minute * 60 + \
-                   value.second + \
-                   value.microsecond / 1000000
+            return (value.hour * 3600 +
+                    value.minute * 60 +
+                    value.second +
+                    value.microsecond / 1000000)
         if isinstance(value, (int, float)):
             return value

@@ -30,8 +30,13 @@ class TestDocumentation(unittest.TestCase):
                     readmeless_dirs.append(relpath)
                     continue
 
-        self.assertEqual(readmeless_dirs, [],
-            msg=self.README + " must be created in: \n\t- " + '\n\t- '.join(readmeless_dirs))
+        self.assertEqual(readmeless_dirs,
+                         [],
+                         msg=(
+                             self.README +
+                             " must be created in: \n\t- " +
+                             '\n\t- '.join(readmeless_dirs)
+                         ))
 
 if __name__ == '__main__':
     unittest.main()

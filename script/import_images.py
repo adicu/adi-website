@@ -25,7 +25,6 @@ def import_from_directory(path_to_images):
         old_path = os.path.join(path_to_images, filename)
         shutil.copy(old_path, config['UPLOAD_FOLDER'])
 
-
         default_path = config['RELATIVE_UPLOAD_FOLDER'] + filename
         image = Image(filename=filename,
                       default_path=default_path,
@@ -38,12 +37,5 @@ def import_from_directory(path_to_images):
             print e
 
     print "Processed %s images." % len(filenames)
-    print "%s success." %  (len(filenames) - len(failures))
+    print "%s success." % (len(filenames) - len(failures))
     print "%s failures." % len(failures)
-
-
-
-
-
-
-

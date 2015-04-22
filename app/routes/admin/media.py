@@ -29,20 +29,23 @@ def index():
 
     **Methods:** ``GET``
     """
-    images =Image.objects()
+    images = Image.objects()
     form = UploadImageForm()
     return render_template('admin/media/media.html', images=images, form=form)
 
 
-def allowed_file(filename):
-    """Returns True if ``filename`` is a valid filename.  It must have an
+def allowed_file(fn):
+    """Returns True if ``fn`` is a valid filename.  It must have an
     extension and its extension is in the allowed uploaded extensions.
 
-    :returns: True if ``filename`` is valid.
+    :returns: True if ``fn`` is valid.
     :rtype: bool
     """
-    return '.' in filename and \
-            os.path.splitext(filename)[1] in app.config['ALLOWED_UPLOAD_EXTENSIONS']
+    return (
+        '.' in fn and
+        os.path.splitext(fn)[1] in app.config['ALLOWED_UPLOAD_EXTENSIONS']
+    )
+
 
 def create_filename(f, slug):
     """Creates the filename to save.
@@ -55,6 +58,7 @@ def create_filename(f, slug):
     """
     if '.' in f.filename:
         return secure_filename(slug+os.path.splitext(f.filename)[1].lower())
+
 
 @media.route('/media/upload', methods=['POST'])
 @requires_privilege('edit')
@@ -72,8 +76,9 @@ def upload():
         if f and allowed_file(f.filename.lower()):
             filename = create_filename(f, request.form['filename'])
             f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            default_path = app.config['RELATIVE_UPLOAD_FOLDER'] + filename
             image = Image(filename=filename,
-                          default_path=app.config['RELATIVE_UPLOAD_FOLDER']+filename,
+                          default_path=default_path,
                           creator=g.user)
             image.save()
             return redirect(url_for('.index'))
@@ -83,6 +88,7 @@ def upload():
     if uploaded_from:
         return redirect(uploaded_from)
     return render_template('admin/media/upload.html', form=form)
+
 
 @media.route('/media/uploads/<filename>', methods=['GET'])
 def file(filename):
@@ -96,6 +102,7 @@ def file(filename):
     """
     return send_from_directory(app.config['UPLOAD_FOLDER'],
                                filename)
+
 
 @media.route('/media/delete/<filename>', methods=['POST'])
 @requires_privilege('edit')

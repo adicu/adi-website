@@ -12,6 +12,7 @@ from datetime import datetime
 import markdown
 now = datetime.now
 
+
 class Post(db.Document):
     """A generic post object.
 

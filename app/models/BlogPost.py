@@ -14,6 +14,7 @@ from app.lib.text import truncate_html
 
 now = datetime.now
 
+
 class BlogPost(Post):
     """An subclass of :class:`Post` that provides methods specific to blog
     posts.
@@ -76,6 +77,7 @@ class BlogPost(Post):
         self.published = True
         self.date_published = now()
         self.save()
+
     def unpublish(self):
         self.published = False
         self.date_published = None

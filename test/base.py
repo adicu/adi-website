@@ -15,25 +15,26 @@ GPLUS_IDS = {
 
 class TestingTemplate(unittest.TestCase):
 
-    def setUp(self):
+    # Need "# noqa" to avoid flake8 complaining about this fn name
+    def setUp(self):  # noqa
         from app.models import User
         for u in User.objects():
             u.delete()
-        user= User(name='Test User',
-                   email='user@te.st',
-                     gplus_id=GPLUS_IDS['user'])
-        editor= User(name='Test Editor',
-                     email='editor@te.st',
-                     user_type='editor',
-                     gplus_id=GPLUS_IDS['editor'])
-        publisher= User(name='Test Publisher',
-                        email='publisher@te.st',
-                        user_type='publisher',
-                        gplus_id=GPLUS_IDS['publisher'])
-        admin= User(name='Test Admin',
-                    email='admin@te.st',
-                    user_type='admin',
-                    gplus_id=GPLUS_IDS['admin'])
+        user = User(name='Test User',
+                    email='user@te.st',
+                    gplus_id=GPLUS_IDS['user'])
+        editor = User(name='Test Editor',
+                      email='editor@te.st',
+                      user_type='editor',
+                      gplus_id=GPLUS_IDS['editor'])
+        publisher = User(name='Test Publisher',
+                         email='publisher@te.st',
+                         user_type='publisher',
+                         gplus_id=GPLUS_IDS['publisher'])
+        admin = User(name='Test Admin',
+                     email='admin@te.st',
+                     user_type='admin',
+                     gplus_id=GPLUS_IDS['admin'])
         user.save()
         editor.save()
         publisher.save()
@@ -42,7 +43,7 @@ class TestingTemplate(unittest.TestCase):
         print e.privileges
 
     @classmethod
-    def setUpClass(self):
+    def setUpClass(self):  # noqa
         """ Sets up a test database before each set of tests """
         create_app(
             MONGODB_SETTINGS={'DB': 'testing'},
@@ -54,7 +55,7 @@ class TestingTemplate(unittest.TestCase):
         self.app = app
 
     @classmethod
-    def tearDownClass(self):
+    def tearDownClass(self):  # noqa
         """ Drops the test database after the classes' tests are finished"""
 
     def request_with_role(self, path, method='GET', role='admin',
@@ -71,24 +72,13 @@ class TestingTemplate(unittest.TestCase):
                 kwargs['path'] = path
             return c.open(*args, **kwargs)
 
-    # def assert_flashes(self, expected_message, expected_category='message'):
-    #     with self.app.test_client().session_transaction() as session:
-    #         try:
-    #             print session
-    #             category, message = session['_flashes'][0]
-    #         except KeyError:
-    #             raise AssertionError('nothing flashed')
-    #         self.assertIn(expected_message, message)
-    #         self.assertEqual(expected_category, category)
-
-
     def test_create_test_app(self):
         self.assertTrue(self.app.config['TESTING'])
         self.assertFalse(self.app.config['CSRF_ENABLED'])
         self.assertEqual(mongoengine.connection.get_db().name, 'testing')
 
     @classmethod
-    def main(self):
+    def main(cls):
         cov = coverage(
             branch=True, omit=['test.py', 'test/*', 'lib/*',
                                'include/*', 'bin/*'])
