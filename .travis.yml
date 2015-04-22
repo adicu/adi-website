@@ -15,9 +15,9 @@ before_install:
 
 # command to install dependencies
 install:
-  - "pip install flake8"
+  - "sudo pip install flake8"
   # - "pip install $PYRAMID_VERSION"
-  - "pip install -r config/requirements.txt"
+  - "sudo pip install -r config/requirements.txt"
   - "source config/settings.sh"
 before_script: "flake8 pyramid_genshi --ignore=E501,W291,W293"
 # command to run tests
