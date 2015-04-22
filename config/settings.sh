@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Use environment variables
+export USE_ENV_VARS=TRUE
+
 # flask settings
 export HOST=0.0.0.0
 export PORT=5000

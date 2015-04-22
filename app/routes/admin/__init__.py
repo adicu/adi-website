@@ -7,12 +7,7 @@ from users import users
 from whitelist import whitelist
 from api import api
 
-# note: silences pyflakes unused variables
-assert (admin,
-        auth,
-        events,
-        media,
-        posts,
-        users,
-        whitelist,
-        api)
+# Silences flake8
+__all__ = [
+    'admin', 'auth', 'events', 'media', 'posts', 'users', 'whitelist', 'api'
+]

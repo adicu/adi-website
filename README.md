@@ -1,5 +1,7 @@
 # Eventum
 
+[![Build Status](https://travis-ci.org/adicu/adi-website.svg)](https://travis-ci.org/adicu/adi-website)
+
 Eventum is a content management system for an event-driven blog that syncs with Google Calendar.
 
 ## Stack

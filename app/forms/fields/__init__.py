@@ -1,3 +1,3 @@
 from TimeField import TimeField
 
-assert TimeField
+__all__ = ['TimeField']

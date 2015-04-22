@@ -15,7 +15,6 @@ GPLUS_IDS = {
 
 class TestingTemplate(unittest.TestCase):
 
-    # Need "# noqa" to avoid flake8 complaining about this fn name
     def setUp(self):  # noqa
         from app.models import User
         for u in User.objects():

@@ -7,11 +7,9 @@ from UploadImageForm import UploadImageForm
 from AddToWhitelistForm import AddToWhitelistForm
 from EditUserForm import EditUserForm
 
-assert (CreateBlogPostForm,
-        CreateEventForm,
-        CreateProfileForm,
-        DeleteEventForm,
-        EditEventForm,
-        UploadImageForm,
-        AddToWhitelistForm,
-        EditUserForm)
+# Silences flake8
+__all__ = [
+    'CreateBlogPostForm', 'CreateEventForm', 'CreateProfileForm',
+    'DeleteEventForm', 'EditEventForm', 'UploadImageForm',
+    'AddToWhitelistForm', 'EditUserForm'
+]

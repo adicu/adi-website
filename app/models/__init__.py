@@ -6,10 +6,7 @@ from BlogPost import BlogPost
 from Event import Event
 from EventSeries import EventSeries
 
-assert (BlogPost,
-        Event,
-        EventSeries,
-        Image,
-        Post,
-        User,
-        Whitelist)
+# Silences flake8
+__all__ = [
+    'BlogPost', 'Event', 'EventSeries', 'Image', 'Post', 'User', 'Whitelist'
+]
