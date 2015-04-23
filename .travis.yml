@@ -22,7 +22,7 @@ env:
     # Google OAuth settings
     - INSTALLED_APP_CLIENT_SECRET_PATH=client_secrets.json
     - CREDENTIALS_PATH=config/credentials.json
-    - GOOGLE_AUTH_ENABLED=TRUE
+    - GOOGLE_AUTH_ENABLED=FALSE
     - CLIENT_SECRETS_PATH=config/client_secrets.json
     # Cross-site request forgery settings
     - CSRF_ENABLED=TRUE
@@ -50,5 +50,5 @@ script:
   - flake8 app/
   - flake8 script/
   - flake8 test/
-  - nosetests --nocapture test/base.py:TestingTemplate.test_create_test_app
+  - nosetests
 
