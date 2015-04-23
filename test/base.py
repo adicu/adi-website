@@ -1,3 +1,12 @@
+"""
+.. module:: base
+    :synopsis: This defines common functionality in our test suite, in the base
+    class :class:`TestingTemplate`, which should be inherited by all test
+    suite classes.
+
+.. moduleauthor:: Dan Schlosser <dan@danrs.ch>
+"""
+
 import unittest
 import os
 import mongoengine
@@ -52,10 +61,6 @@ class TestingTemplate(unittest.TestCase):
         )
         from app import app
         self.app = app
-
-    @classmethod
-    def tearDownClass(self):  # noqa
-        """ Drops the test database after the classes' tests are finished"""
 
     def request_with_role(self, path, method='GET', role='admin',
                           *args, **kwargs):

@@ -24,7 +24,7 @@ def index():
         BlogPost.objects(published=True).order_by('-date_published')[:10]
     )
     previous_index = None
-    next_index = 1
+    next_index = 1 if len(blog_posts) > 10 else None
     return render_template('blog/blog.html',
                            posts=blog_posts,
                            previous_index=previous_index,
@@ -57,13 +57,15 @@ def blog_archive(index):
 
     **Methods:** ``GET``
     """
-    index = int(index)
-
     if index <= 0:
         return redirect(url_for('.index'))
 
     blog_posts = BlogPost.objects(published=True).order_by('-date_published')
-    if len(blog_posts) < 10 * (index + 1):
+
+    if len(blog_posts) <= 10 * index:
+        return redirect(url_for('blog.blog_archive', index=index - 1))
+
+    if len(blog_posts) <= 10 * (index + 1):
         next_index = None
     else:
         next_index = index + 1

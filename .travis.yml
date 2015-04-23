@@ -44,5 +44,5 @@ script:
   - flake8 app/
   - flake8 script/
   - flake8 test/
-  - nosetests
+  - nosetests --with-progressive
 
