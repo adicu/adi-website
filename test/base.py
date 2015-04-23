@@ -14,69 +14,74 @@ from coverage import coverage
 from app import create_app
 from config.flask_config import config
 
-GPLUS_IDS = {
-    'user': 'user123',
-    'editor': 'editor123',
-    'publisher': 'publisher123',
-    'admin': 'admin123'
+USERS = {
+    'user': {
+        'name': 'Test User',
+        'email': 'user@te.st',
+        'user_type': 'fake_user',
+        'gplus_id': 'user123'
+    },
+    'editor': {
+        'name': 'Test Editor',
+        'email': 'editor@te.st',
+        'user_type': 'editor',
+        'gplus_id': 'editor123'
+    },
+    'publisher': {
+        'name': 'Test Publisher',
+        'email': 'publisher@te.st',
+        'user_type': 'publisher',
+        'gplus_id': 'publisher123'
+    },
+    'admin': {
+        'name': 'Test Admin',
+        'email': 'admin@te.st',
+        'user_type': 'admin',
+        'gplus_id': 'admin123'
+    }
 }
 
 
 class TestingTemplate(unittest.TestCase):
 
     def setUp(self):  # noqa
+        """Before every test, make some example users."""
         from app.models import User
-        for u in User.objects():
-            u.delete()
-        user = User(name='Test User',
-                    email='user@te.st',
-                    gplus_id=GPLUS_IDS['user'])
-        editor = User(name='Test Editor',
-                      email='editor@te.st',
-                      user_type='editor',
-                      gplus_id=GPLUS_IDS['editor'])
-        publisher = User(name='Test Publisher',
-                         email='publisher@te.st',
-                         user_type='publisher',
-                         gplus_id=GPLUS_IDS['publisher'])
-        admin = User(name='Test Admin',
-                     email='admin@te.st',
-                     user_type='admin',
-                     gplus_id=GPLUS_IDS['admin'])
-        user.save()
-        editor.save()
-        publisher.save()
-        admin.save()
-        e = User.objects().get(gplus_id=GPLUS_IDS['editor'])
-        print e.privileges
+        for user_config in USERS.values():
+            user = User()
+            user.save()
+
+    def tearDown(self):  # noqa
+        """After every test, delete users created in :func:`setUp`."""
+        from app.models import User
+        User.drop_collection()
 
     @classmethod
-    def setUpClass(self):  # noqa
-        """ Sets up a test database before each set of tests """
-        create_app(
+    def setUpClass(cls):  # noqa
+        """Sets up a test database before each set of tests."""
+        cls.app = create_app(
             MONGODB_SETTINGS={'DB': 'testing'},
             TESTING=True,
             CSRF_ENABLED=False,
             WTF_CSRF_ENABLED=False
         )
-        from app import app
-        self.app = app
 
     def request_with_role(self, path, method='GET', role='admin',
                           *args, **kwargs):
-        """ Make an http request with the given role's gplus_id
+        """Make an http request with the given role's gplus_id
         in the session and a User with the given role in the database.
         """
         with self.app.test_client() as c:
             with c.session_transaction() as sess:
-                if role in GPLUS_IDS:
+                if role in USERS:
                     # if it isn't, the request is without a role
-                    sess['gplus_id'] = GPLUS_IDS[role]
+                    sess['gplus_id'] = USERS[role]['gplus_id']
                 kwargs['method'] = method
                 kwargs['path'] = path
             return c.open(*args, **kwargs)
 
     def test_create_test_app(self):
+        """Assert that we are in a proper testing environment."""
         self.assertTrue(self.app.config['TESTING'])
         self.assertFalse(self.app.config['CSRF_ENABLED'])
         self.assertEqual(mongoengine.connection.get_db().name, 'testing')
