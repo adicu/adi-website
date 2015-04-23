@@ -40,9 +40,12 @@ env:
 install:
   - pip install -r config/requirements.txt
   - pip install flake8
-script:
+
+before_script:
   - flake8 app/
   - flake8 script/
   - flake8 test/
+  - mkdir log
+script:
   - nosetests --with-progressive
 
