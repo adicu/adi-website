@@ -37,12 +37,6 @@ env:
     - APP_LOG_NAME=log/app.log
     - WERKZEUG_LOG_NAME=log/werkzeug.log
 
-git:  # We need custom git configurations
-    submodules: false
-before_install:  # Use sed to replace the SSH URL with the public URL
-    - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
-    - git submodule update --init --recursive
-
 install:
   - pip install -r config/requirements.txt
   - pip install flake8

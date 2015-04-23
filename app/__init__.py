@@ -84,6 +84,8 @@ def register_logger():
     """Create an error logger and attach it to ``app``."""
 
     max_bytes = int(app.config["LOG_FILE_MAX_SIZE"]) * 1024 * 1024   # MB to B
+    # Use "# noqa" to silence flake8 warnings for creating a variable that is
+    # uppercase.  (Here, we make a class, so uppercase is correct.)
     Handler = logging.handlers.RotatingFileHandler  # noqa
     f_str = ('%(levelname)s @ %(asctime)s @ %(filename)s '
              '%(funcName)s %(lineno)d: %(message)s')

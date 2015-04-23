@@ -76,6 +76,6 @@ class TimeField(BaseField):
             return (value.hour * 3600 +
                     value.minute * 60 +
                     value.second +
-                    value.microsecond / 1000000)
+                    value.microsecond / 10 ** 6)
         if isinstance(value, (int, float)):
             return value

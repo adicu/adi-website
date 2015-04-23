@@ -7,7 +7,7 @@ from UploadImageForm import UploadImageForm
 from AddToWhitelistForm import AddToWhitelistForm
 from EditUserForm import EditUserForm
 
-# Silences flake8
+# Silence flake8 by referencing otherwise unused imports
 __all__ = [
     'CreateBlogPostForm', 'CreateEventForm', 'CreateProfileForm',
     'DeleteEventForm', 'EditEventForm', 'UploadImageForm',

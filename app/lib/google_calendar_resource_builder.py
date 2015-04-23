@@ -71,7 +71,9 @@ class GoogleCalendarResourceBuilder():
             r += ';COUNT=%d' % s.num_occurrences
         else:
             raise GoogleCalendarAPIError(
-                'Series.ends_on and ends_after both false'
+                'A series should either end on a specific date, or after a '
+                'specific number of occurences.  Series.ends_on and ends_after'
+                ' are both false.'
             )
         return r
 

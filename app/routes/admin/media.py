@@ -34,16 +34,16 @@ def index():
     return render_template('admin/media/media.html', images=images, form=form)
 
 
-def allowed_file(fn):
-    """Returns True if ``fn`` is a valid filename.  It must have an
+def allowed_file(filename):
+    """Returns True if ``filename`` is a valid filename.  It must have an
     extension and its extension is in the allowed uploaded extensions.
 
-    :returns: True if ``fn`` is valid.
+    :returns: True if ``filename`` is valid.
     :rtype: bool
     """
     return (
-        '.' in fn and
-        os.path.splitext(fn)[1] in app.config['ALLOWED_UPLOAD_EXTENSIONS']
+        '.' in filename and os.path.splitext(filename)[1] in
+        app.config['ALLOWED_UPLOAD_EXTENSIONS']
     )
 
 
@@ -57,7 +57,7 @@ def create_filename(f, slug):
     :rtype: str
     """
     if '.' in f.filename:
-        return secure_filename(slug+os.path.splitext(f.filename)[1].lower())
+        return secure_filename(slug + os.path.splitext(f.filename)[1].lower())
 
 
 @media.route('/media/upload', methods=['POST'])

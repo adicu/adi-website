@@ -7,7 +7,7 @@ from users import users
 from whitelist import whitelist
 from api import api
 
-# Silences flake8
+# Silence flake8 by referencing otherwise unused imports
 __all__ = [
     'admin', 'auth', 'events', 'media', 'posts', 'users', 'whitelist', 'api'
 ]

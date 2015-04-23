@@ -24,7 +24,7 @@ class TimeField(Field):
     def __init__(self,
                  label=None,
                  validators=None,
-                 format='%I:%M%p',
+                 format='%I:%M%p',  # 1:45PM
                  **kwargs):
         """Creates a TimeField instance.
 

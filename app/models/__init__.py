@@ -6,7 +6,7 @@ from BlogPost import BlogPost
 from Event import Event
 from EventSeries import EventSeries
 
-# Silences flake8
+# Silence flake8 by referencing otherwise unused imports
 __all__ = [
     'BlogPost', 'Event', 'EventSeries', 'Image', 'Post', 'User', 'Whitelist'
 ]

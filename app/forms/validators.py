@@ -72,7 +72,7 @@ class UniqueEditEvent(UniqueEvent):
         :param str message: An alternate message to be raised.
         """
         self.original = original
-        self.message = message if message else self.SLUG_MESSAGE
+        self.message = message or self.SLUG_MESSAGE
 
     def __call__(self, form, field):
         """Called internally by :mod:`wtforms` on validation of the field.

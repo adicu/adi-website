@@ -53,12 +53,10 @@ def new():
     upload_form = UploadImageForm()
     if form.validate_on_submit():
         author = User.objects().get(id=ObjectId(form.author.data))
+        images = [Image.objects().get(filename=fn) for fn in form.images.data]
         post = BlogPost(title=form.title.data,
                         slug=form.slug.data,
-                        images=[
-                            Image.objects().get(filename=fn)
-                            for fn in form.images.data
-                        ],
+                        images=images,
                         markdown_content=form.body.data,
                         author=author,
                         posted_by=g.user, tags=form.tags.data)
