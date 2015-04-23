@@ -4,6 +4,7 @@ from mongoengine import connect
 import os
 from datetime import datetime
 
+
 def backfill_from_jekyll(path_to_jekyll_posts):
 
     connect('eventum')
@@ -15,7 +16,7 @@ def backfill_from_jekyll(path_to_jekyll_posts):
         slug = filename.split('.')[0]
         title = None
         date_published = None
-        published=True
+        published = True
         markdown_content = ''
 
         with open(os.path.join(path_to_jekyll_posts, filename)) as md_file:
@@ -44,8 +45,3 @@ def backfill_from_jekyll(path_to_jekyll_posts):
         blog_post.save()
 
     print "Backfilled %s blog posts." % len(filenames)
-
-
-
-
-

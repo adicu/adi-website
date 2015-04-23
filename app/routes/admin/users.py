@@ -19,6 +19,7 @@ users = Blueprint('users', __name__)
 
 gplus_service = build('plus', 'v1')
 
+
 @users.route('/users', methods=['GET'])
 @login_required
 def index():
@@ -41,6 +42,7 @@ def index():
                            images=Image.objects(),
                            current_user=g.user)
 
+
 @users.route('/users/me', methods=['GET'])
 @login_required
 def me():
@@ -51,6 +53,7 @@ def me():
     **Methods:** ``GET``
     """
     return redirect(url_for(".user", slug=g.user.slug))
+
 
 @users.route('/users/delete/<user_id>', methods=['POST'])
 @login_required
@@ -87,6 +90,7 @@ def delete(user_id):
 
     return redirect(url_for('.index'), code=303)
 
+
 @users.route('/user/<slug>', methods=['GET', 'POST'])
 @login_required
 def user(slug):
@@ -121,9 +125,10 @@ def user(slug):
     return render_template('admin/users/user.html', user=user, form=form,
                            current_user=g.user)
 
-#============================================================
-# Development Only (quick and dirty ways to play with Users)
-#============================================================
+
+# ============================================================
+#  Development Only (quick and dirty ways to play with Users)
+# ============================================================
 @users.route('/become/<level>', methods=['GET'])
 @development_only
 @login_required
@@ -146,6 +151,7 @@ def become(level=0):
                    for k, v in admin_privileges.iteritems()))
     User.objects(gplus_id=session['gplus_id']).update(**db_dict)
     return redirect(url_for('.index'))
+
 
 @users.route('/super', methods=['GET'])
 @development_only

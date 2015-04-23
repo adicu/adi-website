@@ -1,3 +1,4 @@
+
 """
 .. module:: events
     :synopsis: All routes on the ``events`` Blueprint.
@@ -14,13 +15,15 @@ from bson.objectid import ObjectId
 from mongoengine.errors import DoesNotExist, ValidationError
 
 from app.models import Event, Image
-from app.forms import CreateEventForm, EditEventForm, DeleteEventForm, UploadImageForm
+from app.forms import (CreateEventForm, EditEventForm, DeleteEventForm,
+                       UploadImageForm)
 from app.lib.decorators import login_required, requires_privilege
 from app.routes.base import ERROR_FLASH, MESSAGE_FLASH
 
 from app.lib.error import GoogleCalendarAPIError
 from app.lib.events import EventsHelper
 events = Blueprint('events', __name__)
+
 
 @events.route('/events', methods=['GET'])
 @login_required
@@ -32,18 +35,22 @@ def index():
 
     **Methods:** ``GET``
     """
+    past = request.args.get('past')
+    future = request.args.get('future')
+    past = int(past) if past else 0
+    future = int(future) if future else 0
 
-    past = int(request.args.get('past')) if request.args.get('past') else 0
-    future = int(request.args.get('future')) if request.args.get('future') else 0
-
-    past_events, this_week, next_week, future_events = \
-    _get_events_for_template(past, future)
+    (past_events,
+     this_week,
+     next_week,
+     future_events) = _get_events_for_template(past, future)
 
     return render_template('admin/events/events.html',
                            past_events=past_events,
                            this_week=this_week,
                            next_week=next_week,
                            future_events=future_events)
+
 
 def _format_for_display(dt):
     """Formats ``dt`` like "Saturday, October 25".
@@ -57,6 +64,7 @@ def _format_for_display(dt):
     # Cast the %d part to int and back so that 06 --> 6
     return dt.strftime("%A, %B ") + str(int(dt.strftime("%d")))
 
+
 def _get_events_for_template(past, future):
     """Returns the events to insert in the events template.  Returns four
     groups of dates:
@@ -65,21 +73,25 @@ def _get_events_for_template(past, future):
         list of events for a week, and a label for the week.
     - ``this_week``: A list of events happening this week.
     - ``next_week``: A list of events happening next week.
-    - ``future_events``: A list of dictionaries similar to ``post_events``, but for
-        events happening in the future.
+    - ``future_events``: A list of dictionaries similar to ``post_events``,
+        but for events happening in the future.
 
     :returns: ``past_events``, ``this_week``, ``next_week``, ``future_events``
     """
     today = date.today()
-    last_sunday = datetime.combine(today - timedelta(days=(today.isoweekday() % 7)),
-                                   datetime.min.time())
+    last_sunday = datetime.combine(
+        today - timedelta(days=(today.isoweekday() % 7)),
+        datetime.min.time()
+    )
     next_sunday = last_sunday + timedelta(days=7)
     following_sunday = last_sunday + timedelta(days=14)
 
-    this_week = Event.objects(start_date__gte=last_sunday,
-                              start_date__lt=next_sunday).order_by('start_date')
-    next_week = Event.objects(start_date__gte=next_sunday,
-                              start_date__lt=following_sunday).order_by('start_date')
+    this_week = (Event.objects(start_date__gte=last_sunday,
+                               start_date__lt=next_sunday)
+                 .order_by('start_date'))
+    next_week = (Event.objects(start_date__gte=next_sunday,
+                               start_date__lt=following_sunday)
+                 .order_by('start_date'))
     past_events = []
     future_events = []
 
@@ -106,6 +118,7 @@ def _get_events_for_template(past, future):
         })
 
     return past_events, this_week, next_week, future_events
+
 
 @events.route('/events/create', methods=['GET', 'POST'])
 @requires_privilege('edit')
@@ -136,6 +149,7 @@ def create():
     return render_template('admin/events/create.html', form=form,
                            delete_form=delete_form, upload_form=upload_form,
                            images=images)
+
 
 @events.route('/events/edit/<event_id>', methods=['GET', 'POST'])
 @requires_privilege('edit')
@@ -178,6 +192,7 @@ def edit(event_id):
                            delete_form=delete_form, upload_form=upload_form,
                            images=images)
 
+
 @events.route('/events/delete/<event_id>', methods=['POST'])
 @requires_privilege('edit')
 def delete(event_id):
@@ -201,6 +216,7 @@ def delete(event_id):
         flash('Invalid event id', ERROR_FLASH)
     return redirect(url_for('.index'))
 
+
 def set_published_status(event_id, status):
     """"""
     object_id = ObjectId(event_id)
@@ -223,11 +239,13 @@ def set_published_status(event_id, status):
         flash('Invalid event id', ERROR_FLASH)
     return redirect(url_for('.index'))
 
+
 @events.route('/events/publish/<event_id>', methods=['POST'])
 @requires_privilege('publish')
 def publish(event_id):
     """"""
     return set_published_status(event_id, True)
+
 
 @events.route('/events/unpublish/<event_id>', methods=['POST'])
 @requires_privilege('publish')

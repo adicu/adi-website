@@ -17,6 +17,7 @@ from app.routes.base import MESSAGE_FLASH, ERROR_FLASH
 
 whitelist = Blueprint('whitelist', __name__)
 
+
 @whitelist.route('/whitelist/delete/<email>', methods=['POST'])
 @login_required
 def delete(email):
@@ -70,7 +71,8 @@ def add():
     else:
         user_exists = User.objects(email=form.email.data).count() != 0
         if form.validate_on_submit() and not user_exists:
-            wl = Whitelist(email=form.email.data, user_type=form.user_type.data)
+            wl = Whitelist(email=form.email.data,
+                           user_type=form.user_type.data)
             wl.save()
         else:
             app.logger.warning(form.errors)

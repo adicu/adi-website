@@ -61,14 +61,14 @@ def create_app(**config_overrides):
         gcal_client = GoogleCalendarAPIClient()
     except IOError:
         gae_environ = 'TRUE' if app.config['GOOGLE_AUTH_ENABLED'] else 'FALSE'
-        print ('Failed to find the Google Calendar credentials file at `{}`, '
-               'please create it by running:\n\n'
-               '    $ python manage.py --authorize\n'
-               'The environment variable GOOGLE_AUTH_ENABLED is currently set '
-               'to `{}`.  If set to FALSE, Google Calendar calls will fail '
-               'silently.'
-               .format(app.config['INSTALLED_APP_CREDENTIALS_PATH'],
-                       gae_environ))
+        raise Exception('Failed to find the Google Calendar credentials file '
+                        'at `{}`, please create it by running:\n\n'
+                        '    $ python manage.py --authorize\n'
+                        'The environment variable GOOGLE_AUTH_ENABLED is '
+                        'currently set to `{}`.  If set to FALSE, Google '
+                        'Calendar calls will fail silently.'.format(
+                            app.config['INSTALLED_APP_CREDENTIALS_PATH'],
+                            gae_environ))
         exit(1)
 
     register_delete_rules()
@@ -84,7 +84,9 @@ def register_logger():
     """Create an error logger and attach it to ``app``."""
 
     max_bytes = int(app.config["LOG_FILE_MAX_SIZE"]) * 1024 * 1024   # MB to B
-    Handler = logging.handlers.RotatingFileHandler
+    # Use "# noqa" to silence flake8 warnings for creating a variable that is
+    # uppercase.  (Here, we make a class, so uppercase is correct.)
+    Handler = logging.handlers.RotatingFileHandler  # noqa
     f_str = ('%(levelname)s @ %(asctime)s @ %(filename)s '
              '%(funcName)s %(lineno)d: %(message)s')
 

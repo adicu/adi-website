@@ -14,6 +14,7 @@ import markdown
 from datetime import datetime, timedelta
 now = datetime.now
 
+
 class Event(db.Document):
     """The object that represents an individual event in Mongoengine.
 
@@ -108,7 +109,9 @@ class Event(db.Document):
         :rtype: str
         """
         if self.is_recurring:
-            return url_for('client.recurring_event', slug=self.slug, index=self.index)
+            return url_for('client.recurring_event',
+                           slug=self.slug,
+                           index=self.index)
         return url_for('client.event', slug=self.slug)
 
     def image_url(self):
@@ -145,12 +148,16 @@ class Event(db.Document):
         self.date_modified = now()
 
         if self.short_description_markdown:
-            self.short_description = markdown.markdown(self.short_description_markdown,
-                                                       ['extra', 'smarty'])
+            self.short_description = markdown.markdown(
+                self.short_description_markdown,
+                ['extra', 'smarty']
+            )
 
         if self.long_description_markdown:
-            self.long_description = markdown.markdown(self.long_description_markdown,
-                                                      ['extra', 'smarty'])
+            self.long_description = markdown.markdown(
+                self.long_description_markdown,
+                ['extra', 'smarty']
+            )
 
         if (self.start_date and
                 self.end_date and
@@ -220,16 +227,14 @@ class Event(db.Document):
         :Returns: True if we are ready for publishing.
         :rtype: bool
         """
-        return all([
-            self.title,
-            self.creator,
-            self.location,
-            self.start_datetime,
-            self.end_datetime,
-            self.short_description,
-            self.long_description,
-            self.image
-            ])
+        return all([self.title,
+                    self.creator,
+                    self.location,
+                    self.start_datetime,
+                    self.end_datetime,
+                    self.short_description,
+                    self.long_description,
+                    self.image])
 
     def is_multiday(self):
         """Returns True if the event spans muliple days.
@@ -239,7 +244,8 @@ class Event(db.Document):
         """
         if self.start_date == self.end_date:
             return False
-        if self.start_date == self.end_date - timedelta(days=1) and self.end_time.hour < 5:
+        if (self.start_date == self.end_date - timedelta(days=1) and
+                self.end_time.hour < 5):
             return False
         return True
 
@@ -295,7 +301,9 @@ class Event(db.Document):
                 start_format = "%I:%M-"
             else:
                 start_format = "%I:%M%p-"
-            output += self.start_time.strftime(start_format).lstrip("0").lower()
+            output += self.start_time.strftime(
+                start_format
+            ).lstrip("0").lower()
         else:
             output += "??:?? - "
 
@@ -324,22 +332,22 @@ class Event(db.Document):
         # Check times against None, because midnight is represented by 0.
         return (self.start_time is not None and
                 self.end_time is not None and
-                self.start_time.strftime("%p")==self.end_time.strftime("%p"))
+                self.start_time.strftime("%p") == self.end_time.strftime("%p"))
 
     def to_jsonifiable(self):
         """
         Returns a jsonifiable dictionary of event attributes to values. The
         dictionary only contains attributes whose types are jsonifiable.
 
-        :returns: A jsonifiable dictionary of event attributes to values. 
+        :returns: A jsonifiable dictionary of event attributes to values.
         :rtype: dict
         """
 
         attrs = ['date_created', 'date_modified', 'title', 'location', 'slug',
-                'start_datetime', 'end_datetime', 'short_description',
-                'long_description', 'short_description_markdown',
-                'long_description_markdown', 'published', 'date_published',
-                'is_recurring']
+                 'start_datetime', 'end_datetime', 'short_description',
+                 'long_description', 'short_description_markdown',
+                 'long_description_markdown', 'published', 'date_published',
+                 'is_recurring']
 
         return dict(zip(list(attrs), [getattr(self, attr) for attr in attrs]))
 
@@ -359,5 +367,5 @@ class Event(db.Document):
         """
         return 'Event(title=%r, location=%r, creator=%r, start=%r, end=%r, ' \
             'published=%r)' % (self.title, self.location, self.creator,
-                             self.start_datetime, self.end_datetime,
-                            self.published)
+                               self.start_datetime, self.end_datetime,
+                               self.published)

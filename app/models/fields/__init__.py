@@ -1,4 +1,5 @@
 from TimeField import TimeField
 from DateField import DateField
 
-assert (TimeField, DateField)
+# Silence flake8 by referencing otherwise unused imports
+__all__ = ['TimeField', 'DateField']

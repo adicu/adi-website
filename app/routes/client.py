@@ -25,6 +25,7 @@ ONE_LARGE_AND_TRIPLE = 4  # One large event and one set of three small events
 NUM_PAST_EVENTS_FOR_FRONTPAGE = 6  # Two triples
 NUM_EVENTS_PER_PAGE = 10
 
+
 @client.route('/', methods=['GET'])
 def index():
     """View the ADI homepage.
@@ -54,6 +55,7 @@ def index():
                            events=events,
                            blog_post=latest_blog_post)
 
+
 @client.route('/events/devfest', methods=['GET'])
 @client.route('/devfest', methods=['GET'])
 def devfest():
@@ -65,6 +67,7 @@ def devfest():
     """
     return redirect("http://devfe.st")
 
+
 @client.route('/contact', methods=['GET'])
 def contact():
     """View contact information.
@@ -75,6 +78,7 @@ def contact():
     """
     return render_template('contact.html')
 
+
 @client.route('/feedback', methods=['GET'])
 def feedback():
     """Submit feedback on past ADI events.
@@ -84,6 +88,7 @@ def feedback():
     **Methods:** ``GET``
     """
     return render_template('feedback.html')
+
 
 @client.route('/jobfair', methods=['GET'])
 def jobfair():
@@ -97,12 +102,14 @@ def jobfair():
     companies = _get_companies(force=force)
     return render_template('jobfair.html', companies=companies)
 
+
 def _get_companies(force=False):
     global _companies
     if not _companies or force:
         with open(adi['COMPANIES_PATH']) as f:
             _companies = json.loads(f.read()).get('companies')
     return _companies
+
 
 @client.route('/labs', methods=['GET'])
 def labs():
@@ -116,12 +123,14 @@ def labs():
     labs_data = _get_labs_data(force=force)
     return render_template('labs.html', data=labs_data)
 
+
 def _get_labs_data(force=False):
     global _labs_data
     if not _labs_data or force:
         with open(adi['LABS_DATA_PATH']) as f:
             _labs_data = json.loads(f.read())
     return _labs_data
+
 
 @client.route('/learn', methods=['GET'])
 def learn():
@@ -132,6 +141,7 @@ def learn():
     **Methods:** ``GET``
     """
     return redirect(url_for('.resources'))
+
 
 @client.route('/resources', methods=['GET'])
 def resources():
@@ -146,12 +156,14 @@ def resources():
     resources_data = _get_resources(force=force)
     return render_template('resources.html', resources=resources_data)
 
+
 def _get_resources(force=False):
     global _resources
     if not _resources or force:
         with open(adi['RESOURCES_PATH']) as f:
             _resources = json.loads(f.read())
     return _resources
+
 
 @client.route('/events', methods=['GET'])
 def events():
@@ -191,6 +203,7 @@ def events():
                            upcoming_events=upcoming_events,
                            more_past_events=more_past_events)
 
+
 @client.route('/events/<int:index>', methods=['GET'])
 def event_archive(index):
     """View old events.
@@ -227,6 +240,7 @@ def event_archive(index):
                            previous_index=previous_index,
                            next_index=next_index)
 
+
 @client.route('/events/<slug>', methods=['GET'])
 def event(slug):
     """View a specific non-recurring event, or the next upcoming instance of
@@ -258,6 +272,7 @@ def event(slug):
                            now=now,
                            upcoming_events=_upcoming_events_triple(event))
 
+
 @client.route('/events/<slug>/<int:index>', methods=['GET'])
 def recurring_event(slug, index):
     """View a specific instance of a recurring event.
@@ -285,6 +300,7 @@ def recurring_event(slug, index):
                            event=event,
                            now=now,
                            upcoming_events=_upcoming_events_triple(event))
+
 
 def _upcoming_events_triple(event):
     """Returns a set of three upcoming events, excluding ``event``.
