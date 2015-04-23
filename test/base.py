@@ -48,7 +48,7 @@ class TestingTemplate(unittest.TestCase):
         """Before every test, make some example users."""
         from app.models import User
         for user_config in USERS.values():
-            user = User()
+            user = User(**user_config)
             user.save()
 
     def tearDown(self):  # noqa
@@ -65,6 +65,8 @@ class TestingTemplate(unittest.TestCase):
             CSRF_ENABLED=False,
             WTF_CSRF_ENABLED=False
         )
+        from app.models import User
+        User.drop_collection()
 
     def request_with_role(self, path, method='GET', role='admin',
                           *args, **kwargs):
