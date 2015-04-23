@@ -3,10 +3,10 @@ language: python
 python:
     - "2.7"
 
-# sudo: false  # Use container-based infrastructure
-# cache:
-#   directories:
-#     - $HOME/.cache/pip  # cache pip requirements
+sudo: false  # Use container-based infrastructure
+cache:
+  directories:
+    - $HOME/.cache/pip  # cache pip requirements
 services:
   - mongodb
 
@@ -50,5 +50,5 @@ script:
   - flake8 app/
   - flake8 script/
   - flake8 test/
-  - nosetests test/base.py:TestingTemplate.test_create_test_app
+  - nosetests --nocapture test/base.py:TestingTemplate.test_create_test_app
 
