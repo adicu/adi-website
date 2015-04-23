@@ -37,6 +37,9 @@ env:
     - APP_LOG_NAME=log/app.log
     - WERKZEUG_LOG_NAME=log/werkzeug.log
 
+before_install:
+  # Install SCSS
+  - gem install sass
 install:
   - pip install -r config/requirements.txt
   - pip install flake8
