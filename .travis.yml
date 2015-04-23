@@ -50,4 +50,5 @@ script:
   - flake8 app/
   - flake8 script/
   - flake8 test/
+  - nosetests test/base.py:TestingTemplate.test_create_test_app
 

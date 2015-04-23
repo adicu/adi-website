@@ -3,7 +3,7 @@ import os
 import mongoengine
 from coverage import coverage
 from app import create_app
-from config.flask_config import BASEDIR
+from config.flask_config import config
 
 GPLUS_IDS = {
     'user': 'user123',
@@ -91,7 +91,7 @@ class TestingTemplate(unittest.TestCase):
         print "\n\nCoverage Report:\n"
         cov.report()
         print "HTML version: " + \
-            os.path.join(BASEDIR, "tmp/coverage/index.html")
+            os.path.join(config['BASEDIR'], "tmp/coverage/index.html")
         cov.html_report(directory='tmp/coverage')
         cov.erase()
 
