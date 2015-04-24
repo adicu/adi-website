@@ -33,5 +33,6 @@ class UploadImageForm(Form):
         Required('Please submit a filename'),
         UniqueImage()])
     extension = StringField('Extension', [
-        Regexp(EXTENSION_REGEX, message='Only images are allowed.'),
+        Regexp(EXTENSION_REGEX, message='Only .png, .jpg, .jpeg, '
+            'and .gif files are allowed.'),
         Required('Invalid extension')])
