@@ -23,8 +23,42 @@ $(function() {
 
     /* let the `btn-upload` div act as the submit button */
     $(".btn-upload").click(function () {
-        $('form.upload-form').submit();
-        return false;
+        var formData = new FormData($('.upload-form')[0]);
+        $.ajax({
+            url: '/admin/media/upload',  //server script to process data
+            type: 'POST',
+            xhr: function() {  // custom xhr
+                myXhr = $.ajaxSettings.xhr();
+                return myXhr;
+            },
+            //Ajax events
+            success: function(data, textStatus, jqXHR) {
+                var response = jQuery.parseJSON(jqXHR.responseText);
+                if (response.extension == null){
+                    $('#images-ajax-loadpoint').load("/admin/media/view", function(response, status){
+                        if (status == "error"){
+                            alert("Sorry, there was an error loading the images.");
+                        }
+                    });
+                    $('.error-message').hide();
+                }
+                else {
+                    $('.error-message').text(response.extension);
+                    $('.error-message').show();
+                    $('.error-message').addClass('active');
+                }
+            },
+            error: function(jqXHR, textStatus, error) {
+                $('.error-mesage').text("An unknown error occured.");
+                $('.error-message').addClass('active');
+            },
+            // Form data
+            data: formData,
+            //Options to tell JQuery not to process data or worry about content-type
+            cache: false,
+            contentType: false,
+            processData: false
+        });
     });
 
     /* Automatically populate the filename field when a file is chosen */

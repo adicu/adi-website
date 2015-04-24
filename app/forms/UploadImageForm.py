@@ -10,6 +10,7 @@ from wtforms import StringField, FileField
 from wtforms.validators import Regexp, Required
 from app.forms.validators import UniqueImage
 from app.lib.regex import FILENAME_REGEX
+from app.lib.regex import EXTENSION_REGEX
 
 
 class UploadImageForm(Form):
@@ -31,4 +32,6 @@ class UploadImageForm(Form):
         Regexp(FILENAME_REGEX),
         Required('Please submit a filename'),
         UniqueImage()])
-    extension = StringField('Extension')
+    extension = StringField('Extension', [
+        Regexp(EXTENSION_REGEX, message='Only images are allowed.'),
+        Required('Invalid extension')])
