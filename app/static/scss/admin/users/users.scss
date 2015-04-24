@@ -37,6 +37,11 @@
                 .fa-check {
                     color: green;
                 }
+                small {
+                    label {
+                        font-size: 0.9rem;
+                    }
+                }
             }
         }
     }
@@ -67,6 +72,11 @@
                 }
                 .fa-check {
                     color: green;
+                }
+                small {
+                    label {
+                        font-size: 0.9rem; 
+                    }
                 }
             }
         }

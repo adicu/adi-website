@@ -56,8 +56,8 @@
             <tr>
                 <th>&nbsp;</th>
                 {% for subfield in whitelist_form.user_type %}
-                    <td>{{ subfield }}
-                    {{subfield.label}}</td>
+                    <td><small>{{subfield.label}}</small>
+                    {{ subfield }}</td>
                 {% endfor %}
             </tr>
             <tr>
