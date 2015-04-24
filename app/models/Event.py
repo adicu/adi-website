@@ -344,10 +344,10 @@ class Event(db.Document):
         """
 
         attrs = ['date_created', 'date_modified', 'title', 'location', 'slug',
-                'start_datetime', 'end_datetime', 'short_description',
-                'long_description', 'short_description_markdown',
-                'long_description_markdown', 'published', 'date_published',
-                'is_recurring', 'facebook_url']
+                 'start_datetime', 'end_datetime', 'short_description',
+                 'long_description', 'short_description_markdown',
+                 'long_description_markdown', 'published', 'date_published',
+                 'is_recurring', 'facebook_url']
 
         return dict(zip(list(attrs), [getattr(self, attr) for attr in attrs]))
 
