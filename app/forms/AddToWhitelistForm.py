@@ -21,8 +21,8 @@ class AddToWhitelistForm(Form):
     - Editor (``"editor"``): Can edit content on Eventum.
     - Publisher (``"publisher"``) Can publish content to the client.
     - Admin (``"publisher"``) Can manage user accounts and permissions.
-    - Fake User (``"fake_user"``) Can not do anything, and should only be used as
-        dummy accounts for guest blog posts.
+    - Fake User (``"fake_user"``) Can not do anything, and should only be used
+        as dummy accounts for guest blog posts.
 
     If the whitelisted user is a fake user (``user_type`` is set to
     ``fake_user``) then ``name`` and ``fake_user_image`` must also be set.

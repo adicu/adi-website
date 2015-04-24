@@ -5,7 +5,8 @@
 .. moduleauthor:: Dan Schlosser <dan@danrs.ch>
 """
 
-from wtforms import FieldList, StringField, TextAreaField, BooleanField, SelectField
+from wtforms import (FieldList, StringField, TextAreaField, BooleanField,
+                     SelectField)
 from flask.ext.wtf import Form
 from wtforms.validators import Regexp, Required
 from app.forms.validators import image_with_same_name
@@ -13,6 +14,7 @@ from app.lib.regex import SLUG_REGEX
 
 INVALID_SLUG = 'Post slug should only contain numbers, letters and dashes.'
 BODY_DEFAULT = 'Type your post here.\n\nRendered in **Markdown**!'
+
 
 class CreateBlogPostForm(Form):
     """A form for the creation of a :class:`~app.models.BlogPost` entry.

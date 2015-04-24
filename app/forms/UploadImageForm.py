@@ -11,6 +11,7 @@ from wtforms.validators import Regexp, Required
 from app.forms.validators import UniqueImage
 from app.lib.regex import FILENAME_REGEX
 
+
 class UploadImageForm(Form):
     """A form to upload an :class:`~app.models.Image`.
 

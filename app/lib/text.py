@@ -1,5 +1,6 @@
 import re
 
+
 def truncate_html(text, truncate_len, truncate_text):
     """ Truncates HTML to a certain number of words (not counting tags and
     comments). Closes opened tags if they were correctly closed in the given

@@ -1,9 +1,5 @@
-from __future__ import absolute_import
-
 from app.routes.blog import blog
 from app.routes.client import client
 
-# note: silences pyflakes unused variables
-assert (absolute_import,
-        blog,
-        client)
+# Silence flake8 by referencing otherwise unused imports
+__all__ = ['blog', 'client']

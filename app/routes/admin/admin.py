@@ -12,6 +12,7 @@ from app.models import Event, BlogPost
 
 admin = Blueprint('admin', __name__)
 
+
 @admin.route('/home', methods=['GET'])
 @login_required
 def index():
@@ -22,15 +23,19 @@ def index():
     **Methods:** ``GET``
     """
     today = date.today()
-    last_sunday = datetime.combine(today - timedelta(days=(today.isoweekday() % 7)),
-                                   datetime.min.time())
+    last_sunday = datetime.combine(
+        today - timedelta(days=(today.isoweekday() % 7)),
+        datetime.min.time())
     next_sunday = last_sunday + timedelta(days=7)
 
-    this_week = Event.objects(start_date__gt=last_sunday,
-                              start_date__lt=next_sunday).order_by('start_date')
+    this_week = (Event.objects(start_date__gt=last_sunday,
+                               start_date__lt=next_sunday)
+                 .order_by('start_date'))
     posts = BlogPost.objects().order_by('published', '-date_published')[:5]
 
-    return render_template("admin/home.html", this_week=this_week, recent_posts=posts)
+    return render_template("admin/home.html",
+                           this_week=this_week,
+                           recent_posts=posts)
 
 
 @admin.route('/', methods=['GET'])

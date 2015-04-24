@@ -38,8 +38,8 @@ class EventSeries(db.Document):
     :ivar ends_on: :class:`mongoengine.fields.BooleanField` - True if the event
         ends on a certain date. Must be set opposite to ``ends_after``.
     :ivar num_occurrences: :class:`mongoengine.fields.IntField` - The number of
-        occurrences for a recurring event.  Should be set only if ``ends_after``
-        is ``True``.
+        occurrences for a recurring event.  Should be set only if
+        ``ends_after`` is ``True``.
     :ivar recurrence_end_date: :class:`DateField` - The date that the
         recurrence ends on.  Should be set only if ``ends_on`` is ``True``.
     :ivar recurrence_summary: :class:`mongoengine.fields.StringField` - A plain
@@ -68,7 +68,7 @@ class EventSeries(db.Document):
     num_occurrences = db.IntField(default=1)
     recurrence_end_date = DateField()
     recurrence_summary = db.StringField()
-    gcal_id = db.StringField() # ID of the first event in the series
+    gcal_id = db.StringField()  # ID of the first event in the series
 
     def delete_one(self, event):
         """Deletes ``event`` after removing it from the series.
@@ -112,4 +112,3 @@ class EventSeries(db.Document):
         if self.ends_after == self.ends_on:
             raise ValidationError("ends_on and ends_after should not share a "
                                   "value.")
-

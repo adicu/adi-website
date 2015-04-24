@@ -11,6 +11,7 @@ import time
 from wtforms import Field
 from wtforms.widgets.html5 import TimeInput
 
+
 class TimeField(Field):
     """A text field which stores a `datetime.time` matching a format.
 
@@ -20,7 +21,11 @@ class TimeField(Field):
     widget = TimeInput()
     error_msg = 'Not a valid time.'
 
-    def __init__(self, label=None, validators=None, format='%I:%M%p', **kwargs):
+    def __init__(self,
+                 label=None,
+                 validators=None,
+                 format='%I:%M%p',  # 1:45PM
+                 **kwargs):
         """Creates a TimeField instance.
 
         :param str label: A label to be optionally displayed next to the field.

@@ -19,7 +19,7 @@ config = {
 # consul_configurations contains equivalent keys that will be used to extract
 # configuration values from Consul.
 consul_configurations = [  # (consul key, config key)
-    ('host', 'HOST'),
+    ('flask_host', 'HOST'),
     ('flask_port', 'PORT'),
     ('flask_debug', 'DEBUG'),
     ('secret_key', 'SECRET_KEY'),
@@ -45,7 +45,8 @@ if environ.get('USE_ENV_VARS') == 'TRUE':  # use env variables
             raise Exception("Critical config variable {} is missing. "
                             "You probably need to run either: \n\n\tsource "
                             "config/<your settings file> \n\tor \n\t"
-                            "./config/setup_consul_<environment>.sh".format(key))
+                            "./config/setup_consul_<environment>.sh".format(
+                                key))
 
 else:
     from consul import Consul
@@ -65,6 +66,7 @@ else:
 
 # basic flask settings
 config['PORT'] = int(config['PORT'])
+config['DEBUG'] = (config['DEBUG'] == 'TRUE')
 
 # Google Auth
 # This is used for the webapp that allows Google+ login
@@ -77,13 +79,14 @@ if config['GOOGLE_AUTH_ENABLED']:
             _secrets_data = json.loads(f.read())['web']
             config['GOOGLE_CLIENT_ID'] = _secrets_data['client_id']
             if not _secrets_data.get('client_secret', None):
-                print ('Google Auth config file, %s,'
-                       ' missing client secret', config['CLIENT_SECRETS_PATH'])
+                raise Exception('Google Auth config file, {}, missing client '
+                                'secret'.format(config['CLIENT_SECRETS_PATH']))
                 exit(1)
 
     except IOError:
-        print ("The Google client_secrets file was not found at '{}', "
-               "check that it exists.".format(config['CLIENT_SECRETS_PATH']))
+        raise Exception("The Google client_secrets file was not found at '{}',"
+                        " check that it exists.".format(
+                            config['CLIENT_SECRETS_PATH']))
         exit(1)
 
 # Cross-site request forgery settings
@@ -100,12 +103,15 @@ config['MONGODB_SETTINGS'] = {'DB': config['MONGO_DATABASE']}
 config['BASEDIR'] = path.abspath(path.join(path.dirname(__file__), pardir))
 
 config['RELATIVE_UPLOAD_FOLDER'] = 'app/static/img/uploaded/'
-config['UPLOAD_FOLDER'] = path.join(config['BASEDIR'], config['RELATIVE_UPLOAD_FOLDER'])
+config['UPLOAD_FOLDER'] = path.join(config['BASEDIR'],
+                                    config['RELATIVE_UPLOAD_FOLDER'])
 config['RELATIVE_DELETE_FOLDER'] = 'app/static/img/uploaded/deleted/'
-config['DELETE_FOLDER'] = path.join(config['BASEDIR'], config['RELATIVE_DELETE_FOLDER'])
+config['DELETE_FOLDER'] = path.join(config['BASEDIR'],
+                                    config['RELATIVE_DELETE_FOLDER'])
 
 # The file extensions that may be uploaded
-config['ALLOWED_UPLOAD_EXTENSIONS'] = set(['.txt',
+config['ALLOWED_UPLOAD_EXTENSIONS'] = set([
+    '.txt',
     '.pdf',
     '.png',
     '.jpg',

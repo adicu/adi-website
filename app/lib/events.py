@@ -88,6 +88,7 @@ from app.forms import EditEventForm
 from datetime import timedelta
 from app import gcal_client
 
+
 class EventsHelper(object):
     """A class with helper functions that translate WTForms to Mongoengine
     models and Google Calendar models.
@@ -103,7 +104,6 @@ class EventsHelper(object):
     PUBLIC = 'public'
     PRIVATE = 'private'
 
-
     ###########################################################################
     # Public API:
     # - create_form
@@ -113,7 +113,7 @@ class EventsHelper(object):
     ###########################################################################
 
     @classmethod
-    def create_form(klass, event, request):
+    def create_form(cls, event, request):
         """Create an instance of :class:`CreateEventForm` from an event from the
         database and the request object.
 
@@ -135,11 +135,11 @@ class EventsHelper(object):
         if event.parent_series:
             updates = DataBuilder.form_data_from_series(event.parent_series)
             form_data.update(updates)
-        form_data = klass._remove_none_fields(form_data)
+        form_data = cls._remove_none_fields(form_data)
         return EditEventForm(event, request.form, **form_data)
 
     @classmethod
-    def create_event(klass, form, creator):
+    def create_event(cls, form, creator):
         """Creates a Mongoengine and Google Calendar event from form data.
 
         Calls either :func:`create_series` or :func:`create_single_event`
@@ -158,12 +158,12 @@ class EventsHelper(object):
 
         if form.is_recurring.data:
             # Series
-            return klass.create_series(form, creator)
+            return cls.create_series(form, creator)
         # Single event
-        return klass.create_single_event(form, creator)
+        return cls.create_single_event(form, creator)
 
     @classmethod
-    def update_event(klass, event, form):
+    def update_event(cls, event, form):
         """Updates ``event``, syncing changes to Google Calendar.
 
         Calls either :func:`update_series`, :func:`update_single_event`, or
@@ -189,28 +189,28 @@ class EventsHelper(object):
         # Determine if the event should be moved between calendars
         move_to = None
         if event.published != form.published.data:
-            move_to = klass.PUBLIC if form.published.data else klass.PRIVATE
+            move_to = cls.PUBLIC if form.published.data else cls.PRIVATE
 
         if event.is_recurring != form.is_recurring.data:
             if event.is_recurring:
                 # Series -> single event
-                return klass.convert_to_single_event(event,
-                                                     form,
-                                                     move_to=move_to)
+                return cls.convert_to_single_event(event,
+                                                   form,
+                                                   move_to=move_to)
             # Single event -> series
-            return klass.convert_to_series(event, form, move_to=move_to)
+            return cls.convert_to_series(event, form, move_to=move_to)
 
         elif event.is_recurring:
             if form.update_all.data:
                 # Entire series
-                return klass.update_series(event, form, move_to=move_to)
+                return cls.update_series(event, form, move_to=move_to)
             # Single event from series
-            return klass.update_single_event_from_series(event, form)
+            return cls.update_single_event_from_series(event, form)
         # Single event
-        return klass.update_single_event(event, form, move_to=move_to)
+        return cls.update_single_event(event, form, move_to=move_to)
 
     @classmethod
-    def delete_event(klass, event, form):
+    def delete_event(cls, event, form):
         """Deletes ``event``, syncing changes to Google Calendar.
 
         Calls either :func:`delete_series`, :func:`delete_single_event`, or
@@ -233,12 +233,11 @@ class EventsHelper(object):
         if event.is_recurring:
             if form.delete_all.data:
                 # Series
-                return klass.delete_series(event)
+                return cls.delete_series(event)
             # Single event from series
-            return klass.delete_single_event_from_series(event)
+            return cls.delete_single_event_from_series(event)
         # Single event
-        return klass.delete_single_event(event)
-
+        return cls.delete_single_event(event)
 
     ###########################################################################
     # Worker Methods.
@@ -247,7 +246,7 @@ class EventsHelper(object):
     ###########################################################################
 
     @classmethod
-    def create_single_event(klass, form, creator):
+    def create_single_event(cls, form, creator):
         """Creates a non-recurring Mongoengine and Google Calendar event from
         form data.
 
@@ -263,9 +262,11 @@ class EventsHelper(object):
         """
 
         # Generate the event and date data
-        event_and_date_data = DataBuilder.event_and_date_data_from_form(form,
-                                                                        creator=creator)
-        event_and_date_data = klass._remove_none_fields(event_and_date_data)
+        event_and_date_data = DataBuilder.event_and_date_data_from_form(
+            form,
+            creator=creator
+        )
+        event_and_date_data = cls._remove_none_fields(event_and_date_data)
 
         event = Event(**event_and_date_data)
         event.save()
@@ -274,11 +275,12 @@ class EventsHelper(object):
         return gcal_client.create_event(event)
 
     @classmethod
-    def create_series(klass, form, creator):
+    def create_series(cls, form, creator):
         """Creates a recurring Mongoengine and Google Calendar event from
         form data.
 
-        Creates both a :class:`EventSeries` and its associated :class:`Event` s.
+        Creates both a :class:`EventSeries` and its associated
+        :class:`Event` s.
 
         :param form: The WTForms form.
         :type form: :class:`CreateEventForm` or a subclass.
@@ -295,16 +297,16 @@ class EventsHelper(object):
         date_data = DataBuilder.date_data_from_form(form)
 
         # Make the parent series
-        series = klass._make_series(form)
+        series = cls._make_series(form)
 
         # Update event_data with the parent series
         event_data['parent_series'] = series
 
         # Make the individual Event objects in the series
-        while klass._more_events(series, date_data):
-            ev = klass._make_event(event_data, date_data)
+        while cls._more_events(series, date_data):
+            ev = cls._make_event(event_data, date_data)
             series.events.append(ev)
-            klass._increment_date_data(series, date_data)
+            cls._increment_date_data(series, date_data)
 
         series.save()
 
@@ -312,7 +314,7 @@ class EventsHelper(object):
         return gcal_client.create_event(series.events[0])
 
     @classmethod
-    def update_single_event(klass, event, form, move_to=None):
+    def update_single_event(cls, event, form, move_to=None):
         """Updates the non-recurring ``event``, syncing changes to Google
         Calendar.
 
@@ -332,13 +334,13 @@ class EventsHelper(object):
         """
 
         event_and_date_data = DataBuilder.event_and_date_data_from_form(form)
-        event_and_date_data = klass._remove_none_fields(event_and_date_data)
-        klass._update_event(event, event_and_date_data)
+        event_and_date_data = cls._remove_none_fields(event_and_date_data)
+        cls._update_event(event, event_and_date_data)
 
         # Update the event in Google Calendar and publish it as necessary
-        if move_to == klass.PUBLIC:
+        if move_to == cls.PUBLIC:
             response = gcal_client.publish_event(event)
-        elif move_to == klass.PRIVATE:
+        elif move_to == cls.PRIVATE:
             response = gcal_client.unpublish_event(event)
         response = gcal_client.update_event(event)
 
@@ -346,7 +348,7 @@ class EventsHelper(object):
         return response
 
     @classmethod
-    def update_series(klass, event, form, move_to=None):
+    def update_series(cls, event, form, move_to=None):
         """Updates the recurring ``event``, syncing changes to Google Calendar.
 
         If ``move_to`` is set to ``"public"`` or ``"private"`` the event
@@ -368,14 +370,14 @@ class EventsHelper(object):
         event_data = DataBuilder.event_data_from_form(form)
         date_data = DataBuilder.date_data_from_form(form)
         series_data = DataBuilder.series_data_from_form(form)
-        klass._validate_series_data(series_data)
+        cls._validate_series_data(series_data)
 
-        if klass._changes_are_easy(event, series_data, date_data):
+        if cls._changes_are_easy(event, series_data, date_data):
             # If changes are easy, then we can make them on the Event objects
             # that already exist.
             for e in event.parent_series.events:
                 # the date data isn't changing, so pass in {}
-                klass._update_event(e, event_data, {})
+                cls._update_event(e, event_data, {})
             series = event.parent_series
         else:
             # Otherwise, they changes are hard, and we have to create fresh
@@ -385,9 +387,9 @@ class EventsHelper(object):
             shared_creator = event.creator
 
             event.parent_series.delete_all()
-            series = klass._make_series(None,
-                                        gcal_id=shared_gcal_id,
-                                        **series_data)
+            series = cls._make_series(None,
+                                      gcal_id=shared_gcal_id,
+                                      **series_data)
 
             # Update event_data with the parent series
             event_data['parent_series'] = series
@@ -396,17 +398,17 @@ class EventsHelper(object):
             event_data['creator'] = shared_creator
 
             # Make the individual Event objects in the series
-            while klass._more_events(series, date_data):
-                ev = klass._make_event(event_data, date_data)
+            while cls._more_events(series, date_data):
+                ev = cls._make_event(event_data, date_data)
                 series.events.append(ev)
-                klass._increment_date_data(series, date_data)
+                cls._increment_date_data(series, date_data)
 
             series.save()
 
         # Update the event in Google Calendar and publish it as necessary
-        if move_to == klass.PUBLIC:
+        if move_to == cls.PUBLIC:
             response = gcal_client.publish_event(series.events[0])
-        elif move_to == klass.PRIVATE:
+        elif move_to == cls.PRIVATE:
             response = gcal_client.unpublish_event(series.events[0])
         response = gcal_client.update_event(series.events[0])
 
@@ -414,7 +416,7 @@ class EventsHelper(object):
         return response
 
     @classmethod
-    def update_single_event_from_series(klass, event, form):
+    def update_single_event_from_series(cls, event, form):
         """Updates the ``event`` as an exception to a series, syncing changes
         to Google Calendar.
 
@@ -434,14 +436,14 @@ class EventsHelper(object):
         """
 
         event_and_date_data = DataBuilder.event_and_date_data_from_form(form)
-        event_and_date_data = klass._remove_none_fields(event_and_date_data)
-        klass._update_event(event, event_and_date_data)
+        event_and_date_data = cls._remove_none_fields(event_and_date_data)
+        cls._update_event(event, event_and_date_data)
 
         # Return Google Calendar response
         return gcal_client.update_event(event, as_exception=True)
 
     @classmethod
-    def convert_to_series(klass, event, form, move_to=None):
+    def convert_to_series(cls, event, form, move_to=None):
         """Converts ``event`` to be a series and updates other fields, syncing
         changes to Google Calendar.
 
@@ -464,22 +466,22 @@ class EventsHelper(object):
         date_data = DataBuilder.date_data_from_form(form)
 
         # Make the parent series
-        series = klass._make_series(form, gcal_id=event.gcal_id)
+        series = cls._make_series(form, gcal_id=event.gcal_id)
 
         # Update event_data with the parent series
         event_data['parent_series'] = series
         event_data['creator'] = event.creator
         event_data['gcal_id'] = event.gcal_id
 
-        klass._update_event(event, event_data, date_data)
+        cls._update_event(event, event_data, date_data)
         series.events.append(event)
-        klass._increment_date_data(series, date_data)
+        cls._increment_date_data(series, date_data)
 
         # Make the individual Event objects in the series
-        while klass._more_events(series, date_data):
-            ev = klass._make_event(event_data, date_data)
+        while cls._more_events(series, date_data):
+            ev = cls._make_event(event_data, date_data)
             series.events.append(ev)
-            klass._increment_date_data(series, date_data)
+            cls._increment_date_data(series, date_data)
 
         series.save()
 
@@ -487,7 +489,7 @@ class EventsHelper(object):
         return gcal_client.update_event(series.events[0])
 
     @classmethod
-    def convert_to_single_event(klass, event, form, move_to=None):
+    def convert_to_single_event(cls, event, form, move_to=None):
         """Converts ``event`` from a series to a single event, updating other
         fields and syncing changes to Google Calendar.
 
@@ -510,14 +512,13 @@ class EventsHelper(object):
         date_data = DataBuilder.date_data_from_form(form)
 
         event.parent_series.delete_all_except(event)
-        klass._update_event(event, date_data, event_data)
+        cls._update_event(event, date_data, event_data)
 
         # Delete the series and create a single event
         return gcal_client.update_event(event)
 
-
     @classmethod
-    def delete_single_event(klass, event):
+    def delete_single_event(cls, event):
         """Deletes the non-recurring ``event``, syncing changes to Google
         Calendar.
 
@@ -541,7 +542,7 @@ class EventsHelper(object):
         return response
 
     @classmethod
-    def delete_single_event_from_series(klass, event):
+    def delete_single_event_from_series(cls, event):
         """Deletes ``event`` from it's parent series, syncing changes to Google
         Calendar.
 
@@ -566,7 +567,7 @@ class EventsHelper(object):
         return response
 
     @classmethod
-    def delete_series(klass, event):
+    def delete_series(cls, event):
         """Deletes the recurring `event`, syncing changes to Google Calendar.
 
         :param event: The event to delete.
@@ -588,13 +589,12 @@ class EventsHelper(object):
         # Return the Google Calendar response
         return response
 
-
     ###########################################################################
     # Private Helpers
     ###########################################################################
 
     @classmethod
-    def _remove_none_fields(klass, d):
+    def _remove_none_fields(cls, d):
         """removes any fields in ``d`` that are ``None`` and returns ``d``.
 
         :param dict d: The dictionary to strip ``None`` fields from.
@@ -606,7 +606,7 @@ class EventsHelper(object):
         return dict((k, v) for k, v in d.iteritems() if v is not None)
 
     @classmethod
-    def _increment_date_data(klass, series, date_data):
+    def _increment_date_data(cls, series, date_data):
         """Increment the start and end date in ``date_data`` for a recurring
         event by the appropriate amount depending on how frequently the event
         occurs.
@@ -626,7 +626,7 @@ class EventsHelper(object):
         date_data['end_date'] = date_data['end_date'] + delta
 
     @classmethod
-    def _validate_series_data(klass, s_data):
+    def _validate_series_data(cls, s_data):
         """Ensures that the all necessary fields in ``s_data` are populated.
 
         ``s_data`` must include a valid ``frequency`` (which should always be
@@ -646,10 +646,12 @@ class EventsHelper(object):
             raise ValueError('Cannont create recurrence from series data.')
 
         if s_data['frequency'] != 'weekly':
-            raise ValueError('Unknown frequency value "{}"'.format(s_data.frequency))
+            raise ValueError(
+                'Unknown frequency value "{}"'.format(s_data.frequency)
+            )
 
     @classmethod
-    def _more_events(klass, series, date_data):
+    def _more_events(cls, series, date_data):
         """Returns True if more events exist in this series after ``date_data``.
 
         :Example:
@@ -679,7 +681,7 @@ class EventsHelper(object):
         return True
 
     @classmethod
-    def _make_event(klass, e_data, d_data):
+    def _make_event(cls, e_data, d_data):
         """Create a new :class:`Event` object and save it to Mongoengine.
 
         The event is created by unpacking non-None fields of ``e_data`` and
@@ -688,13 +690,13 @@ class EventsHelper(object):
         :param dict e_data: The event data for this event.
         :param dict d_data: The date data for this event.
         """
-        params = klass._remove_none_fields(dict(e_data.items() + d_data.items()))
+        params = cls._remove_none_fields(dict(e_data.items() + d_data.items()))
         event = Event(**params)
         event.save()
         return event
 
     @classmethod
-    def _make_series(klass, form, **kwargs):
+    def _make_series(cls, form, **kwargs):
         """Create a new :class:`EventSeries` object and save it to Mongoengine.
 
         The event is made by creating ``series_data`` and then unpacking it
@@ -711,15 +713,15 @@ class EventsHelper(object):
 
         series_data = DataBuilder.series_data_from_form(form)
         series_data.update(kwargs)
-        klass._validate_series_data(series_data)
-        series_data = klass._remove_none_fields(series_data)
+        cls._validate_series_data(series_data)
+        series_data = cls._remove_none_fields(series_data)
 
         series = EventSeries(**series_data)
         series.save()
         return series
 
     @classmethod
-    def _update_event(klass, event, *data_dicts):
+    def _update_event(cls, event, *data_dicts):
         """Updates ``event`` in Mongoengine using the dictionaries in
         ``data_dicts``.
 
@@ -740,7 +742,7 @@ class EventsHelper(object):
         d = {}
         for data_dict in data_dicts:
             d.update(data_dict)
-        d = klass._remove_none_fields(d)
+        d = cls._remove_none_fields(d)
         d = dict(("set__" + k, v) for k, v in d.iteritems())
 
         # Update and save.
@@ -748,7 +750,7 @@ class EventsHelper(object):
         event.save()
 
     @classmethod
-    def _changes_are_easy(klass, event, series_data, date_data):
+    def _changes_are_easy(cls, event, series_data, date_data):
         """Returns True if the changes we want to make to event are easy to
         perform.
 
@@ -774,7 +776,6 @@ class EventsHelper(object):
         return True
 
 
-
 class DataBuilder(object):
     """A class with helper functions that translate WTForms forms and
     Mongoengine objects to and from different dictionary shapes.
@@ -784,7 +785,7 @@ class DataBuilder(object):
     """
 
     @classmethod
-    def form_data_from_event(klass, event):
+    def form_data_from_event(cls, event):
         """Translate an single :class:`Event` into a dictionary of form data.
 
         :param event: The event to translate.
@@ -811,7 +812,7 @@ class DataBuilder(object):
         }
 
     @classmethod
-    def form_data_from_series(klass, series):
+    def form_data_from_series(cls, series):
         """Translate an :class:`EventSeries` into a dictionary of recurrence
         form data.
 
@@ -831,7 +832,7 @@ class DataBuilder(object):
         }
 
     @classmethod
-    def event_data_from_form(klass, form, creator=None):
+    def event_data_from_form(cls, form, creator=None):
         """Translate a :class:`~app.forms.CreateEventForm` or a subclass into a
         dictionary of event data.
 
@@ -851,7 +852,7 @@ class DataBuilder(object):
         if filename and Image.objects(filename=filename).count() == 1:
             event_image = Image.objects().get(filename=filename)
 
-        event_data =  {
+        event_data = {
             'title': form.title.data,
             'slug': form.slug.data,
             'location': form.location.data,
@@ -869,7 +870,7 @@ class DataBuilder(object):
         return event_data
 
     @classmethod
-    def date_data_from_form(klass, form):
+    def date_data_from_form(cls, form):
         """Translate a :class:`~app.forms.CreateEventForm` or a subclass into a
         dictionary of date data.
 
@@ -888,7 +889,7 @@ class DataBuilder(object):
         }
 
     @classmethod
-    def series_data_from_form(klass, form):
+    def series_data_from_form(cls, form):
         """Translate a :class:`~app.forms.CreateEventForm` or a subclass into a
         dictionary of series data.
 
@@ -913,7 +914,7 @@ class DataBuilder(object):
         }
 
     @classmethod
-    def event_and_date_data_from_form(klass, form, creator=None):
+    def event_and_date_data_from_form(cls, form, creator=None):
         """Translate a :class:`~app.forms.CreateEventForm` or a subclass into a
         dictionary of both event and date data.
 
@@ -928,6 +929,6 @@ class DataBuilder(object):
 
         if not form:
             return {}
-        event_data = klass.event_data_from_form(form, creator=creator)
-        date_data = klass.date_data_from_form(form)
+        event_data = cls.event_data_from_form(form, creator=creator)
+        date_data = cls.date_data_from_form(form)
         return dict(event_data.items() + date_data.items())
