@@ -68,8 +68,7 @@ class Post(db.Document):
     categories = db.ListField(db.StringField(db_field='category',
                                              max_length=255),
                               default=list)
-    tags = db.ListField(db.StringField(db_field='tag', max_length=255),
-                        default=list)
+    post_tags = db.ListField(db.ReferenceField('Tag'))
     published = db.BooleanField(required=True, default=False)
     date_published = db.DateTimeField()
     posted_by = db.ReferenceField(User, required=True)
@@ -121,7 +120,7 @@ class Post(db.Document):
         """
         rep = '%r(title=%r, author=%r, categories=%r, tags=%r, published=%r' %\
             (self.__class__.__name__, self.title, self.author, self.categories,
-             self.tags, self.published)
+             self.post_tags, self.published)
 
         # excluded if None
         rep += ', date_published=%r' % (self.date_published) \
@@ -133,4 +132,5 @@ class Post(db.Document):
             rep += ', html_content=%r' % (self.html_content[:97] + "...")
         else:
             rep += ', html_content=%r' % (self.html_content)
+        rep = self.title
         return rep

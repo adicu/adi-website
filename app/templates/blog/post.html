@@ -50,12 +50,29 @@
         <div class="text">
             {{ post.html_content | safe }}
         </div>
+        {% if post.post_tags %}
         Tags:
-        {% for tag in post.tags %}
+        {% for tag in post.post_tags %}
             <a href="{{ url_for('blog.same_tag', tag=tag) }}">{{ tag }}</a>{% if loop.index != loop.length %}, {% endif %}
         {% endfor %}
+        {% endif %}
     </div>
 </section>
+{% if related_posts %}
+<section>
+    <div class="content">
+        <div class="section-header">
+            <h4>Related Posts</h4>
+            <span class="bar blue"></span>
+        </div>
+        <div class="triple">
+            {% for p in related_posts %}
+                {{ macros.small_post(p) }}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
 <section>
     <div class="content">
         <div class="section-header">
