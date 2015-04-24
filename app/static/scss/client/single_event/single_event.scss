@@ -5,6 +5,19 @@
 .single-event {
     .text {
         margin-left: 33%;
+
+        ol {
+            list-style: initial;
+            list-style-type: decimal;
+            font-size: 1.2rem;
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+            line-height: 1.9rem;
+        }
+        ul {
+            list-style-type: circle;
+            margin: 1.75rem;
+        }
     }
 
     .details {
