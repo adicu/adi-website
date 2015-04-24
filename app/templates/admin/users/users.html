@@ -60,48 +60,28 @@
                     {{ subfield }}</td>
                 {% endfor %}
             </tr>
+            {% set features = [
+                ('Author blog posts',          [True, True, True, True]),
+                ('Create and edit blog posts', [False, True, True, True]),
+                ('Create and edit events',     [False, True, True, True]),
+                ('Publish blog posts and events', [False, False, True, True]),
+                ('View and manage users',      [False, False, False, True]),
+                ('Add users to the whitelist', [False, False, False, True]),
+            ] %}
+            {% for description, bools in features %}
             <tr>
-                <th><small>Author blog posts</small></th>
-                <td><i class="fa fa-check"></i></td>
-                <td><i class="fa fa-check"></i></td>
-                <td><i class="fa fa-check"></i></td>
-                <td><i class="fa fa-check"></i></td>
+                <th>{{description}}</th>
+                {% for bool in bools %}
+                <td>
+                    {% if bool %}
+                        <i class="fa fa-check"></i>
+                    {% else %}
+                        <i class="fa fa-times"></i>
+                    {% endif %}
+                </td>
+                {% endfor %}
             </tr>
-            <tr>
-                <th><small>Create and edit blog posts</small></th>
-                <td><i class="fa fa-times"></i></td>
-                <td><i class="fa fa-check"></i></td>
-                <td><i class="fa fa-check"></i></td>
-                <td><i class="fa fa-check"></i></td>
-            </tr>
-            <tr>
-                <th><small>Create and edit events</small></th>
-                <td><i class="fa fa-times"></i></td>
-                <td><i class="fa fa-check"></i></td>
-                <td><i class="fa fa-check"></i></td>
-                <td><i class="fa fa-check"></i></td>
-            </tr>
-            <tr>
-                <th><small>Publish blog posts and events</small></th>
-                <td><i class="fa fa-times"></i></td>
-                <td><i class="fa fa-times"></i></td>
-                <td><i class="fa fa-check"></i></td>
-                <td><i class="fa fa-check"></i></td>
-            </tr>
-            <tr>
-                <th><small>View and manage users</small></th>
-                <td><i class="fa fa-times"></i></td>
-                <td><i class="fa fa-times"></i></td>
-                <td><i class="fa fa-times"></i></td>
-                <td><i class="fa fa-check"></i></td>
-            </tr>
-            <tr>
-                <th><small>Add users to the whitelist</small></th>
-                <td><i class="fa fa-times"></i></td>
-                <td><i class="fa fa-times"></i></td>
-                <td><i class="fa fa-times"></i></td>
-                <td><i class="fa fa-check"></i></td>
-            </tr>
+            {% endfor %}
         </table>
     </div>
     <input class="big" type="submit" value="Add">

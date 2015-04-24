@@ -15,20 +15,20 @@ $(function() {
      * Table Highlight and Click
      * ==================================================================== */
     $('td').hover(function() {
-        var t = parseInt($(this).index()) + 1;
-        $('td:nth-child(' + t + ')').addClass('highlighted');
+        var columnNo = parseInt($(this).index()) + 1;
+        $('td:nth-child(' + columnNo + ')').addClass('highlighted');
     },
     function() {
-        var t = parseInt($(this).index()) + 1;
-        $('td:nth-child(' + t + ')').removeClass('highlighted');
+        var columnNo = parseInt($(this).index()) + 1;
+        $('td:nth-child(' + columnNo + ')').removeClass('highlighted');
     });
 
-    var all_td = $('td');
+    var $all_td = $('td');
     $('input[name="user_type"]:radio').on('click', function() {
         all_td.removeClass('clicked');
         $(this).closest('td').addClass('clicked');
-        var t = parseInt($(this).closest('td').index()) + 1;
-        $('td:nth-child(' + t + ')').addClass('clicked');
+        var header = parseInt($(this).closest('td').index()) + 1;
+        $('td:nth-child(' + header + ')').addClass('clicked');
     });
 
     /* =======================================================================

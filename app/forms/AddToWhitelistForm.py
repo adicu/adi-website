@@ -44,7 +44,7 @@ class AddToWhitelistForm(Form):
     fake_user_image = StringField('Image', [image_with_same_name])
     user_type = RadioField('User Type',
                            [Required(message="Please select a user type.")],
-                           choices=[("fake_user", "Guest Writer"),
-                                    ('editor', "Editor"),
-                                    ('publisher', "Publisher"),
-                                    ('admin', "Admin")])
+                           choices=[('fake_user', 'Guest Writer'),
+                                    ('editor', 'Editor'),
+                                    ('publisher', 'Publisher'),
+                                    ('admin', 'Admin')])
