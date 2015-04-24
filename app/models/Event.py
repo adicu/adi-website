@@ -347,7 +347,7 @@ class Event(db.Document):
                  'start_datetime', 'end_datetime', 'short_description',
                  'long_description', 'short_description_markdown',
                  'long_description_markdown', 'published', 'date_published',
-                 'is_recurring']
+                 'is_recurring', 'facebook_url']
 
         return dict(zip(list(attrs), [getattr(self, attr) for attr in attrs]))
 
