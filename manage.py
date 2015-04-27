@@ -1,36 +1,81 @@
-import argparse
-from sys import argv, exit
+"""
+.. module:: manage
+    :synopsis: This script facilitates test database entry generation and
+        migration tools. run ``python manage.py -h`` for more.
 
-import gflags
-from oauth2client.file import Storage
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.tools import run_flow
-from oauth2client import tools
+.. moduleauthor:: Dan Schlosser <dan@schlosser.io>
+"""
 
-from config import flask_config
-from script import backfill_blog, import_images
+from argparse import ArgumentParser
 
-parser = argparse.ArgumentParser(parents=[tools.argparser])
-FLAGS = parser.parse_args()
+from script.migrate import backfill_blog, import_images
+from script.db.gen import TestDataGenerator, ACTIONS, FLAGS
 
-def authorize_google_calendar():
-    FLOW = flow_from_clientsecrets(flask_config.INSTALLED_APP_SECRET_PATH,
-                   scope='https://www.googleapis.com/auth/calendar')
+COMMAND_MIGRATE = 'migrate'
+MIGRATE_DESCRIPTION = """
+Migrates data from Jekyll to Eventum.  Imports data from data/old-website-data,
+which is a submodule.
+"""
+MIGRATE_HELP = """
+blog: Backfills blog posts from data/old-website-data/posts.\n
+images: Imports images from data/old-website-data/images.
+"""
+MIGRATE_IMAGES = 'images'
+MIGRATE_BLOG = 'blog'
+MIGRATE_OPTIONS = (MIGRATE_IMAGES, MIGRATE_BLOG)
 
-    # Save the credentials file here for use by the app
-    storage = Storage(flask_config.INSTALLED_APP_CREDENTIALS_PATH)
-    run_flow(FLOW, storage, FLAGS)
+COMMAND_DB = 'db'
+DB_DESCRIPTION = """
+Populates Mongo with test images, blog posts, events, and / or event series.
+"""
+DB_HELP = """
+Which database to populate with test data.  Selecting "all" will populate all
+three.
+"""
 
-def print_usage():
-    print "Usage:"
-    print "%s --authorize (-a)     Authorize the Google Calendar API Client" % argv[0]
-    print "%s --backfill-blog (-b) Backfill blog posts from data/jekyll-posts" % argv[0]
-    print "%s --import-images (-i) Import images from data/jekyll-images" % argv[0]
+COMMAND_HELP = """
+Either migrate old data to Eventum, or populate the database.
+"""
+
+
+def parse_args():
+    """Constructs an argument parser, with two subcommands: "migrate" and
+    "db".  Run ``python manage.py -h" to see more. Then give the parsed
+    arguments.
+
+    :returns: The arguments, parsed.
+    :rtype: :class:`argparse.Namespace`
+    """
+    parser = ArgumentParser(description='Manage Eventum.')
+    subparsers = parser.add_subparsers(dest='command', help=COMMAND_HELP)
+    db_parser = subparsers.add_parser(COMMAND_DB,
+                                      description=DB_DESCRIPTION)
+    db_parser.add_argument('action',
+                           choices=ACTIONS,
+                           help=DB_HELP)
+    for flags, help in FLAGS:
+        db_parser.add_argument(*flags,
+                               action='store_true',
+                               help=help)
+    migrate_parser = subparsers.add_parser(COMMAND_MIGRATE,
+                                           description=MIGRATE_DESCRIPTION)
+    migrate_parser.add_argument('action',
+                                choices=MIGRATE_OPTIONS,
+                                help=MIGRATE_HELP)
+    return parser.parse_args()
+
 
 if __name__ == '__main__':
-    if '--backfill-blog' in argv or '-b' in argv:
-        backfill_blog.backfill_from_jekyll('data/old-website-data/posts')
-    elif '--import-images' in argv or '-i' in argv:
-        import_images.import_from_directory('data/old-website-data/images')
-    else:
-        authorize_google_calendar()
+    args = parse_args()
+
+    if args.command == COMMAND_MIGRATE:
+        if args.action == MIGRATE_IMAGES:
+            import_images.import_from_directory('data/old-website-data/images')
+        elif args.action == MIGRATE_BLOG:
+            backfill_blog.backfill_from_jekyll('data/old-website-data/posts')
+    elif args.command == COMMAND_DB:
+        generator = TestDataGenerator(args.action,
+                                      quiet=args.quiet,
+                                      wipe=args.wipe,
+                                      force=args.force)
+        generator.run()

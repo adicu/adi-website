@@ -96,9 +96,10 @@ class Post(db.Document):
                                               ['extra', 'smarty'])
         if self.images:
             for image in self.images:
-                self.html_content = self.html_content.replace(
-                    'src="' + image.filename + '"',
-                    'src="' + image.url() + '"')
+                if image.filename in self.html_content:
+                    self.html_content = self.html_content.replace(
+                        'src="' + image.filename + '"',
+                        'src="' + image.url() + '"')
         if not self.posted_by:
             self.posted_by = self.author
         if self.published and not self.date_published:

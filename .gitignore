@@ -17,6 +17,7 @@ settings.dev
 settings.prod
 setup_consul_dev.sh
 setup_consul_prod.sh
+consul.out
 client_secrets.json
 credentials.json
 .webassets-cache

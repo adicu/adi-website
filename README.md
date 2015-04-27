@@ -28,7 +28,7 @@ Eventum runs on Linux and OSX.  To get it up an running, follow these steps:
 
 4.  Authorize the Google Calendar API:
     ```bash
-    $ python manage.py --authorize
+    $ python authorize.py
     ```
 5.  Install SASS gem `gem install sass`
     * otherwise, you will see an `OS` error
@@ -156,6 +156,7 @@ nosetests
 │   └── __init__.py  # All app-wide setup.  Called by `run.py`
 ├── config           # Configuration files
 ├── data             # Backup data
+├── authorize.py     # Used for authorizing the app with Google Calendar.
 ├── manage.py        # Various scripts.  Run `python manage.py` to view usage.
 ├── run.py           # Runs the app!
 ├── script           # Scripts run by `manage.py` outside of the app
