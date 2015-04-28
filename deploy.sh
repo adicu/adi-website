@@ -28,7 +28,8 @@ else
 fi
 
 # Validate nginx configurations
-if [ ! nginx -t ]; then
+nginx -t
+if [ $? -ne 0 ]; then
     echo "Nginx config failed!"
     exit
 fi
