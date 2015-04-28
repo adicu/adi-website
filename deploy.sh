@@ -37,7 +37,7 @@ fi
 # Determine the new and old container names
 NEW_NAME=""
 OLD_NAME=""
-CURRENT_NAME="$(docker ps -a | grep adi-website | awk 'NF>1{print $NF}')"
+CURRENT_NAME="$(docker ps -a | grep adi-website- | awk 'NF>1{print $NF}')"
 if [ "$CURRENT_NAME" == "$NAME1" ]; then
     OLD_NAME=$NAME1
     NEW_NAME=$NAME2
