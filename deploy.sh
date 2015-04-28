@@ -54,8 +54,10 @@ docker build -t $NEW_NAME .
 
 # --net: Use the local network stack
 # --restart: Always restart, even if it crashes
-# -v: mount a volume, to ensure that created or edited files are not sandboxed
-#     to the server (one for logs, one for images)
+# -v: mount a volume, to ensure that edited log files live on the server,
+#     not in the docker box.
+# --volumes-from: Mount the uploaded images filesystem, so that new image
+#                 live on the server, not in the docker box.
 # -d: detach after running, instead of entering the container
 # --name: Set the name of the container
 
@@ -63,7 +65,7 @@ docker run \
     --net=host \
     --restart=always \
     -v $ADI_WWW/../logs:/opt/logs \
-    -v $ADI_WWW/app/static/img/uploaded:/app/static/img/uploaded \
+    --volumes-from uploaded-images \
     -d \
     --name="$NEW_NAME" $NEW_NAME
 
