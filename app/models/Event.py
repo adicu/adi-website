@@ -269,7 +269,18 @@ class Event(db.Document):
                               self._human_readable_end_time())
 
     def _human_readable_start_time(self):
-        """
+        """Format start time as one of these four formats:
+
+        1. ``"3:30am"``
+        2. ``"3pm"``
+        2. ``"3:30"``
+        2. ``"3"``
+
+        depending on whether or not the start time is on an even hour, and
+        whether or not the end time and start time will share the pm/am string.
+
+        :returns: The formatted date.
+        :rtype: str
         """
         if self.start_time is None:
             return '??:??'
@@ -286,7 +297,15 @@ class Event(db.Document):
         return self.start_time.strftime(format).lstrip('0').lower()
 
     def _human_readable_end_time(self):
-        """
+        """Format end time as one of these two formats:
+
+        1. ``"3:30am"``
+        2. ``"3pm"``
+
+        depending on whether or not the end time is on an even hour
+
+        :returns: The formatted date.
+        :rtype: str
         """
         if self.end_time is None:
             return '??:??'
