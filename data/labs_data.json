@@ -4,6 +4,7 @@
             "title": "Density",
             "image": "img/density.png",
             "url": "http://density.adicu.com",
+            "github_url": "https://github.com/adicu/density",
             "buttons": [
                 {
                     "title": "Find Study Space",
@@ -13,21 +14,23 @@
             "description": "Using Wi-Fi data acquired thanks to the help of Engineering Student Council and CUIT, we are able to estimate how full certain areas are. What this means it that now you can check if Butler is full without having to actually go to Butler! Density updates every 15 minutes."
         },
         {
-            "title": "Courses",
+            "title": "Courses (retired)",
             "image": "img/courses.png",
-            "url": "http://courses.adicu.com",
+            "url": "https://vergil.registrar.columbia.edu",
+            "github_url": "https://github.com/adicu/courses",
             "buttons": [
                 {
-                    "title": "Plan Your Schedule",
-                    "url": "http://courses.adicu.com"
+                    "title": "Visit Vergil",
+                    "url": "https://vergil.registrar.columbia.edu"
                 }
             ],
-            "description": "Courses by ADI is a course scheduler for Columbia students.  Orginally developed in 2011 by ADI's founders, Courses has been taken over by ADI Labs, who is maintaining it using a data pipeline provided by <a href=\"https://cuit.columbia.edu/\">CUIT</a>."
+            "description": "Courses by ADI is a course scheduler for Columbia students.  Orginally developed in 2011 by ADI's founders, Courses was retired in 2015 in favor of <a href='https://vergil.registrar.columbia.edu'>Vergil</a>, the best schedule builder at Columbia. Vergil was designed in partnership with ADI, and is maintained by <a href='https://cuit.columbia.edu'>CUIT</a>."
         },
         {
             "title": "Eventum",
             "image": "img/eventum.png",
             "url": "https://adicu.com/blog/post/origins-of-eventum",
+            "github_url": "https://github.com/adicu/adi-website",
             "buttons": [
                 {
                     "title": "Learn More",

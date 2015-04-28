@@ -37,7 +37,10 @@
                 </div>
                 <div class="text">
                     <a href="{{ project.url }}">
-                        <h2>{{ project.title }}</h2>
+                        <h2>
+                            {{ project.title }}
+                            <span><a href="{{ project.github_url }}"><i class="fa fa-github"></i></a></span>
+                        </h2>
                     </a>
                     <p class="description">{{ project.description | safe }}</p>
                     <div class="button-group">
