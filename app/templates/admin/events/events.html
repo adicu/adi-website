@@ -40,26 +40,74 @@
     class="unpublished event"
     {% endif %}
     >
-    <a href="{{ url_for('events.edit', event_id=event.id) }}">
-    <span
-        {% if event.published %}
-        class="published"
-        {% else %}
-        class="not-published"
-        {% endif %}
-    ></span>
+    <div class="event-image">
+        <a href="{{ url_for('events.edit', event_id=event.id) }}">
+            <i style="background-image:url({{ event.image_url() }});"></i>
+            <h3>{{event.title}}</h3>
+        </a>
+    </div>
     <div class="text-content">
-        <h3>{{event.title}}</h3>
-        <p>{{event.location}}</p>
-        <p>{{ event.human_readable_datetime() }}</p>
+        <ul class="links">
+            {% if event.facebook_url %}
+            <li>
+                <a href="{{ event.facebook_url }}">
+                    <span><i class="fa fa-facebook"></i></span>
+                </a>
+            </li>
+            {% endif %}
+            {% if event.published %}
+            <li>
+                <a href="{{ event.get_absolute_url() }}">
+                    <span><i class="fa fa-external-link"></i></span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+        {% if event.location %}
+            <p>
+                <a href="{{ url_for('events.edit', event_id=event.id) }}">
+                    <i class="fa fa-map-marker"></i>
+                    {{ event.location }}
+                </a>
+            </p>
+        {% else %}
+            <p class="missing">
+                <a href="{{ url_for('events.edit', event_id=event.id) }}">
+                    <i class="fa fa-map-marker"></i>
+                    No Location Set
+                </a>
+            </p>
+        {% endif %}
+        {% if event.is_multiday() %}
+        <p>
+            <a href="{{ url_for('events.edit', event_id=event.id) }}">
+                <i class="fa fa-calendar"></i>
+                {{ event.human_readable_datetime() }}
+            </a>
+        </p>
+        {% else %}
+        <p>
+            <a href="{{ url_for('events.edit', event_id=event.id) }}">
+                <i class="fa fa-calendar"></i>
+                {{ event.human_readable_date() }}
+            </a>
+        </p>
+        <p>
+            <a href="{{ url_for('events.edit', event_id=event.id) }}">
+                <i class="fa fa-clock-o"></i>
+                {{ event.human_readable_time() }}
+            </a>
+        </p>
+        {% endif %}
     </div>
     <div class="creator">
-        <span class="image">
-            <img src="{{ event.creator.get_profile_picture() }}">
-        </span>
-        <p class="name">{{ event.creator.name }}</p>
+        <a href="{{ url_for('users.user', slug=event.creator.slug) }}">
+            <span class="image">
+                <img src="{{ event.creator.get_profile_picture() }}">
+            </span>
+            <p class="name">{{ event.creator.name }}</p>
+        </a>
     </div>
-    </a>
 </li>
 {% endmacro %}
 

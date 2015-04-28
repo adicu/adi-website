@@ -2,6 +2,7 @@
 
 $event-width: 15rem;
 $creator-size: 3rem;
+$event-padding: 0.75rem;
 
 .week {
     margin: 0 0 1.5rem;
@@ -41,8 +42,10 @@ $creator-size: 3rem;
             float: left;
             position: relative;
             display: inline-block;
+            font-size: 0;
             width: $event-width;
             background-color: $offwhite;
+
             &:not(:first-child) {
                 margin-left: 1rem;
             }
@@ -51,14 +54,97 @@ $creator-size: 3rem;
             &.unpublished { border-bottom: 0.5rem solid $yellow; }
 
             .text-content {
-                padding: 0.5rem;
+                font-size: 1rem;
+                padding: $event-padding 0;
+                position: relative;
+                display: inline-block;
+                width: 100%;
+                .links {
+                    position: absolute;
+                    z-index: 5;
+                    top: -2rem;
+                    height: 2rem;
+                    right: 0;
+                    li {
+                        display: inline-block;
+                        margin-left: 0.25rem;
+                        height: 2rem;
+                        width: 2rem;
+                        border: 1px solid $white;
+                        border-bottom-width: 0;
+                        box-sizing: border-box;
+                        color: $white;
+                        &:last-child {
+                            border-right-width: 0;
+                        }
+                        &:hover {
+                            background-color: rgba(0,0,0,0.3);
+                        }
+                        span {
+                            line-height: 1.5rem;
+                            width: 1.5rem;
+                            padding: 0.25rem;
+                            display: inline-block;
+                            i {
+                                width: 1.5rem;
+                                text-align: center;
+                            }
+                        }
+                    }
+                }
+                p, h3 {
+                    padding: 0 $event-padding;
+                    i {
+                        width: 1.5rem;
+                        text-align: center;
+                    }
+                    &:not(:last-child) {
+                        margin-bottom: 0.25rem;
+                    }
+                }
+                .missing {
+                    font-style: italic;
+                    // padding-left: 0.25rem;
+                    // border-left: 0.25rem solid $red;
+                }
             }
+
+            .event-image {
+                width: 100%;
+                padding-bottom: 56.25%; // 16:9 image
+                position: relative;
+                i {
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    z-index: 1;
+                    display: block;
+                    background-position: center center;
+                    background-size: cover;
+                }
+                h3 {
+                    position: absolute;
+                    z-index: 2;
+                    padding: $event-padding;
+                    color: $white;
+                    background-color: rgba(0,0,0,0.3);
+                    text-shadow: 1px 1px #000;
+                    top: 0;
+                    left: 0;
+                    bottom: 0;
+                    right: 0;
+                }
+            }
+
 
             .creator {
                 position: absolute;
-                bottom: 0.5rem;
-                left: 0.5rem;
-                right: 0.5rem;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                font-size: 1rem;
 
                 .image {
                     width: $creator-size;
@@ -79,6 +165,7 @@ $creator-size: 3rem;
         }
     }
 }
+
 
 .reset {
     line-height: 3.5rem;
