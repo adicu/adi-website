@@ -23,8 +23,11 @@ def index():
     blog_posts = list(
         BlogPost.objects(published=True).order_by('-date_published')[:10]
     )
+
+    # Hide the next button if there are <= 10 posts.
+    next_index = 1 if len(blog_posts) > 10 else None
     previous_index = None
-    next_index = 1
+
     return render_template('blog/blog.html',
                            posts=blog_posts,
                            previous_index=previous_index,
@@ -58,17 +61,22 @@ def blog_archive(index):
 
     **Methods:** ``GET``
     """
-    index = int(index)
-
     if index <= 0:
         return redirect(url_for('.index'))
 
     blog_posts = BlogPost.objects(published=True).order_by('-date_published')
-    if len(blog_posts) < 10 * (index + 1):
+
+    # If the index is too high, check the previous page.
+    if len(blog_posts) <= 10 * index:
+        return redirect(url_for('blog.blog_archive', index=index - 1))
+
+    # Hide the next button if there are no more posts after this page.
+    if len(blog_posts) <= 10 * (index + 1):
         next_index = None
     else:
         next_index = index + 1
     previous_index = index - 1
+
     return render_template('blog/blog.html',
                            posts=list(blog_posts[10 * index:10 * (index + 1)]),
                            previous_index=previous_index,
