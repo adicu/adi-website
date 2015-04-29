@@ -242,6 +242,8 @@ class Event(db.Document):
         :returns: True if the event spans multiple days.
         :rtype: bool
         """
+        if self.start_date is None or self.end_date is None:
+            return True
         if self.start_date == self.end_date:
             return False
         if (self.start_date == self.end_date - timedelta(days=1) and
@@ -251,12 +253,14 @@ class Event(db.Document):
 
     def human_readable_date(self):
         """Return the date of the event (presumed not multiday) formatted like:
-        ``"Sunday, Mar 31"``.
+        ``"Sunday, March 31"``.
 
         :returns: The formatted date.
         :rtype: str
         """
-        return self.start_date.strftime("%A, %b %d")
+        if not self.start_date:
+            return '??? ??/??'
+        return self.start_date.strftime("%A, %B %d").replace(' 0', ' ')
 
     def human_readable_time(self):
         """Return the time range of the event (presumed not multiday) formatted
@@ -329,10 +333,10 @@ class Event(db.Document):
         :rtype: str
         """
         if self.start_date:
-            start_date = self.start_date.strftime('%A, %B %d ') \
-                .replace(' 0', ' ').replace('/0', '/')
+            start_date = (self.start_date.strftime('%A, %B %d ')
+                          .replace(' 0', ' '))
         else:
-            start_date = '???, ??/??'
+            start_date = '???, ??/?? '
 
         # Check times against None, because midnight is represented by 0.
         if self.start_time is not None:
@@ -341,13 +345,13 @@ class Event(db.Document):
             start_time = '??:??'
 
         if self.end_date:
-            if self.start_date and self.start_date != self.end_date:
-                end_date = self.end_date.strftime('%A, %B %d ') \
-                    .replace(' 0', ' ').replace('/0', '/')
+            if not self.start_date or self.start_date != self.end_date:
+                end_date = (self.end_date.strftime('%A, %B %d ')
+                            .replace(' 0', ' '))
             else:
                 end_date = ''
         else:
-            end_date = '???, ??/??'
+            end_date = '???, ??/?? '
 
         # Check times against None, because midnight is represented by 0.
         if self.end_time is not None:
@@ -376,6 +380,7 @@ class Event(db.Document):
         # Check times against None, because midnight is represented by 0.
         return (self.start_time is not None and
                 self.end_time is not None and
+                not self.is_multiday() and
                 self.start_time.strftime("%p") == self.end_time.strftime("%p"))
 
     def to_jsonifiable(self):
