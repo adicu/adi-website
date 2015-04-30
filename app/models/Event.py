@@ -242,6 +242,8 @@ class Event(db.Document):
         :returns: True if the event spans multiple days.
         :rtype: bool
         """
+        if self.start_date is None or self.end_date is None:
+            return True
         if self.start_date == self.end_date:
             return False
         if (self.start_date == self.end_date - timedelta(days=1) and
@@ -251,12 +253,14 @@ class Event(db.Document):
 
     def human_readable_date(self):
         """Return the date of the event (presumed not multiday) formatted like:
-        ``"Sunday, Mar 31"``.
+        ``"Sunday, March 31"``.
 
         :returns: The formatted date.
         :rtype: str
         """
-        return self.start_date.strftime("%A, %b %d")
+        if not self.start_date:
+            return '??? ??/??'
+        return self.start_date.strftime("%A, %B %d").replace(' 0', ' ')
 
     def human_readable_time(self):
         """Return the time range of the event (presumed not multiday) formatted
@@ -265,22 +269,62 @@ class Event(db.Document):
         :returns: The formatted date.
         :rtype: str
         """
-        output = ''
-        if self.start_time.strftime("%p") == self.end_time.strftime("%p"):
-            format = "%I:%M-"
-        else:
-            format = "%I:%M%p-"
-        output += self.start_time.strftime(format).lstrip("0").lower()
-        output += self.end_time.strftime("%I:%M%p").lower().lstrip("0")
-        return output
+        return '{}-{}'.format(self._human_readable_start_time(),
+                              self._human_readable_end_time())
+
+    def _human_readable_start_time(self):
+        """Format start time as one of these four formats:
+
+        1. ``"3:30am"``
+        2. ``"3pm"``
+        2. ``"3:30"``
+        2. ``"3"``
+
+        depending on whether or not the start time is on an even hour, and
+        whether or not the end time and start time will share the pm/am string.
+
+        :returns: The formatted date.
+        :rtype: str
+        """
+        if self.start_time is None:
+            return '??:??'
+
+        am_pm = '%p'
+        if self._start_and_end_time_share_am_or_pm():
+            am_pm = ''   # Omit am/pm if it will appear in the end time.
+
+        time = '%I:%M'
+        if self.start_time.minute == 0:
+            time = '%I'  # Omit minutes if the time is on the hour.
+
+        format = time + am_pm
+        return self.start_time.strftime(format).lstrip('0').lower()
+
+    def _human_readable_end_time(self):
+        """Format end time as one of these two formats:
+
+        1. ``"3:30am"``
+        2. ``"3pm"``
+
+        depending on whether or not the end time is on an even hour
+
+        :returns: The formatted date.
+        :rtype: str
+        """
+        if self.end_time is None:
+            return '??:??'
+        format = '%I:%M%p'
+        if self.end_time.minute == 0:
+            format = '%I%p'
+        return self.end_time.strftime(format).lstrip('0').lower()
 
     def human_readable_datetime(self):
         """Format the start and end date date in one of the following three
         formats:
 
         1. ``"Sunday, March 31 11pm - Monday, April 1 3am"``
-        2. ``"Sunday, March 31 11am - 2:15pm"``
-        3. ``"Sunday, March 31 3 - 7:30pm"``
+        2. ``"Sunday, March 31 11am-2:15pm"``
+        3. ``"Sunday, March 31 3-7:30pm"``
 
         Depending on whether or not the start / end times / dates are the same.
         All unkown values will be replaced by question marks.
@@ -288,38 +332,42 @@ class Event(db.Document):
         :returns: The formatted date.
         :rtype: str
         """
-        output = ""
         if self.start_date:
-            output += self.start_date.strftime("%A, %B %d ") \
-                .replace(" 0", " ").replace("/0", "/")
+            start_date = (self.start_date.strftime('%A, %B %d ')
+                          .replace(' 0', ' '))
         else:
-            output += "???, ??/?? "
+            start_date = '???, ??/?? '
 
         # Check times against None, because midnight is represented by 0.
         if self.start_time is not None:
-            if self._start_and_end_time_share_am_or_pm():
-                start_format = "%I:%M-"
-            else:
-                start_format = "%I:%M%p-"
-            output += self.start_time.strftime(
-                start_format
-            ).lstrip("0").lower()
+            start_time = self._human_readable_start_time()
         else:
-            output += "??:?? - "
+            start_time = '??:??'
 
         if self.end_date:
-            if self.start_date and self.start_date != self.end_date:
-                output += self.end_date.strftime("%A, %B %d ") \
-                    .replace(" 0", " ").replace("/0", "/")
+            if not self.start_date or self.start_date != self.end_date:
+                end_date = (self.end_date.strftime('%A, %B %d ')
+                            .replace(' 0', ' '))
+            else:
+                end_date = ''
         else:
-            output += "???, ??/?? "
+            end_date = '???, ??/?? '
 
         # Check times against None, because midnight is represented by 0.
         if self.end_time is not None:
-            output += self.end_time.strftime("%I:%M%p").lower().lstrip("0")
+            end_time = self._human_readable_end_time()
         else:
-            output += "??:??"
-        return output
+            end_time = '??:??'
+
+        separator = ' - '
+        if not end_date:
+            separator = '-'
+
+        return '{}{}{}{}{}'.format(start_date,
+                                   start_time,
+                                   separator,
+                                   end_date,
+                                   end_time)
 
     def _start_and_end_time_share_am_or_pm(self):
         """Returns True if the start and end times for an event are both pm or
@@ -332,6 +380,7 @@ class Event(db.Document):
         # Check times against None, because midnight is represented by 0.
         return (self.start_time is not None and
                 self.end_time is not None and
+                not self.is_multiday() and
                 self.start_time.strftime("%p") == self.end_time.strftime("%p"))
 
     def to_jsonifiable(self):

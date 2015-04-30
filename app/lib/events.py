@@ -602,8 +602,13 @@ class EventsHelper(object):
         :returns: ``d`` with all non-``None`` fields.
         :rtype: dict
         """
-
-        return dict((k, v) for k, v in d.iteritems() if v is not None)
+        # TODO: This hack fixes the problem where it's impossible to remove an
+        # image from an event.  When you remove an image, the `event_image` key
+        # is None.  We should leave it that way.
+        return dict(
+            (k, v) for k, v in d.iteritems()
+            if v is not None or k == 'image'
+        )
 
     @classmethod
     def _increment_date_data(cls, series, date_data):
