@@ -65,12 +65,11 @@ def create_filename(f, slug):
 def upload():
     """Upload an image to Eventum
 
-    **Route:** ``/admin/media/upload``
-
-    **Methods:** ``POST``
+    :returns: A JSON containing the status of the file upload, or error
+              messages, if any.
+    :rtype: json
     """
     form = UploadImageForm(request.form)
-    uploaded_from = form.uploaded_from.data
     if form.validate_on_submit():
         f = request.files['image']
         if f:
@@ -82,8 +81,6 @@ def upload():
                           creator=g.user)
             image.save()
             return jsonify({"status": "true"})
-    if uploaded_from:
-        return redirect(uploaded_from)
     if form.errors:
         return jsonify(form.errors)
     return jsonify({"status": "error"})
@@ -118,3 +115,9 @@ def delete(filename):
     else:
         flash('Invalid filename', ERROR_FLASH)
     return redirect(url_for('.index'))
+
+
+@media.route('/media/view', methods=['GET'])
+def view():
+    images = Image.objects()
+    return render_template('admin/media/view.html', images=images)

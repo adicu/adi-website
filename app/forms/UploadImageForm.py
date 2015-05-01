@@ -29,10 +29,12 @@ class UploadImageForm(Form):
     image = FileField('Image file')
     uploaded_from = StringField('Uploaded from')
     filename = StringField('Filename', [
-        Regexp(FILENAME_REGEX, message='Invalid filename.'),
-        Required('Please submit a filename'),
+        Regexp(FILENAME_REGEX, message='Your filename should only contain '
+                                       'uppercase and lowercase letters, '
+                                       'numbers, and underscores.'),
+        Required('Please submit a filename.'),
         UniqueImage()])
     extension = StringField('Extension', [
         Regexp(EXTENSION_REGEX, message='Only .png, .jpg, .jpeg, '
-            'and .gif files are allowed.'),
-        Required('Invalid extension')])
+                                        'and .gif files are allowed.'),
+        Required('Please ensure your file has an extension.')])

@@ -110,6 +110,6 @@ config['DELETE_FOLDER'] = path.join(config['BASEDIR'],
                                     config['RELATIVE_DELETE_FOLDER'])
 
 # The file extensions that may be uploaded
-ALLOWED_UPLOAD_EXTENSIONS = set(['.png', '.jpg', '.jpeg', '.gif'])
+config['ALLOWED_UPLOAD_EXTENSIONS'] = set(['.png', '.jpg', '.jpeg', '.gif'])
 
 config['DEVFEST_BANNER'] = False

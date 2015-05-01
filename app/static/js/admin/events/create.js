@@ -219,7 +219,16 @@ $(function() {
         $('.set-image').removeClass('hidden');
         $('.display-image').addClass('hidden');
     });
-
+    
+    /*When image modal opens, request images*/
+    $(document).on('click', 'a[href="#show-modal"][data-modal="image"]', function(e) {
+        e.preventDefault();
+        $('#images-ajax-loadpoint').load("/admin/media/view", function(response, status){
+            if (status == "error"){
+                alert("Sorry, there was an error loading the images.");
+            }
+        });
+    });
 
     /* =======================================================================
      * Marked / Epiceditor initialization
