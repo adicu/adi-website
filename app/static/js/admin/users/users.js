@@ -11,6 +11,25 @@ $(function() {
         }
     });
 
+    /* =======================================================================
+     * Table Highlight and Click
+     * ==================================================================== */
+    $('td').hover(function() {
+        var columnNo = parseInt($(this).index()) + 1;
+        $('td:nth-child(' + columnNo + ')').addClass('highlighted');
+    },
+    function() {
+        var columnNo = parseInt($(this).index()) + 1;
+        $('td:nth-child(' + columnNo + ')').removeClass('highlighted');
+    });
+
+    var $all_td = $('td');
+    $('input[name="user_type"]:radio').on('click', function() {
+        all_td.removeClass('clicked');
+        $(this).closest('td').addClass('clicked');
+        var header = parseInt($(this).closest('td').index()) + 1;
+        $('td:nth-child(' + header + ')').addClass('clicked');
+    });
 
     /* =======================================================================
      * Fake User Image

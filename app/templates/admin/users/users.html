@@ -31,18 +31,9 @@
 
 {% block main %}
 {% call macros.modal(modal="new-user") %}
-<h2>Add a User to the Whitelist</h2>
-<small>Only emails on this whitelist can be used to make an account.</small>
+<h2>Choose Your User Type:</h2>
 <form class="whitelist-add-form" method="POST" action="{{ url_for('whitelist.add') }}">
     {{ whitelist_form.csrf_token }}
-    <div>
-        {% for subfield in whitelist_form.user_type %}
-        <ul>
-            <li>{{ subfield }}</li>
-            <li>{{ subfield.label }}</li>
-        </ul>
-        {% endfor %}
-    </div>
     <div class="for-whitelist hidden">
     {{ macros.render_field(whitelist_form.email, placeholder="Email Address", autofocus="", label=False)}}
     </div>
@@ -59,6 +50,39 @@
                 <i></i>
             </a>
         </div>
+    </div>
+    <div class="display-feature-table">
+        <table>
+            <tr>
+                <th>&nbsp;</th>
+                {% for subfield in whitelist_form.user_type %}
+                    <td><small>{{subfield.label}}</small>
+                    {{ subfield }}</td>
+                {% endfor %}
+            </tr>
+            {% set features = [
+                ('Author blog posts',          [True, True, True, True]),
+                ('Create and edit blog posts', [False, True, True, True]),
+                ('Create and edit events',     [False, True, True, True]),
+                ('Publish blog posts and events', [False, False, True, True]),
+                ('View and manage users',      [False, False, False, True]),
+                ('Add users to the whitelist', [False, False, False, True]),
+            ] %}
+            {% for description, bools in features %}
+            <tr>
+                <th>{{description}}</th>
+                {% for bool in bools %}
+                <td>
+                    {% if bool %}
+                        <i class="fa fa-check"></i>
+                    {% else %}
+                        <i class="fa fa-times"></i>
+                    {% endif %}
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
     </div>
     <input class="big" type="submit" value="Add">
 </form>

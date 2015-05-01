@@ -29,7 +29,7 @@ class EditUserForm(Form):
     image_url = StringField('Image URL')
     user_type = RadioField('User Type',
                            [Required(message="Please select a user type.")],
-                           choices=[('editor', "Editor"),
-                                    ('publisher', "Publisher"),
-                                    ('admin', "Admin"),
-                                    ("fake_user", "Fake User")])
+                           choices=[('editor', 'Editor'),
+                                    ('publisher', 'Publisher'),
+                                    ('admin', 'Admin'),
+                                    ('fake_user', 'Guest Writer')])
