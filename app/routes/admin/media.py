@@ -119,5 +119,11 @@ def delete(filename):
 
 @media.route('/media/view', methods=['GET'])
 def view():
+    """Displays all uploaded images.
+
+    **Route:** ``/admin/media/view``
+
+    **Methods:** ``GET``
+    """
     images = Image.objects()
     return render_template('admin/media/view.html', images=images)
