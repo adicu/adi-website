@@ -25,9 +25,9 @@ $(function() {
     $(".btn-upload").click(function () {
         var formData = new FormData($('.upload-form')[0]);
         $.ajax({
-            url: '/admin/media/upload',  //server script to process data
+            url: '/admin/media/upload',
             type: 'POST',
-            xhr: function() {  // custom xhr
+            xhr: function() {   //don't know what this does, but it works!
                 myXhr = $.ajaxSettings.xhr();
                 return myXhr;
             },
