@@ -29,4 +29,17 @@
         margin-bottom: 1rem;
         line-height: 1.9rem;
     }
+
+    .preview-banner {
+        padding: 1rem;
+        margin-bottom: 2rem;
+        font-size: large;
+        text-align: center;
+        color: black;
+        background-color: yellow;
+
+        & > .underline{
+            text-decoration: underline;
+        }
+    }
 }

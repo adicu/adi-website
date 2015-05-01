@@ -35,7 +35,7 @@ $(function() {
 
 
     function addedTag(tag, id){
-        return '<li class="tag" data-tag="' + tag + '">' + tag + ' <a href="#remove-tag" data-tag="' + tag + '">x</a></li>' 
+        return '<li class="tag" data-tag="' + tag + '">' + tag + ' <a href="#remove-tag" data-tag="' + tag + '">x</a></li>'
     }
 
     function hiddenTag(tag, id){
@@ -114,6 +114,11 @@ $(function() {
         $('.selected-images').append(selectedImage(filename, url));
     });
 
+    $(document).on('click', 'a[href="#preview-button"]', function(e){
+        e.preventDefault();
+        $('#preview').prop('checked', true);
+        $('#save-post').click();
+    });
     /* Submit the form */
     $(document).on('click', 'a[href="#save"]', function(e) {
         e.preventDefault();
@@ -169,7 +174,7 @@ $(function() {
         var key = e.which;
         if (key == 13)
         {
-           e.preventDefault();
+            e.preventDefault();
             var i = 0;
             while (document.getElementById("tags-"+i)) { i++; }
             var id = "tags-"+i;
@@ -190,7 +195,7 @@ $(function() {
     $(document).on('click', 'a[href="#remove-tag"]', function(e) {
         e.preventDefault();
         var tag = $(this).data('tag');
-       
+
         // Remove the hidden input, so it will be removed on the server
         $('input[value="' + tag + '"]').remove();
 

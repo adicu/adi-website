@@ -4,7 +4,7 @@
 @import '../admin';
 
 #epiceditor {
-    margin-bottom: 1rem;
+    margin-bottom: 3rem;
 }
 
 .content {
@@ -34,6 +34,9 @@
 	color: red;
 }
 
+.preview-button{
+    float: right;
+}
 @media only screen and (max-width: $phone-max) {
 	.edit-post-barright {
         & > a {

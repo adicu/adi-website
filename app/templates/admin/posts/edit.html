@@ -109,10 +109,14 @@
             {% endif %}
         </ul>
     </div>
+    <div>
+    <a class="preview-button" href="#preview-button"><button type="button">Preview</button></a>
+    </div>
 
     {{ macros.render_field(form.body, required="", placeholder="Body", hidden="hidden")}}
     {{ macros.render_field(form.images, hidden="hidden")}}
     {{ macros.render_field(form.featured_image, hidden="hidden")}}
+    {{ macros.render_field(form.preview, hidden="hidden")}}
     <div id="epiceditor"></div>
     <div class="image-help-text">
         <h3>Add Images</h3>

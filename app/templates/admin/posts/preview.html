@@ -1,0 +1,4 @@
+{% extends "blog/post.html" %}
+{% block previewBanner %}
+ <a href="{{ url_for('posts.edit', post_id=post.id) }}"><div class="preview-banner">This is a preview! To return to editing, click <span class="underline">here</span>.</div></a>
+{% endblock %}
