@@ -30,9 +30,9 @@ $(function() {
         var scrollHandler = function() {
             var scrolled = $(window).scrollTop();
             var scrolled = Math.min(scrolled, $image.height());
-            console.log(scrolled, scrolled * scroll_factor);
             $image.css({
                 'transform': translateY(scrolled * scroll_factor),
+                '-o-transform': translateY(scrolled * scroll_factor),
                 '-moz-transform': translateY(scrolled * scroll_factor),
                 '-webkit-transform': translateY(scrolled * scroll_factor)
             });
