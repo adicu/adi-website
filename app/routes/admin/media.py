@@ -8,7 +8,7 @@
 import os
 
 from flask import Blueprint, request, redirect, url_for, render_template, \
-    send_from_directory, g, flash
+    send_from_directory, g, flash, jsonify
 from werkzeug.utils import secure_filename
 
 from app import app
@@ -65,15 +65,14 @@ def create_filename(f, slug):
 def upload():
     """Upload an image to Eventum
 
-    **Route:** ``/admin/media/upload``
-
-    **Methods:** ``POST``
+    :returns: A JSON containing the status of the file upload, or error
+              messages, if any.
+    :rtype: json
     """
     form = UploadImageForm(request.form)
-    uploaded_from = form.uploaded_from.data
     if form.validate_on_submit():
         f = request.files['image']
-        if f and allowed_file(f.filename.lower()):
+        if f:
             filename = create_filename(f, request.form['filename'])
             f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             default_path = app.config['RELATIVE_UPLOAD_FOLDER'] + filename
@@ -81,13 +80,10 @@ def upload():
                           default_path=default_path,
                           creator=g.user)
             image.save()
-            return redirect(url_for('.index'))
-        flash("Filename {} is invalid".format(f.filename), ERROR_FLASH)
+            return jsonify({"status": "true"})
     if form.errors:
-        flash(form.errors, ERROR_FLASH)
-    if uploaded_from:
-        return redirect(uploaded_from)
-    return render_template('admin/media/upload.html', form=form)
+        return jsonify(form.errors)
+    return jsonify({"status": "error"})
 
 
 @media.route('/media/uploads/<filename>', methods=['GET'])
@@ -119,3 +115,15 @@ def delete(filename):
     else:
         flash('Invalid filename', ERROR_FLASH)
     return redirect(url_for('.index'))
+
+
+@media.route('/media/view', methods=['GET'])
+def view():
+    """Displays all uploaded images.
+
+    **Route:** ``/admin/media/view``
+
+    **Methods:** ``GET``
+    """
+    images = Image.objects()
+    return render_template('admin/media/view.html', images=images)

@@ -12,3 +12,4 @@ FILENAME_REGEX = r'[\w\-@\|\(\)]+'
 FULL_FILENAME_REGEX = "{fname}({ext})".format(
     fname=FILENAME_REGEX,
     ext="|".join(config['ALLOWED_UPLOAD_EXTENSIONS']))
+EXTENSION_REGEX = "|".join(config['ALLOWED_UPLOAD_EXTENSIONS'])
