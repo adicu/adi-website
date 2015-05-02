@@ -163,7 +163,8 @@ def preview(slug):
         abort(404)
     post = BlogPost.objects().get(slug=slug)
     if not post.date_published:
-        post.date_published = datetime.now()
+        post.date_published = datetime.now()  # just used as placeholder to
+        # display in preview. Does not get saved to db.
 
     recent_posts = BlogPost.objects(published=True,
                                     id__ne=post.id,
