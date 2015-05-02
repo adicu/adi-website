@@ -55,3 +55,4 @@ class CreateBlogPostForm(Form):
     published = BooleanField('Published')
     featured_image = StringField('Featured Image', [image_with_same_name])
     tags = FieldList(StringField('Tag'))
+    preview = BooleanField('Preview')

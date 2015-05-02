@@ -33,6 +33,7 @@
 {% block main %}
 <section class="single post">
     <div class="content">
+        {% block previewBanner %}{% endblock %}
         {% if post.featured_image %}
         <i class="image"
            style="background-image:url({{ post.featured_image.url() }})"></i>
