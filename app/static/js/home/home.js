@@ -14,6 +14,7 @@ $(function() {
     });
 
 
+
     var md = new MobileDetect(window.navigator.userAgent);
     if (md.mobile() == null) {
         var scroll_factor = 0.333333; // Image moves 1/3 as fast as body
@@ -22,10 +23,19 @@ $(function() {
         var $nav = $('nav');
         var $hero = $('.hero');
 
+        var translateY = function(y) {
+            return 'translate3d(0px, -' + y + 'px, 0px)'
+        }
+
         var scrollHandler = function() {
             var scrolled = $(window).scrollTop();
             var scrolled = Math.min(scrolled, $image.height());
-            $image.css('transform','translate3d(0px, ' + (scrolled * scroll_factor) + 'px, 0px)');
+            console.log(scrolled, scrolled * scroll_factor);
+            $image.css({
+                'transform': translateY(scrolled * scroll_factor),
+                '-moz-transform': translateY(scrolled * scroll_factor),
+                '-webkit-transform': translateY(scrolled * scroll_factor)
+            });
 
             if ($devfestbanner !== undefined) {
                 if (scrolled > $hero.height()) {
@@ -39,5 +49,9 @@ $(function() {
         $(window).on('scroll', function() {
            window.requestAnimationFrame(scrollHandler);
         });
+        $(window).on('resize', function() {
+            window.requestAnimationFrame(scrollHandler);
+        })
+        window.requestAnimationFrame(scrollHandler);
     }
 });

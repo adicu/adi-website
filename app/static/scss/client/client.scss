@@ -122,7 +122,7 @@ $content-padding: 0.625rem;
 }
 
 $hero-height: 38rem;
-$hero-offset: 10rem;
+$hero-offset: 5rem;
 .hero {
     padding-top: $navbar-height;
     position: relative;
@@ -141,11 +141,12 @@ $hero-offset: 10rem;
     i {
         z-index: 2;
         display: block;
-        height: ($hero-height + $navbar-height + $hero-offset);
+        height: ($hero-height + $hero-offset);
         width: 100%;
-        background-attachment: fixed;
-        background-position: center (-1 * $hero-offset);
+        position: fixed;
+        background-position: center center;
         background-size: cover;
+        background-repeat: no-repeat;
     }
 
     .solid {
@@ -359,6 +360,17 @@ $section-bottom: 1.25rem;
     p a {
         text-decoration: underline;
         color: $gray !important;
+    }
+}
+
+$large-hero-height: $hero-height + 7rem;
+@media screen and (min-width: $desktop-min) {
+    .hero {
+        height: $large-hero-height;
+
+        i {
+            height: ($large-hero-height + $hero-offset);
+        }
     }
 }
 
