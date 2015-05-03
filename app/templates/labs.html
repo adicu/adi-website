@@ -4,11 +4,9 @@
 {% block header_image %}/static/img/hero/judges.jpg{% endblock %}
 
 {% block main %}
-<section class="tagline">
-   <h1>ADI Labs</h1>
-</section>
 <section class="card top-card">
    <div class="content">
+       <h1 class="page-title">ADI Labs</h1>
        <div class="section-header">
            <h4>About</h4>
            <span class="bar green"></span>
@@ -56,24 +54,26 @@
         </ul>
     </div>
 </section>
-<section class="full blue callout">
-    <div class="content">
-        <div class="callout-left">
-            <div class="section-header">
-                <h4>Apply</h4>
-                <span class="bar gray"></span>
+<section class="callout">
+    <div class="full blue">
+        <div class="content">
+            <div class="callout-left">
+                <div class="section-header">
+                    <h4>Apply</h4>
+                    <span class="bar gray"></span>
+                </div>
+                <h3>Interested in taking your programming beyond problem sets?</h3>
+                <div class="button-group">
+                    <div class="button gray"><a target="_blank" href="https://bit.ly/ADILabsApp">Apply Now</a></div>
+                </div>
+                <p>Just getting started? <a href="/resources">Learn to Code</a></p>
             </div>
-            <h3>Interested in taking your programming beyond problem sets?</h3>
-            <div class="button-group">
-                <div class="button gray"><a target="_blank" href="https://bit.ly/ADILabsApp">Apply Now</a></div>
-            </div>
-            <p>Just getting started? <a href="/resources">Learn to Code</a></p>
-        </div>
-        <div class="callout-right">
-            <div class="card">
-                <a href="http://courses.adicu.com">
-                    <i style="background-image:url({{ url_for('static', filename='img/apply.jpg') }})"></i>
-                </a>
+            <div class="callout-right">
+                <div class="card">
+                    <a href="http://courses.adicu.com">
+                        <i style="background-image:url({{ url_for('static', filename='img/apply.jpg') }})"></i>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

@@ -20,16 +20,14 @@ def index():
 
     **Methods:** ``GET``
     """
-    blog_posts = list(
-        BlogPost.objects(published=True).order_by('-date_published')[:10]
-    )
+    blog_posts = BlogPost.objects(published=True).order_by('-date_published')
 
     # Hide the next button if there are <= 10 posts.
     next_index = 1 if len(blog_posts) > 10 else None
     previous_index = None
 
     return render_template('blog/blog.html',
-                           posts=blog_posts,
+                           posts=list(blog_posts[:10]),
                            previous_index=previous_index,
                            next_index=next_index)
 

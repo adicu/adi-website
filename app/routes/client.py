@@ -174,7 +174,7 @@ def events():
     **Methods:** ``GET``
     """
     today = date.today()
-    weekday = today.isoweekday()
+    weekday = (today.isoweekday() % 7) + 1  # Sun: 1, Mon: 2, ... , Sat: 7
     last_sunday = datetime.combine(today - timedelta(days=weekday + 7),
                                    datetime.min.time())
     next_sunday = datetime.combine(today + timedelta(days=7 - weekday),
@@ -187,8 +187,10 @@ def events():
                                         .order_by('-start_date')
                                         .limit(NUM_PAST_EVENTS_FOR_FRONTPAGE))
 
-    events_this_week = recent_and_upcoming.filter(end_date__gte=today,
-                                                  start_date__lt=next_sunday)
+    events_this_week = list(
+        recent_and_upcoming.filter(end_date__gte=today,
+                                   start_date__lt=next_sunday)
+    )
 
     # One large event, and one set of three small events
     upcoming_events = (recent_and_upcoming.filter(start_date__gt=next_sunday)
