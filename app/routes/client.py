@@ -174,7 +174,7 @@ def events():
     **Methods:** ``GET``
     """
     today = date.today()
-    weekday = (today.isoweekday() % 7) + 1  # Sun: 0, Mon: 1, ... , Sat: 6
+    weekday = (today.isoweekday() % 7) + 1  # Sun: 1, Mon: 2, ... , Sat: 7
     last_sunday = datetime.combine(today - timedelta(days=weekday + 7),
                                    datetime.min.time())
     next_sunday = datetime.combine(today + timedelta(days=7 - weekday),
