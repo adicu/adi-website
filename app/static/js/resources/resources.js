@@ -10,27 +10,32 @@ $(function() {
 
     var md = new MobileDetect(window.navigator.userAgent);
     if (md.mobile() == null) {
+        var $wrapper = $('.sidebar-wrapper .full');
+        var $sidebar = $('.sidebar');
+        var $inner = $('.sidebar .inner');
+        var $navbar = $('.navbar');
+
         $(window).scroll( function(e) {
-            if ($(window).scrollTop() > $('.sidebar-wrapper').offset().top - 80) {
-                $('.navbar').addClass('up');
+            if ($(window).scrollTop() > $wrapper.offset().top - 80) {
+                $navbar.addClass('up');
             } else {
-                $('.navbar').removeClass('up');
+                $navbar.removeClass('up');
             }
-            if ($(window).scrollTop() > $('.sidebar-wrapper').offset().top ) {
-                $('.sidebar').addClass('fixed');
+            if ($(window).scrollTop() > $wrapper.offset().top ) {
+                $sidebar.addClass('fixed');
             } else {
-                $('.sidebar').removeClass('fixed');
+                $sidebar.removeClass('fixed');
             }
 
-            var bottomOfSidebar = $('.sidebar .inner').offset().top + $('.sidebar .inner').height();
-            var bottomOfSidebarWrapper = $('.sidebar-wrapper').offset().top + $('.sidebar-wrapper').height();
-            var topOfSidebar = $('.sidebar .inner').offset().top;
+            var bottomOfSidebar = $inner.offset().top + $inner.height();
+            var bottomOfSidebarWrapper = $wrapper.offset().top + $wrapper.height();
+            var topOfSidebar = $inner.offset().top;
             var topOfVisibleWindow = $(window).scrollTop();
 
-            if (!$('.sidebar').hasClass('bottom') && bottomOfSidebar > bottomOfSidebarWrapper){
-                $('.sidebar').addClass('bottom');
+            if (!$sidebar.hasClass('bottom') && bottomOfSidebar > bottomOfSidebarWrapper){
+                $sidebar.addClass('bottom');
             } else if (topOfSidebar > topOfVisibleWindow) {
-                $('.sidebar').removeClass('bottom');
+                $sidebar.removeClass('bottom');
             }
 
 

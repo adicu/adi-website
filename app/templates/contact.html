@@ -4,11 +4,9 @@
 {% block header_image %}/static/img/hero/contact.jpg{% endblock %}
 
 {% block main %}
-<section class="tagline">
-    <h1>Contact</h1>
-</section>
 <section class="card top-card">
     <div class="content">
+        <h1 class="page-title">Contact</h1>
         <div class="section-header">
             <h4>Come meet ADI</h4>
             <span class="bar blue"></span>
@@ -28,23 +26,25 @@
         </div>
     </div>
 </section>
-<section class="full green callout">
-    <div class="content">
-        <div class="callout-left">
-            <div class="section-header">
-                <h4>Jobs</h4>
-                <span class="bar gray"></span>
+<section class="callout">
+    <div class="full green">
+        <div class="content">
+            <div class="callout-left">
+                <div class="section-header">
+                    <h4>Jobs</h4>
+                    <span class="bar gray"></span>
+                </div>
+                <h3>Have a job opportunity or looking for one yourself?  Check out the CORE Jobs Board!</h3>
+                <div class="button-group">
+                    <div class="button gray"><a target="_blank" href="http://jobs.coreatcu.com">Launch</a></div>
+                </div>
             </div>
-            <h3>Have a job opportunity or looking for one yourself?  Check out the CORE Jobs Board!</h3>
-            <div class="button-group">
-                <div class="button gray"><a target="_blank" href="http://jobs.coreatcu.com">Launch</a></div>
-            </div>
-        </div>
-        <div class="callout-right">
-            <div class="card">
-                <a href="http://jobs.coreatcu.com">
-                    <i style="background-image:url({{ url_for('static', filename='img/jobs.png') }})"></i>
-                </a>
+            <div class="callout-right">
+                <div class="card">
+                    <a href="http://jobs.coreatcu.com">
+                        <i style="background-image:url({{ url_for('static', filename='img/jobs.png') }})"></i>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

@@ -127,7 +127,6 @@ $hero-offset: 5rem;
     padding-top: $navbar-height;
     position: relative;
     height: $hero-height;
-    overflow: hidden;
 
     .scrim {
         @include scrim;
@@ -163,27 +162,28 @@ $hero-offset: 5rem;
     margin-bottom: (-1*($footer-height + 2 * $footer-padding));
 }
 
-$section-top: 3.75rem;
-$section-bottom: 1.25rem;
+$callout-padding: 4rem 0;
+$section-padding: 2.5rem 0;
+$newsletter-padding: 3.75rem 0 1.25rem;
+$top-card-padding: 4rem 0 2.5rem;
 .main {
-    margin-top: -18rem;
     height: auto !important;
     height: 100%;
+    position: relative;
+    z-index: 4;
+    background-color: $white;
 
     &.no-hero {
         padding-top: ($navbar-height + 3rem);
         margin-top: 0;
     }
-    .tagline{
-        background-color: $transparent;
-    }
-    .tagline h1 {
-
+    h1.page-title {
         color: $white;
         margin: 1.5rem auto;
+        position: absolute;
+        top: -12rem;
         width: 95%;
         z-index: 5;
-        position: relative;
         max-width: $content-width;
         text-align: center;
     }
@@ -197,55 +197,49 @@ $section-bottom: 1.25rem;
             @include clearfix;
         }
         &:not(:first-child) {
-            padding-top: $section-top;
-            padding-bottom: $section-bottom;
+            padding: $section-padding;
         }
 
         h3.no-events {
             margin: 4rem 0;
         }
 
+        .event.large:last-child {
+            margin-bottom: 0;
+        }
+
         h3 + h3 {
             margin-top: 1rem;
         }
 
-        .section-header {
-            margin-bottom: 2.1875rem;
-        }
 
         &:last-child{
-            padding-bottom: 4rem;
+            padding: 2.5rem 0 5rem;
         }
-    }
-    .bar {
-        width: 3.75rem;
-        height: $ribbon-height;
-        display: block;
-        background-color: $yellow;
-
-        &.blue { background-color: $blue;  }
-        &.green { background-color: $green; }
-        &.yellow { background-color: $yellow; }
-        &.gray { background-color: $gray; }
-        &.white { background-color: $white; }
     }
 
     $radius: 0.625rem;
     $card-gutter: 3.75rem;
+    $top-card-offset: -10rem;
     .top-card {
         z-index: 100;
         width: ($content-width + 2*$card-gutter);
         max-width: 95%;
+        position: relative;
         margin: 0 auto;
+        @include transform(translateY($top-card-offset));
+        margin-bottom: $top-card-offset;
         background-color: $white;
+        padding: $top-card-padding !important;
+        border-top-left-radius: $radius;
+        border-top-right-radius: $radius;
         &+section{
-
             background-color: $white;
         }
     }
-    .card {
-        border-top-left-radius: $radius;
-        border-top-right-radius: $radius;
+
+    .newsletter .top-card {
+        padding: $newsletter-padding !important;
     }
 
     .subscribe {
@@ -253,6 +247,9 @@ $section-bottom: 1.25rem;
         max-width: 51.25rem;
         margin: 0 auto;
         position: relative;
+        &:after {
+            @include clearfix;
+        }
 
         .submit {
             background-color: $green;
@@ -288,13 +285,30 @@ $section-bottom: 1.25rem;
         }
     }
 }
+.section-header {
+    margin-bottom: 2.1875rem;
+    .bar {
+        width: 3.75rem;
+        height: $ribbon-height;
+        display: block;
+        background-color: $yellow;
+
+        &.blue { background-color: $blue;  }
+        &.green { background-color: $green; }
+        &.yellow { background-color: $yellow; }
+        &.gray { background-color: $gray; }
+        &.white { background-color: $white; }
+    }
+}
 
 .callout {
     position: relative;
-    padding-bottom: 2.25rem !important;
 
-    &:after {
+    .content:after {
         @include clearfix;
+    }
+    .full {
+        padding: $callout-padding;
     }
     .callout-left {
         width: 50%;
@@ -324,15 +338,11 @@ $section-bottom: 1.25rem;
 
     h3 {
         width: 20rem;
-        margin-bottom: 2.5rem;
+        margin-bottom: 2rem;
     }
-    // p:not(p:last-child) {
-    //     margin-bottom: 0.625rem;
-    // }
-    // TODO: scss is broken: https://github.com/sass/sass/issues/1476
 }
 .button-group {
-    margin: 1.25rem 0;
+    margin: 1rem 0;
     &.centered {
         text-align: center;
     }
@@ -340,26 +350,28 @@ $section-bottom: 1.25rem;
         margin-right: 1.25rem;
     }
 }
-.yellow {
-    background-color: $yellow !important;
-    color: $gray !important;
-}
-.blue {
-    background-color: $blue !important;
-    color: $gray !important;
-}
-.green {
-    background-color: $green !important;
-    color: $gray !important;
-}
-.white {
-    background-color: $green !important;
-    color: $gray !important;
-}
-.yellow, .blue, .green {
-    p a {
-        text-decoration: underline;
+.full {
+    &.yellow {
+        background-color: $yellow !important;
         color: $gray !important;
+    }
+    &.blue {
+        background-color: $blue !important;
+        color: $gray !important;
+    }
+    &.green {
+        background-color: $green !important;
+        color: $gray !important;
+    }
+    &.white {
+        background-color: $green !important;
+        color: $gray !important;
+    }
+    &.yellow, &.blue, &.green {
+        p a {
+            text-decoration: underline;
+            color: $gray !important;
+        }
     }
 }
 

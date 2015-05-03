@@ -13,6 +13,16 @@ $(function() {
         }, 200  );
     });
 
+    // Email regex
+    var pattern = new RegExp(/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i);
+    $('footer form input[type="email"]').keyup(function() {
+        if (pattern.test($(this).val())) {
+            $('footer form').addClass('valid');
+        } else {
+            $('footer form').removeClass('valid');
+        }
+    });
+
 
 
     var md = new MobileDetect(window.navigator.userAgent);
