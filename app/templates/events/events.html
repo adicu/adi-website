@@ -5,8 +5,11 @@
 
 {% set num_triples_this_week = (events_this_week | length - 1) // 3 %}
 {% set events_in_triples_this_week = events_this_week[-3*num_triples_this_week:] %}
-{% set events_in_singles_this_week = events_this_week[:-3*num_triples_this_week] %}
-
+{% if num_triples_this_week == 0 %}
+    {% set events_in_singles_this_week = events_this_week %}
+{% else %}
+    {% set events_in_singles_this_week = events_this_week[:-3*num_triples_this_week] %}
+{% endif %}
 
 {% block main %}
 <section class="card top-card">
