@@ -14,6 +14,8 @@ class TestTextHelpers(TestingTemplate):
     ERROR_MSG = 'Incorrect:\nexpected: "{}"\n     got: "{}"'
 
     MARKDOWN_EXPECTATIONS = [
+        ('**Bold** text is unbolded.', 'Bold text is unbolded.'),
+        ('So is *underlined* text.', 'So is underlined text.'),
         ('An [](http://empty-link).', 'An.'),
         ('A [test](https://adicu.com)', 'A test (https://adicu.com)'),
         ('A [test](http://adicu.com)', 'A test (http://adicu.com)'),
