@@ -2,7 +2,7 @@ import re
 
 
 def truncate_html(text, truncate_len, truncate_text):
-    """ Truncates HTML to a certain number of words (not counting tags and
+    """Truncates HTML to a certain number of words (not counting tags and
     comments). Closes opened tags if they were correctly closed in the given
     HTML. If text is truncated, truncate_text will be appended to the result.
 
@@ -84,3 +84,36 @@ def truncate_html(text, truncate_len, truncate_text):
         out += '</{}>'.format(tag)
     # Return string
     return out
+
+
+def clean_markdown(markdown):
+    """Formats markdown text for easier plaintext viewing.  Performs the
+    following substitutions:
+
+    - Removes bad or empty links
+    - Removes images
+    - Formats hyperlinks from ``[link](http://adicu.com)`` to
+    ``link (http://adicu.com)``.
+
+    :param str markdown: The markdown text to format.
+
+    :returns: the formatted text:
+    :rtype: str
+    """
+    substitutions = [
+        # Remove images: '\t   ![hello](anything)' -> ''
+        (r'\s*\!\[[^\]]*\]\([^\)]*\)', r''),
+        # Remove empty links: '\t   [\t   ](anything)' -> ''
+        (r'\s*\[\s*\]\([^\)]*\)', r''),
+        # Links: '[hello](http://google.com)' -> 'hello (http://google.com)'
+        (r'\[(?P<text>.*)\]\((?P<link>http[s]?://[^\)]*)\)', r'\1 (\2)'),
+        # Bad links: '[hello](garbage)' -> 'hello'
+        (r'\[(?P<text>.*)\]\((?P<link>[^\)]*)\)', r'\1'),
+        # Remove italics / bold: '*' -> ''
+        (r'\*', r''),
+    ]
+
+    for pattern, repl in substitutions:
+        markdown = re.sub(pattern, repl, markdown)
+
+    return markdown
