@@ -89,7 +89,8 @@ ERROR_DATA = {
                 }),
 
             'BadStatusLine': (
-                'Encountered a Bad Status Line error with the API',
+                'Encountered a BadStatusLine error with the Google Calendar '
+                'API.',
                 620, HTTP_INTERNAL_SERVER_ERROR, {}),
 
             'EventAlreadyDeleted': (
@@ -168,10 +169,10 @@ class EventumError(Exception):
         as well as any other data associated with it.
         """
         message = '[{}]: {}'.format(self.error_type, self.message)
-        app.logger.warning(message)
+        app.logger.error(message)
         if self.data:
-            app.logger.warning('[{}][DATA]: {}'.format(self.error_type,
-                                                       self.data))
+            app.logger.error('[{}][DATA]: {}'.format(self.error_type,
+                                                     self.data))
 
     def _form_message(self, message, subs):
         """Apply subsitutions to the error message if any exist.  If there are

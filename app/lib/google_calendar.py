@@ -174,10 +174,9 @@ class GoogleCalendarAPIClient():
         # Send the request, falling back to update if it fails.
         try:
             updated_event = self._execute_request(request)
-        except EventumError.GoogleCalendarAPINotFound as e:
+        except EventumError.GCalAPI.NotFound as e:
             self.create_event(event)
-            app.logger.warning(e.message)
-            raise EventumError.GCalAPI.NotFound.UpdateFellBackToCreate()
+            raise EventumError.GCalAPI.NotFound.UpdateFellBackToCreate(e=e)
 
         # Update the Event with the latest info from the response.
         self._update_event_from_response(event, updated_event)
@@ -273,8 +272,6 @@ class GoogleCalendarAPIClient():
             return self._execute_request(request)
         except EventumError.GCalAPI.NotFound as e:
             self.create_event(event)
-            message = 'Move failed. Successfully fell back to create.'
-            app.logger.warning('[GOOGLE_CALENDAR]: ' + message)
             raise EventumError.GCalAPI.NotFound.MoveFellBackToCreate(uri=e.uri)
 
     @skip_and_return_if(not config['GOOGLE_AUTH_ENABLED'])
@@ -324,8 +321,7 @@ class GoogleCalendarAPIClient():
             return self._execute_request(request)
         except EventumError.GCalAPI.NotFound as e:
             # If the resource has already been deleted, fail quietly.
-            app.logger.warning(e)
-            raise EventumError.GCalAPI.EventAlreadyDeleted()
+            raise EventumError.GCalAPI.EventAlreadyDeleted(e=e)
 
     def _instance_resource_for_event_in_series(self, event):
         """Searches through the instances of ``event``'s parent series,
@@ -376,8 +372,7 @@ class GoogleCalendarAPIClient():
         gcal_id = response.get('id')
         gcal_sequence = response.get('sequence')
         if gcal_id is None or gcal_sequence is None:
-            app.logger.error('Request failed. {}'.format(response))
-            raise EventumError.GCalAPI()
+            raise EventumError.GCalAPI(response=response)
 
         if event.is_recurring:
             event.parent_series.gcal_id = gcal_id
@@ -405,15 +400,8 @@ class GoogleCalendarAPIClient():
         try:
             return request.execute()
         except httplib.BadStatusLine as e:
-            app.logger.warning('[GOOGLE_CALENDAR]: Got BadStatusLine. '
-                               'Retrying...')
-            try:
-                return request.execute()
-            except httplib.BadStatusLine as e:
-                app.logger.error('[GOOGLE_CALENDAR]: Got BadStatusLine again! '
-                                 'Raising.')
-                message = ('Line: {eline}, Message: {emessage}'
-                           .format(eline=e.line, emessage=e.message))
-                raise EventumError.GCalAPI.BadStatusLine(message)
+            # Google Calendar returned a empty status line.
+            raise EventumError.GCalAPI.BadStatusLine(message=e.message,
+                                                     line=e.line)
         except HttpError as e:
             raise EventumError.GCalAPI.NotFound(uri=e.uri)
