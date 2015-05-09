@@ -1,7 +1,7 @@
 from pyrfc3339 import generate
 import pytz
 from app.lib.text import clean_markdown
-from app.lib.error import GoogleCalendarAPIError
+from app.lib.error import EventumError
 
 
 class GoogleCalendarResourceBuilder():
@@ -19,7 +19,7 @@ class GoogleCalendarResourceBuilder():
             update Google Calendar (in which case an extra ``sequence`` field
             is required).
 
-        :raises: GoogleCalendarAPIError
+        :raises: :class:`EventumError.GCalAPI.EventMustEndOnOrAfter`
 
         :returns: An event resource
         :rtype: dict
@@ -72,11 +72,7 @@ class GoogleCalendarResourceBuilder():
         elif s.ends_after:
             r += ';COUNT=%d' % s.num_occurrences
         else:
-            raise GoogleCalendarAPIError(
-                'A series should either end on a specific date, or after a '
-                'specific number of occurences.  Series.ends_on and ends_after'
-                ' are both false.'
-            )
+            raise EventumError.GCalAPI.EventMustEndOnOrAfter()
         return r
 
     @classmethod
