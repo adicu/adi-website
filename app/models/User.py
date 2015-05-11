@@ -6,9 +6,10 @@
 """
 
 import re
-from app import db
+from app import db, app
 from app.lib.regex import SLUG_REGEX
 from datetime import datetime
+from flask import url_for
 now = datetime.now
 
 # Maps valid values for the ``user_type`` field on the User object to
@@ -118,8 +119,8 @@ class User(db.Document):
         if self.image:
             return self.image.url()
         if not self.image_url:
-            return ('https://lh6.googleusercontent.com/-K9HZ5Z5vOU8/'
-                    'AAAAAAAAAAI/AAAAAAAAAAA/yRoMtBSXoxQ/s48-c/photo.jpg')
+            return url_for('static',
+                           filename=app.config['DEFAULT_PROFILE_PICTURE'])
         if "googleusercontent.com" in self.image_url:
             return self.image_url + str(size)
         return self.image_url
