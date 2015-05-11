@@ -5,9 +5,9 @@ consul_set() {
 }
 
 # Flask configurations
-consul_set FLASK_HOST '0.0.0.0'
-consul_set FLASK_PORT '5000'
-consul_set FLASK_DEBUG 'TRUE'
+consul_set HOST '0.0.0.0'
+consul_set PORT '5000'
+consul_set DEBUG 'TRUE'
 consul_set SECRET_KEY ''
 
 # Cross-site request forgery settings
