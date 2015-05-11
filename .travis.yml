@@ -10,9 +10,6 @@ cache:
 services:
   - mongodb
 
-env:
-  - CONSUL_V=0.5.0
-
 before_install:
   # Install SCSS
   - gem install sass
@@ -20,8 +17,8 @@ install:
   - pip install -r config/requirements.txt
   - pip install flake8
   # Install Consul
-  - wget "https://dl.bintray.com/mitchellh/consul/${CONSUL_V}_linux_amd64.zip"
-  - unzip "${CONSUL_V}_linux_amd64.zip"
+  - wget "https://dl.bintray.com/mitchellh/consul/0.5.0_linux_amd64.zip"
+  - unzip "0.5.0_linux_amd64.zip"
   - ./consul --version
 
 before_script:
@@ -30,7 +27,10 @@ before_script:
   - flake8 config
   - flake8 test/
   - mkdir log
+  # Start and configure Consul
+  - ./consul agent -server -bootstrap-expect 1 -data-dir /tmp/consul &
+  - sleep 5  # sleep while it starts up
+  - ./config/setup_consul_travis.sh
 script:
-  # Run tests
-  - ./run_tests.sh
+  - nosetests
 
