@@ -6,7 +6,7 @@
 """
 
 import re
-from app import db, app
+from app import db
 from app.lib.regex import SLUG_REGEX
 from datetime import datetime
 from flask import url_for
@@ -119,6 +119,7 @@ class User(db.Document):
         if self.image:
             return self.image.url()
         if not self.image_url:
+            from app import app
             return url_for('static',
                            filename=app.config['DEFAULT_PROFILE_PICTURE'])
         if "googleusercontent.com" in self.image_url:
