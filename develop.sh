@@ -9,4 +9,3 @@ consul agent \
     -client 0.0.0.0 \
     -data-dir data/consul_data \
     -ui-dir /usr/share/consul/ui > log/consul.log &
-config/setup_consul_dev.sh

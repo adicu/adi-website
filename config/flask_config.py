@@ -1,77 +1,72 @@
-from os import environ, path, pardir
-from sys import exit
+from os import path, pardir
 import json
+import requests
 
-# dictionary the flask app configures itself from
-# several variables initialized to defaults
+# The Flask app configures itself from this dictionary
+# Values are initialized to default values, or `None`.
 config = {
+
+    # Flask configurations
     'HOST': 'localhost',
     'PORT': 5000,
+    'DEBUG': False,
+    'SECRET_KEY': None,
+
+    # Cross-site request forgery configurations
+    'CSRF_SESSION_KEY': None,
+    'CSRF_ENABLED': True,
+
+    # Google+, Google Auth, and Google Calendar configurations
+    'GOOGLE_AUTH_ENABLED': True,
     'INSTALLED_APP_CLIENT_SECRET_PATH':
         'config/installed_app_client_secrets.json',
     'INSTALLED_APP_CREDENTIALS_PATH': 'config/installed_app_credentials.json',
     'CLIENT_SECRETS_PATH': 'config/client_secrets.json',
+    'PRIVATE_CALENDAR_ID': None,
+    'PUBLIC_CALENDAR_ID': None,
+
+    # MongoDB configurations
     'MONGO_DATABASE': 'eventum',
+
+    # Logging configurations
     'LOG_FILE_MAX_SIZE': '256',
     'APP_LOG_NAME': 'app.log',
-    'WERKZEUG_LOG_NAME': 'werkzeug.log'
+    'WERKZEUG_LOG_NAME': 'werkzeug.log',
 }
 
-# consul_configurations contains equivalent keys that will be used to extract
-# configuration values from Consul.
-consul_configurations = [  # (consul key, config key)
-    ('flask_host', 'HOST'),
-    ('flask_port', 'PORT'),
-    ('flask_debug', 'DEBUG'),
-    ('secret_key', 'SECRET_KEY'),
-    ('installed_app_client_secret_path', 'INSTALLED_APP_CLIENT_SECRET_PATH'),
-    ('installed_app_credentials_path', 'INSTALLED_APP_CREDENTIALS_PATH'),
-    ('google_auth_enabled', 'GOOGLE_AUTH_ENABLED'),
-    ('client_secrets_path', 'CLIENT_SECRETS_PATH'),
-    ('csrf_enabled', 'CSRF_ENABLED'),
-    ('csrf_session_key', 'CSRF_SESSION_KEY'),
-    ('private_calendar_id', 'PRIVATE_CALENDAR_ID'),
-    ('public_calendar_id', 'PUBLIC_CALENDAR_ID'),
-    ('mongo_database', 'MONGO_DATABASE'),
-    ('log_file_max_size', 'LOG_FILE_MAX_SIZE'),
-    ('app_log_name', 'APP_LOG_NAME'),
-    ('werkzeug_log_name', 'WERKZEUG_LOG_NAME')
-]
+from consul import Consul
+kv = Consul().kv  # initalize client to KV store
 
-if environ.get('USE_ENV_VARS') == 'TRUE':  # use env variables
-    for _, key in consul_configurations:
-        if key in environ:
-            config[key] = environ[key]
-        elif key not in config:  # fail if there is not a default for the key
-            raise Exception("Critical config variable {} is missing. "
-                            "You probably need to run either: \n\n\tsource "
-                            "config/<your settings file> \n\tor \n\t"
-                            "./config/setup_consul_<environment>.sh".format(
-                                key))
+# get values from Consul and set the corresponding config variable to the
+# value retrieved from Consul.
+for key, value in config.iteritems():
+    try:
+        _, consul_value = kv.get("adi-website/{}".format(key))
+    except requests.ConnectionError:
+        raise Exception('Failed to connect to Consul.  You probably need to '
+                        'run: \n\n\t./config/run_consul.sh')
 
-else:
-    from consul import Consul
-    kv = Consul().kv  # initalize client to KV store
+    # We have a good value in Consul
+    if consul_value and consul_value.get('Value'):
+        config[key] = consul_value.get('Value')
+        continue
 
-    # get values from Consul and set the corresponding config variable to the
-    # value retrieved from Consul.
-    for consul_key, config_key in consul_configurations:
-        _, consul_value = kv.get("adi-website/{}".format(consul_key))
-        # fail if there is value cannot be found or it is an empty string
-        if not consul_value or not consul_value.get('Value'):
-            raise Exception(("No value found in Consul for key "
-                             "adi-website/{}. You probably need to run: \n\n\t"
-                             "./config/setup_consul_<environment>.sh")
-                            .format(consul_key))
-        config[config_key] = consul_value.get('Value')
+    # We can use the default value if it's not None
+    if value is not None:
+        continue
 
-# basic flask settings
+    # Fail if there is value cannot be found or it is an empty string
+    raise Exception(("No default value found in Consul for key "
+                     "adi-website/{}. You probably need to run: \n\n\t"
+                     "./config/setup_consul_<environment>.sh")
+                    .format(key))
+
+# Cast strings to appropiate types: int, bool, dictionary
 config['PORT'] = int(config['PORT'])
 config['DEBUG'] = (config['DEBUG'] == 'TRUE')
-
-# Google Auth
-# This is used for the webapp that allows Google+ login
 config['GOOGLE_AUTH_ENABLED'] = (config['GOOGLE_AUTH_ENABLED'] == 'TRUE')
+config['CSRF_ENABLED'] = (config['CSRF_ENABLED'] == 'TRUE')
+config['MONGODB_SETTINGS'] = {'DB': config['MONGO_DATABASE']}
 
 # Setup Google Auth
 if config['GOOGLE_AUTH_ENABLED']:
@@ -82,19 +77,11 @@ if config['GOOGLE_AUTH_ENABLED']:
             if not _secrets_data.get('client_secret', None):
                 raise Exception('Google Auth config file, {}, missing client '
                                 'secret'.format(config['CLIENT_SECRETS_PATH']))
-                exit(1)
 
     except IOError:
         raise Exception("The Google client_secrets file was not found at '{}',"
                         " check that it exists.".format(
                             config['CLIENT_SECRETS_PATH']))
-        exit(1)
-
-# Cross-site request forgery settings
-config['CSRF_ENABLED'] = (config['CSRF_ENABLED'] == 'TRUE')
-
-# Mongo configs
-config['MONGODB_SETTINGS'] = {'DB': config['MONGO_DATABASE']}
 
 ############################################################################
 #  Constants in version control

@@ -70,6 +70,7 @@ Finally, go to `localhost:5000` in your web browser.
 ```bash
 ./develop.sh                    # MongoDB, Consul, and Pip
 source bin/activate             # Enter the virtual environment
+./config/setup_consul_dev.sh    # Populate Consul with values
 python run.py                   # Run the application
 ```
 
@@ -80,13 +81,13 @@ Finally, go to `localhost:5000` in your web browser.
 It is possible to run Eventum without logging in using Google+ or authenticating with Google Calendar.  To do so, edit `config/setup_consul_dev.sh` and change the line:
 
 ```bash
-consul_set google_auth_enabled 'FALSE'
+consul_set GOOGLE_AUTH_ENABLED 'FALSE'
 ```
 
 to:
 
 ```bash
-consul_set google_auth_enabled 'TRUE'
+consul_set GOOGLE_AUTH_ENABLED 'TRUE'
 ```
 
 Then, re-run the consul configurations:
