@@ -20,8 +20,8 @@ env:
     - DEBUG=TRUE
     - SECRET_KEY=abc123
     # Google OAuth settings
-    - INSTALLED_APP_CLIENT_SECRET_PATH=client_secrets.json
-    - CREDENTIALS_PATH=config/credentials.json
+    - INSTALLED_APP_CLIENT_SECRET_PATH=config/installed_app_client_secrets.json
+    - CREDENTIALS_PATH=config/installed_app_credentials.json
     - GOOGLE_AUTH_ENABLED=FALSE
     - CLIENT_SECRETS_PATH=config/client_secrets.json
     # Cross-site request forgery settings

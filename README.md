@@ -1,8 +1,8 @@
-# Eventum
+# ADI Website ([adicu.com][adi])
 
 [![Build Status](https://travis-ci.org/adicu/adi-website.svg)](https://travis-ci.org/adicu/adi-website)
 
-Eventum is a content management system for an event-driven blog that syncs with Google Calendar.
+[ADI][adi] is the tech club at [Columbia][columbia].  The ADI website is built on [Eventum][eventum], a content management system for an event-driven blog that syncs with Google Calendar.
 
 ## Stack
 - Built in [Flask][flask]
@@ -10,160 +10,158 @@ Eventum is a content management system for an event-driven blog that syncs with 
 - Authentication is done with [Google+ server-side flow][google-plus-server-side-flow]
 - Forms and validation are done through [Flask-WTForms][flask-wtforms] and [WTForms][wtforms]
 - CSS is generated from [SCSS][scss] and managed with [Flask-Assets][flask-assets]
+- Configurations are managed using [Consul][consul].
+- Development is done using [Vagrant][vagrant].
+- Deployment is done using [Docker][docker].
 
-## Setup
+## First-Time Setup
 
-Eventum runs on Linux and OSX.  To get it up an running, follow these steps:
+Eventum can be run locally on your machine, or in a virtual environment, using [Vagrant][vagrant].  Default to use Vagrant, unless you have some reason to run Eventum locally.
 
-1.  Install [MongoDB][mongodb] ([Ubuntu Linux][mongodb-linux], [OSX][mongodb-osx]).
+#### Using Vagrant 
 
-    > On OSX, you may have to run `$ mkdir /data /data/db` before you can run `mongod` without errors.
+1.  Download the [ADI website secrets][adi-website-secrets] from GitHub. Unzip the folder, and copy its **contents** into the `config` directory. 
+    
+    > If the link gives a 404 error, ask someone within the ADI GitHub organization for access
 
-2.  Install [VirtualEnv][virtualenv]:
+2. Install [Virtual box](https://www.virtualbox.org/wiki/Downloads).
+
+3. Once Vagrant is installed, install [Vagrant][vagrant-install].
+
+#### Without Vagrant
+
+Eventum runs natively on Linux and OSX.  To get it up an running, follow these steps:
+
+1.  Download the [ADI website secrets][adi-website-secrets] from GitHub. Unzip the folder, and copy its **contents** into the `config` directory.  
+
+    > If the link gives a 404 error, ask someone within the ADI GitHub organization for access
+    
+2.  Install [MongoDB][mongodb] ([Ubuntu Linux][mongodb-linux], [OSX][mongodb-osx]).
+
+    > On OSX, you may have to run `mkdir /data /data/db` before you can run `mongod` without errors.
+
+3.  Install [VirtualEnv][virtualenv]:
     ```bash
-    $ sudo pip install virtualenv
+    sudo pip install virtualenv
     ```
 
-3.  Download a copy of `client_secrets.json` from the [Google Developer Console][google-developer-console] or from a friend, and place it in the `config` folder.
+4.  Install [Consul][consul-install].
 
-4.  Authorize the Google Calendar API:
-    ```bash
-    $ python authorize.py
-    ```
 5.  Install SASS gem `gem install sass`
-    * otherwise, you will see an `OS` error
-
-Then you should be all set to run!
+    
+    > Otherwise, you will see an intermittent `OSError` 
 
 ## Developing
 
-Here's how to run Eventum in a development environment:
+#### Using Vagrant
 
 ```bash
-mongod &
-virtualenv --no-site-packages .
-source bin/activate
-source config/settings.dev
-pip install -r config/requirements.txt
-
-python run.py
+vagrant up                      # Wait for installation
+vagrant ssh                     # Enter your virtual machine
+cd /vagrant                     # Enter your project directory
+./config/setup_consul_dev.sh    # Populate Consul with values
+python run.py                   # Run the application
 ```
 
-Or alternately:
+Finally, go to `localhost:5000` in your web browser.
+
+#### Without Vagrant
 
 ```bash
-./develop.sh
-source bin/activate
-source config/settings.dev
-python run.py
+./develop.sh                    # MongoDB, Consul, and Pip
+source bin/activate             # Enter the virtual environment
+python run.py                   # Run the application
 ```
 
-Finally, go to `localhost:5000` on your browser 
+Finally, go to `localhost:5000` in your web browser.
 
-#### Developing without Authentication
+#### Disabling Google Auth
 
-It is possible to run Eventum without logging in using Google+ or authenticating with Google Calendar.  To do so, edit `config/settings.sh` and set `GOOGLE_AUTH_ENABLED` to `FALSE`:
+It is possible to run Eventum without logging in using Google+ or authenticating with Google Calendar.  To do so, edit `config/setup_consul_dev.sh` and change the line:
 
 ```bash
-# Whether or not to enable Google Auth or not.
-echo $GOOGLE_AUTH_ENABLED
+consul_set google_auth_enabled 'FALSE'
 ```
 
-
-
-
-## Vagrant
-
-There is an alternative installation route that will set up a virtual machine on your computer and install all necessary software for you.
-You must first install [Virtual box](https://www.virtualbox.org/) and [Vagrant](https://www.vagrantup.com/).
-
+to:
 
 ```bash
-vagrant up
-# wait for installation
-
-# enter your virtual machine
-vagrant ssh
-
-# enter your project directory
-cd /vagrant
-
-# populate Consul with values
-./config/setup_consul_dev.sh
-
-# run the application
-python run.py
-
-# view the app!
-# open your browser to localhost:5000
+consul_set google_auth_enabled 'TRUE'
 ```
 
+Then, re-run the consul configurations:
 
-
+```bash
+./config/setup_consul_dev.sh    # Populate Consul with values
+```
 
 ## Documentation
 
 Eventum uses [Sphinx](http://sphinx-doc.org/) to compile documentation to an HTML website.  This documentation is generated from the source code.
 
-Here's how to compile the docs:
+First, enter your development environment.  See "Developing" for more.  Then, generate the docs:
 
 ```bash
-# The documentation requires that the app is runnable, so you must be in a
-# development environment
-./develop.sh
-source bin/activate
-source config/settings.sh
-
 cd docs
-# This will generate the documentation website in /docs/_build/html
-make html 
-
-# Then either host the docs on localhost:8000
+make html                       # Generate docs in /docs/_build/html
 cd _build/html
-python -m SimpleHTTPServer .
-
-# Or open them directly
-open _build/html/index.html
+python -m SimpleHTTPServer .    # Host the docs on localhost:8000
 ```
+
 
 ## Testing
 
-Tests live in the `test` directory, and can be run via nosetests:
+Tests live in the `test` directory, and can be run via `nosetests`.  We also use `flake8` for linting `.py` files.
+
+First, enter your development environment.  See "Developing" for more.  Then, run the tests:
 
 ```bash
-source bin/activate # If you are not already in your virtualenv
-nosetests
+flake8 app config test script   # Run the flake8 linter on our python files
+nosetests --with-progressive    # Run test scripts
 ```
 
 ## Organization / Structure
 
 ```bash
 .
+├── .travis.yml      # Configurations for Travis-CI continuous integration
 ├── app              # All code related to the running of the app
-│   ├── forms        # Flask-WTForms models, used for generating forms in HTML
-│   │                #     and validating input
+│   ├── forms        # Flask-WTForms models, used for generating forms in 
+│   │                #     HTML and validating input
 │   ├── lib          # Misc helpers, tasks, and modular libraries
 │   ├── models       # Mongoengine Models
 │   ├── routes       # All Flask routes, using Blueprints
-│   ├── static
+│   ├── static       # Static files.  Note: All files in here are public
 │   │   ├── css      # CSS
 │   │   │   ├── lib  # CSS libraries
 │   │   │   └── gen  # CSS generated from SCSS
 │   │   ├── img      # Images
-│   │   ├── js       # Javascript files
+│   │   ├── js       # JavaScript files
 │   │   └── scss     # Stylesheets
 │   ├── templates    # HTML templates
 │   └── __init__.py  # All app-wide setup.  Called by `run.py`
+├── authorize.py     # Used for authorizing the app with Google Calendar
 ├── config           # Configuration files
 ├── data             # Backup data
-├── authorize.py     # Used for authorizing the app with Google Calendar.
-├── manage.py        # Various scripts.  Run `python manage.py` to view usage.
+├── deploy.sh        # Run on our deployment server to deploy a new version
+├── develop.sh       # Used for non-Vagrant local Development
+├── Dockerfile       # Holds Docker configurations
+├── docs             # Eventum documentation, generated using Sphinx
+├── log              # Log Files
+├── manage.py        # Various scripts. Run `python manage.py` to view usage
 ├── run.py           # Runs the app!
 ├── script           # Scripts run by `manage.py` outside of the app
 ├── test             # Unit tests
-└── log              # Log Files
+└── Vagrantfile      # Configurations for Vagrant
 ```
 
+[adi]: https://adicu.com
+[adi-website-secrets]: https://github.com/adicu/secrets/raw/master/adi-website/config.zip
+[columbia]: http://www.columbia.edu
+[consul]: https://www.consul.io
+[consul-install]: https://www.consul.io/intro/getting-started/install.html
+[docker]: http://www.docker.com/
+[eventum]: https://github.com/danrschlosser/eventum
 [flask]: http://flask.pocoo.org/
 [flask-assets]: http://flask-assets.readthedocs.org/en/latest/
 [flask-mongoengine]: http://flask-mongoengine.readthedocs.org/en/latest/
@@ -177,3 +175,5 @@ nosetests
 [scss]: http://sass-lang.com/
 [virtualenv]: http://virtualenv.readthedocs.org/en/latest/
 [wtforms]: http://wtforms.readthedocs.org/en/latest/
+[vagrant]: https://www.vagrantup.com
+[vagrant-install]: https://www.vagrantup.com/downloads.html

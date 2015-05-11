@@ -7,8 +7,9 @@ import json
 config = {
     'HOST': 'localhost',
     'PORT': 5000,
-    'INSTALLED_APP_CLIENT_SECRET_PATH': 'client_secrets.json',
-    'INSTALLED_APP_CREDENTIALS_PATH': 'config/credentials.json',
+    'INSTALLED_APP_CLIENT_SECRET_PATH':
+        'config/installed_app_client_secrets.json',
+    'INSTALLED_APP_CREDENTIALS_PATH': 'config/installed_app_credentials.json',
     'CLIENT_SECRETS_PATH': 'config/client_secrets.json',
     'MONGO_DATABASE': 'eventum',
     'LOG_FILE_MAX_SIZE': '256',
