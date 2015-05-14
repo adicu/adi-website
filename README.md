@@ -20,9 +20,12 @@ Eventum can be run locally on your machine, or in a virtual environment, using [
 
 #### Using Vagrant 
 
-1.  Download the [ADI website secrets][adi-website-secrets] from GitHub. Unzip the folder, and copy its **contents** into the `config` directory. 
+1.  Generate secrets files:
+    - **ADI:** Download the [ADI website secrets][adi-website-secrets] from GitHub. Unzip the folder, and copy its **contents** into the `config` directory.  
+
+        > If the link gives a 404 error, ask someone within the ADI GitHub organization for access
     
-    > If the link gives a 404 error, ask someone within the ADI GitHub organization for access
+    - **non-ADI:** Copy `config/setup_consul_no_secrets.sh` to `config/setup_consul_dev.sh`, and fill in the four parameters that are set to empty strings.  Then, either setup Google Auth yourself, or [disable it](#disabling-google-auth).
 
 2. Install [Virtual box](https://www.virtualbox.org/wiki/Downloads).
 
@@ -32,9 +35,12 @@ Eventum can be run locally on your machine, or in a virtual environment, using [
 
 Eventum runs natively on Linux and OSX.  To get it up an running, follow these steps:
 
-1.  Download the [ADI website secrets][adi-website-secrets] from GitHub. Unzip the folder, and copy its **contents** into the `config` directory.  
+1.  Generate secrets files:
+    - **ADI:** Download the [ADI website secrets][adi-website-secrets] from GitHub. Unzip the folder, and copy its **contents** into the `config` directory.  
 
-    > If the link gives a 404 error, ask someone within the ADI GitHub organization for access
+        > If the link gives a 404 error, ask someone within the ADI GitHub organization for access
+    
+    - **non-ADI:** Copy `config/setup_consul_no_secrets.sh` to `config/setup_consul_dev.sh`, and fill in the four parameters that are set to empty strings.  Then, either setup Google Auth yourself, or [disable it](#disabling-google-auth).
     
 2.  Install [MongoDB][mongodb] ([Ubuntu Linux][mongodb-linux], [OSX][mongodb-osx]).
 
