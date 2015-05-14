@@ -14,6 +14,7 @@ from app.models import User, Whitelist
 from app.forms import CreateProfileForm
 from app.routes.base import MESSAGE_FLASH
 from apiclient.discovery import build
+from config.flask_config import config
 from flask import Blueprint, render_template, request, \
     flash, session, g, redirect, url_for
 from oauth2client.client import (FlowExchangeError,
@@ -77,8 +78,8 @@ def store_token():
 
     try:
         # Upgrade the authorization code into a credentials object
-        oauth_flow = flow_from_clientsecrets(
-            'config/client_secrets.json', scope='')
+        oauth_flow = flow_from_clientsecrets(config['CLIENT_SECRETS_PATH'],
+                                             scope='')
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
     except FlowExchangeError:
