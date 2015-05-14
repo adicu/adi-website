@@ -100,4 +100,6 @@ config['DELETE_FOLDER'] = path.join(config['BASEDIR'],
 # The file extensions that may be uploaded
 config['ALLOWED_UPLOAD_EXTENSIONS'] = set(['.png', '.jpg', '.jpeg', '.gif'])
 
+config['DEFAULT_PROFILE_PICTURE'] = 'img/default_profile_picture.jpg'
+
 config['DEVFEST_BANNER'] = False
