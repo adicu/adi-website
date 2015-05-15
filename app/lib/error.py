@@ -30,7 +30,7 @@ recurisve error subclasses of this error.
 
 In order to add a new error, simply add a new entry to the ERROR_DATA
 dictionary at the proper level of indentation.  Related errors should share
-common superclasses, and have similar ``error_code`` values.
+common baseclasses, and have similar ``error_code`` values.
 
 Example usage::
 
@@ -43,7 +43,7 @@ Example usage::
         # handle error...
 
 However, we can also except multiple errors by excepting their common
-superclass::
+baseclass::
 
 
     from app.lib.error import EventumError
@@ -61,8 +61,6 @@ superclass::
 """
 
 import re
-from new import classobj
-from app import app
 
 HTTP_OK = 200
 HTTP_BAD_REQUEST = 400
@@ -168,6 +166,9 @@ class EventumError(Exception):
         """Print the error type and plaintext message to the warning logs,
         as well as any other data associated with it.
         """
+        # Import app in the function body to avoid importing `None` when
+        # the module is first loaded.
+        from app import app
         message = '[{}]: {}'.format(self.error_type, self.message)
         app.logger.error(message)
         if self.data:
@@ -198,14 +199,24 @@ class EventumError(Exception):
         :returns: The formatted string.
         :rtype: str
         """
+        # Import app in the function body to avoid importing `None` when
+        # the module is first loaded.
+        from app import app
         n_subs = message.count('%s')
 
         # Extend subs if there aren't enough
         if n_subs > len(subs):
-            subs.extend([''] * (n_subs - len(subs)))
+            app.logger.warning(
+                '[{}._form_message]: {}'.format(self.error_type,
+                                                'Not enough subs provided'))
+            # extend tuple by appending a tuple of length (n_subs - len(subs))
+            subs = subs + (('',) * (n_subs - len(subs)))
 
         # Shorten subs if there are too many
         if len(subs) > n_subs:
+            app.logger.warning(
+                '[{}._form_message]: {}'.format(self.error_type,
+                                                'Too many subs provided'))
             subs = subs[:n_subs]
 
         # Perform substitutions
@@ -233,16 +244,24 @@ def _make_subclasses(error_data, baseclass):
 
     for e_type, e_attrs in error_data.iteritems():
         # Make the new class object
+        # `name` will be EventumError.<BaseClassName>.ClassName
         name = '{}.{}'.format(baseclass.__name__, e_type)
-        subclass = classobj(name, (baseclass,), {})
+        # We then create a class dynamically, using `type()`.
+        # Arguments are:
+        #    name: the name of the class
+        #    (baseclass,): a tuple of baseclasse
+        #    {}: a namespace of function definitions (we don't need any)
+        subclass = type(name, (baseclass,), {})
 
-        # Configure it's message, error_code, and http_status_code
-        subclass.message = e_attrs[0]
-        subclass.error_code = e_attrs[1]
-        subclass.http_status_code = e_attrs[2]
+        message, error_code, http_status_code, subclasses = e_attrs
+
+        # Configure its message, error_code, and http_status_code
+        subclass.message = message
+        subclass.error_code = error_code
+        subclass.http_status_code = http_status_code
 
         # Recursively generate subclasses
-        _make_subclasses(e_attrs[3], subclass)
+        _make_subclasses(subclasses, subclass)
 
         # Add this subclass as an attribute of the baseclass
         setattr(EventumError, e_type, subclass)
