@@ -7,8 +7,8 @@
 .. moduleauthor:: Dan Schlosser <dan@danrs.ch>
 
 This module is slightly complicated.  It contains three main components: the
-nested dictionary ``ERROR_DATA``, the class :class:`EventumError`, and the
-function :func:`_make_subclasses`.  The dictionary ``ERROR_DATA`` contains a
+nested dictionary ``_ERROR_DATA``, the class :class:`EventumError`, and the
+function :func:`_make_subclasses`.  The dictionary ``_ERROR_DATA`` contains a
 family tree of subclasses for :class:`EventumError`. Each key is an error name,
 and the value is a four-tuple of::
 
@@ -28,7 +28,7 @@ this error should it reach the user.
 The ``subclasses`` entry is a dictionary of similar structure, containing
 recurisve error subclasses of this error.
 
-In order to add a new error, simply add a new entry to the ERROR_DATA
+In order to add a new error, simply add a new entry to the _ERROR_DATA
 dictionary at the proper level of indentation.  Related errors should share
 common baseclasses, and have similar ``error_code`` values.
 
@@ -68,7 +68,7 @@ HTTP_INTERNAL_SERVER_ERROR = 500
 
 # Dictionary of:
 # {ErrorName: (message, error_code, http_status_code, error_subclasses)}
-ERROR_DATA = {
+_ERROR_DATA = {
 
     ###################################
     # 6XX: Google Calendar API Errors #
@@ -249,7 +249,7 @@ def _make_subclasses(error_data, baseclass):
         # We then create a class dynamically, using `type()`.
         # Arguments are:
         #    name: the name of the class
-        #    (baseclass,): a tuple of baseclasse
+        #    (baseclass,): a tuple of baseclasses
         #    {}: a namespace of function definitions (we don't need any)
         subclass = type(name, (baseclass,), {})
 
@@ -266,6 +266,6 @@ def _make_subclasses(error_data, baseclass):
         # Add this subclass as an attribute of the baseclass
         setattr(EventumError, e_type, subclass)
 
-# Start the recurisve generation of EventumError subclasses.  This code gets
+# Start the recursive generation of EventumError subclasses.  This code gets
 # run whenever the module is imported.
-_make_subclasses(ERROR_DATA, EventumError)
+_make_subclasses(_ERROR_DATA, EventumError)

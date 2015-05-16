@@ -5,7 +5,7 @@
 .. moduleauthor:: Dan Schlosser <dan@danrs.ch>
 """
 from test.base import TestingTemplate
-from app.lib.error import EventumError, ERROR_DATA
+from app.lib.error import EventumError, _ERROR_DATA
 
 
 class TestErrorMethods(TestingTemplate):
@@ -38,7 +38,7 @@ class TestErrorMethods(TestingTemplate):
         """
         err = EventumError.GCalAPI.NotFound.UpdateFellBackToCreate()
         message, error_code, http_status_code, _ = (
-            ERROR_DATA['GCalAPI'][3]['NotFound'][3]['UpdateFellBackToCreate']
+            _ERROR_DATA['GCalAPI'][3]['NotFound'][3]['UpdateFellBackToCreate']
         )
         self.assertEqual(err.message, message)
         self.assertEqual(err.error_code, error_code)
@@ -54,7 +54,6 @@ class TestErrorMethods(TestingTemplate):
          'Error at url `/home`: '),
         ('Error at url.', ('/home',),
          'Error at url.')
-
     ]
 
     def test_form_message(self):
