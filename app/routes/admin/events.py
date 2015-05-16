@@ -20,7 +20,7 @@ from app.forms import (CreateEventForm, EditEventForm, DeleteEventForm,
 from app.lib.decorators import login_required, requires_privilege
 from app.routes.base import ERROR_FLASH, MESSAGE_FLASH
 
-from app.lib.error import GoogleCalendarAPIError
+from app.lib.error import EventumError
 from app.lib.events import EventsHelper
 events = Blueprint('events', __name__)
 
@@ -134,7 +134,7 @@ def create():
     if form.validate_on_submit():
         try:
             EventsHelper.create_event(form, g.user)
-        except GoogleCalendarAPIError as e:
+        except EventumError.GCalAPI as e:
             flash(e.message, ERROR_FLASH)
 
         return redirect(url_for('.index'))
@@ -175,7 +175,7 @@ def edit(event_id):
     if form.validate_on_submit():
         try:
             EventsHelper.update_event(event, form)
-        except GoogleCalendarAPIError as e:
+        except EventumError.GCalAPI as e:
             flash(e.message, ERROR_FLASH)
 
         return redirect(url_for('.index'))
@@ -210,7 +210,7 @@ def delete(event_id):
         event = Event.objects().with_id(object_id)
         try:
             EventsHelper.delete_event(event, form)
-        except GoogleCalendarAPIError as e:
+        except EventumError.GCalAPI as e:
             flash(e.message, ERROR_FLASH)
     else:
         flash('Invalid event id', ERROR_FLASH)

@@ -10,11 +10,7 @@ from app.models import Event
 from app.lib.google_calendar_resource_builder import (
     GoogleCalendarResourceBuilder)
 from app.lib.decorators import skip_and_return_if
-from app.lib.error import (GoogleCalendarAPIError,
-                           GoogleCalendarAPIMissingID,
-                           GoogleCalendarAPIBadStatusLine,
-                           GoogleCalendarAPIEventAlreadyDeleted,
-                           GoogleCalendarAPIErrorNotFound)
+from app.lib.error import EventumError
 
 from config.flask_config import config
 
@@ -91,8 +87,8 @@ class GoogleCalendarAPIClient():
         :param event: The event to create.
         :type event: :class:`Event`
 
-        :raises: :class:`GoogleCalendarAPIBadStatusLine`,
-            :class:`GoogleCalendarAPIErrorNotFound`
+        :raises: :class:`EventumError.GCalAPI.BadStatusLine`,
+            :class:`EventumError.GCalAPI.NotFound`
 
         :returns: The Google Calendar API response.
         :rtype: dict
@@ -135,9 +131,9 @@ class GoogleCalendarAPIClient():
             an exception in a series.  Otherwise, series' will be updated in
             their entirety.
 
-        :raises: :class:`GoogleCalendarAPIBadStatusLine`,
-            :class:`GoogleCalendarAPIErrorNotFound`,
-            :class:`GoogleCalendarAPIMissingID`
+        :raises: :class:`EventumError.GCalAPI.BadStatusLine`,
+            :class:`EventumError.GCalAPI.NotFound`,
+            :class:`EventumError.GCalAPI.MissingID`
 
         :returns: The Google Calendar API response.
         :rtype: dict
@@ -152,8 +148,7 @@ class GoogleCalendarAPIClient():
             # ID, then create it fresh.  This raises still because it
             # *shouldn't* ever happen, but it does.
             self.create_event(stale_event)
-            raise GoogleCalendarAPIMissingID('Missing gplus_id. Successfully '
-                                             'fell back to create.')
+            raise EventumError.GCalAPI.MissingID.UpdateFellBackToCreate()
 
         resource = None
         resource = GoogleCalendarResourceBuilder.event_resource(
@@ -179,12 +174,9 @@ class GoogleCalendarAPIClient():
         # Send the request, falling back to update if it fails.
         try:
             updated_event = self._execute_request(request)
-        except GoogleCalendarAPIErrorNotFound as e:
+        except EventumError.GCalAPI.NotFound as e:
             self.create_event(event)
-            app.logger.warning(e.message)
-            message = ('Couldn\'t find event to update. '
-                       'Successfully fell back to create.')
-            raise GoogleCalendarAPIErrorNotFound(message)
+            raise EventumError.GCalAPI.NotFound.UpdateFellBackToCreate(e=e)
 
         # Update the Event with the latest info from the response.
         self._update_event_from_response(event, updated_event)
@@ -203,10 +195,10 @@ class GoogleCalendarAPIClient():
         :param stale_event: The event to publish
         :type event: :class:`Event`
 
-        :raises: :class:`GoogleCalendarAPIBadStatusLine`,
-            :class:`GoogleCalendarAPIErrorNotFound`,
-            :class:`GoogleCalendarAPIError`,
-            :class:`GoogleCalendarAPIMissingID`
+        :raises: :class:`EventumError.GCalAPI.BadStatusLine`,
+            :class:`EventumError.GCalAPI.NotFound`,
+            :class:`EventumError.GCalAPI.Error`,
+            :class:`EventumError.GCalAPI.MissingID`
 
         :returns: The Google Calendar API response.
         :rtype: dict
@@ -217,8 +209,7 @@ class GoogleCalendarAPIClient():
         event = Event.objects().get(id=stale_event.id)
 
         if not event.published:
-            raise GoogleCalendarAPIError('Event must have published as `True`'
-                                         ' before publishing')
+            raise EventumError.GCalAPI.PublishFailed.PublishedFalse()
 
         return self.move_event(event, from_id=self.private_calendar_id,
                                to_id=self.public_calendar_id)
@@ -234,10 +225,10 @@ class GoogleCalendarAPIClient():
         :param stale_event: The event to publish
         :type event: :class:`Event`
 
-        :raises: :class:`GoogleCalendarAPIBadStatusLine`,
-            :class:`GoogleCalendarAPIErrorNotFound`,
-            :class:`GoogleCalendarAPIError`,
-            :class:`GoogleCalendarAPIMissingID`
+        :raises: :class:`EventumError.GCalAPI.BadStatusLine`,
+            :class:`EventumError.GCalAPI.NotFound`,
+            :class:`EventumError.GCalAPI.Error`,
+            :class:`EventumError.GCalAPI.MissingID`
 
         :returns: The Google Calendar API response.
         :rtype: dict
@@ -248,8 +239,7 @@ class GoogleCalendarAPIClient():
         event = Event.objects().get(id=stale_event.id)
 
         if event.published:
-            raise GoogleCalendarAPIError('Event must have published as `False`'
-                                         ' before unpublishing')
+            raise EventumError.GCalAPI.PublishFailed.PublishedTrue()
 
         return self.move_event(event, from_id=self.public_calendar_id,
                                to_id=self.private_calendar_id)
@@ -263,14 +253,14 @@ class GoogleCalendarAPIClient():
         :param str from_id: Calendar Id to move the event from
         :param str to_id: Calendar ID to move the event to
 
-        :raises: :class:`GoogleCalendarAPIMissingID`,
-            :class:`GoogleCalendarAPIErrorNotFound`
+        :raises: :class:`EventumError.GCalAPI.MissingID`,
+            :class:`EventumError.GCalAPI.NotFound`
 
         :returns: The Google Calendar API response.
         :rtype: dict
         """
         if not event.gcal_id:
-            raise GoogleCalendarAPIMissingID()
+            raise EventumError.GCalAPI.MissingID()
 
         app.logger.info('[GOOGLE_CALENDAR]: Move Event')
         request = self.service.events().move(calendarId=from_id,
@@ -280,11 +270,9 @@ class GoogleCalendarAPIClient():
         # Execute the request
         try:
             return self._execute_request(request)
-        except GoogleCalendarAPIErrorNotFound as e:
+        except EventumError.GCalAPI.NotFound as e:
             self.create_event(event)
-            message = 'Move failed.  Successfully fell back to create.'
-            app.logger.warning('[GOOGLE_CALENDAR]: ' + message)
-            raise GoogleCalendarAPIErrorNotFound(message, uri=e.uri)
+            raise EventumError.GCalAPI.NotFound.MoveFellBackToCreate(uri=e.uri)
 
     @skip_and_return_if(not config['GOOGLE_AUTH_ENABLED'])
     def delete_event(self, event, as_exception=False):
@@ -297,9 +285,9 @@ class GoogleCalendarAPIClient():
             exception in a series.  Otherwise, series' will be deleted in their
             entirety.
 
-        :raises: :class:`GoogleCalendarAPIBadStatusLine`,
-            :class:`GoogleCalendarAPIErrorNotFound`,
-            :class:`GoogleCalendarAPIMissingID`
+        :raises: :class:`EventumError.GCalAPI.BadStatusLine`,
+            :class:`EventumError.GCalAPI.NotFound`,
+            :class:`EventumError.GCalAPI.MissingID`
 
         :returns: The Google Calendar API response.
         :rtype: dict
@@ -307,7 +295,7 @@ class GoogleCalendarAPIClient():
         self.before_request()
 
         if not event.gcal_id:
-            raise GoogleCalendarAPIMissingID()
+            raise EventumError.GCalAPI.MissingID()
 
         calendar_id = self._calendar_id_for_event(event)
 
@@ -331,10 +319,9 @@ class GoogleCalendarAPIClient():
         # deleted from Google Calendar.
         try:
             return self._execute_request(request)
-        except GoogleCalendarAPIErrorNotFound as e:
+        except EventumError.GCalAPI.NotFound as e:
             # If the resource has already been deleted, fail quietly.
-            app.logger.warning(e)
-            raise GoogleCalendarAPIEventAlreadyDeleted
+            raise EventumError.GCalAPI.EventAlreadyDeleted(e=e)
 
     def _instance_resource_for_event_in_series(self, event):
         """Searches through the instances of ``event``'s parent series,
@@ -385,8 +372,7 @@ class GoogleCalendarAPIClient():
         gcal_id = response.get('id')
         gcal_sequence = response.get('sequence')
         if gcal_id is None or gcal_sequence is None:
-            app.logger.error('Request failed. {}'.format(response))
-            raise GoogleCalendarAPIError('Request Failed.')
+            raise EventumError.GCalAPI(response=response)
 
         if event.is_recurring:
             event.parent_series.gcal_id = gcal_id
@@ -405,8 +391,8 @@ class GoogleCalendarAPIClient():
 
         :param request:  The Google Calendar API request object to execute.
 
-        :raises: :class:`GoogleCalendarAPIBadStatusLine`,
-            :class:`GoogleCalendarAPIErrorNotFound`
+        :raises: :class:`EventumError.GCalAPI.BadStatusLine`,
+            :class:`EventumError.GCalAPI.NotFound`
 
         :returns: The Google Calendar API response.
         :rtype: dict
@@ -414,15 +400,8 @@ class GoogleCalendarAPIClient():
         try:
             return request.execute()
         except httplib.BadStatusLine as e:
-            app.logger.warning('[GOOGLE_CALENDAR]: Got BadStatusLine. '
-                               'Retrying...')
-            try:
-                return request.execute()
-            except httplib.BadStatusLine as e:
-                app.logger.error('[GOOGLE_CALENDAR]: Got BadStatusLine again! '
-                                 'Raising.')
-                message = ('Line: {eline}, Message: {emessage}'
-                           .format(eline=e.line, emessage=e.message))
-                raise GoogleCalendarAPIBadStatusLine(message)
+            # Google Calendar returned a empty status line.
+            raise EventumError.GCalAPI.BadStatusLine(message=e.message,
+                                                     line=e.line)
         except HttpError as e:
-            raise GoogleCalendarAPIErrorNotFound(uri=e.uri)
+            raise EventumError.GCalAPI.NotFound(uri=e.uri)

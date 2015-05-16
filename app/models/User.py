@@ -119,7 +119,7 @@ class User(db.Document):
         if self.image:
             return self.image.url()
         if not self.image_url:
-            # import app in the function body to avoid importing `None` when
+            # Import app in the function body to avoid importing `None` when
             # the module is first loaded.
             from app import app
             return url_for('static',
