@@ -14,6 +14,7 @@ import markdown
 from datetime import datetime, timedelta
 now = datetime.now
 
+
 class Event(db.Document):
     """The object that represents an individual event in Mongoengine.
 
@@ -108,7 +109,9 @@ class Event(db.Document):
         :rtype: str
         """
         if self.is_recurring:
-            return url_for('client.recurring_event', slug=self.slug, index=self.index)
+            return url_for('client.recurring_event',
+                           slug=self.slug,
+                           index=self.index)
         return url_for('client.event', slug=self.slug)
 
     def image_url(self):
@@ -145,12 +148,16 @@ class Event(db.Document):
         self.date_modified = now()
 
         if self.short_description_markdown:
-            self.short_description = markdown.markdown(self.short_description_markdown,
-                                                       ['extra', 'smarty'])
+            self.short_description = markdown.markdown(
+                self.short_description_markdown,
+                ['extra', 'smarty']
+            )
 
         if self.long_description_markdown:
-            self.long_description = markdown.markdown(self.long_description_markdown,
-                                                      ['extra', 'smarty'])
+            self.long_description = markdown.markdown(
+                self.long_description_markdown,
+                ['extra', 'smarty']
+            )
 
         if (self.start_date and
                 self.end_date and
@@ -167,6 +174,7 @@ class Event(db.Document):
                                   "time. Got (%r,%r)" % (self.start_time,
                                                          self.end_time))
 
+    @property
     def start_datetime(self):
         """A convenience method to combine ``start_date`` and ``start_time``
         into one :class:`datetime`.
@@ -180,6 +188,7 @@ class Event(db.Document):
             return None
         return datetime.combine(self.start_date, self.start_time)
 
+    @property
     def end_datetime(self):
         """A convenience method to combine ``end_date`` and ``end_time``
         into one :class:`datetime`.
@@ -218,16 +227,14 @@ class Event(db.Document):
         :Returns: True if we are ready for publishing.
         :rtype: bool
         """
-        return all([
-            self.title,
-            self.creator,
-            self.location,
-            self.start_datetime(),
-            self.end_datetime(),
-            self.short_description,
-            self.long_description,
-            self.image
-            ])
+        return all([self.title,
+                    self.creator,
+                    self.location,
+                    self.start_datetime,
+                    self.end_datetime,
+                    self.short_description,
+                    self.long_description,
+                    self.image])
 
     def is_multiday(self):
         """Returns True if the event spans muliple days.
@@ -235,20 +242,25 @@ class Event(db.Document):
         :returns: True if the event spans multiple days.
         :rtype: bool
         """
+        if self.start_date is None or self.end_date is None:
+            return True
         if self.start_date == self.end_date:
             return False
-        if self.start_date == self.end_date - timedelta(days=1) and self.end_time.hour < 5:
+        if (self.start_date == self.end_date - timedelta(days=1) and
+                self.end_time.hour < 5):
             return False
         return True
 
     def human_readable_date(self):
         """Return the date of the event (presumed not multiday) formatted like:
-        ``"Sunday, Mar 31"``.
+        ``"Sunday, March 31"``.
 
         :returns: The formatted date.
         :rtype: str
         """
-        return self.start_date.strftime("%A, %b %d")
+        if not self.start_date:
+            return '??? ??/??'
+        return self.start_date.strftime("%A, %B %d").replace(' 0', ' ')
 
     def human_readable_time(self):
         """Return the time range of the event (presumed not multiday) formatted
@@ -257,22 +269,62 @@ class Event(db.Document):
         :returns: The formatted date.
         :rtype: str
         """
-        output = ''
-        if self.start_time.strftime("%p") == self.end_time.strftime("%p"):
-            format = "%I:%M-"
-        else:
-            format = "%I:%M%p-"
-        output += self.start_time.strftime(format).lstrip("0").lower()
-        output += self.end_time.strftime("%I:%M%p").lower().lstrip("0")
-        return output
+        return '{}-{}'.format(self._human_readable_start_time(),
+                              self._human_readable_end_time())
+
+    def _human_readable_start_time(self):
+        """Format start time as one of these four formats:
+
+        1. ``"3:30am"``
+        2. ``"3pm"``
+        2. ``"3:30"``
+        2. ``"3"``
+
+        depending on whether or not the start time is on an even hour, and
+        whether or not the end time and start time will share the pm/am string.
+
+        :returns: The formatted date.
+        :rtype: str
+        """
+        if self.start_time is None:
+            return '??:??'
+
+        am_pm = '%p'
+        if self._start_and_end_time_share_am_or_pm():
+            am_pm = ''   # Omit am/pm if it will appear in the end time.
+
+        time = '%I:%M'
+        if self.start_time.minute == 0:
+            time = '%I'  # Omit minutes if the time is on the hour.
+
+        format = time + am_pm
+        return self.start_time.strftime(format).lstrip('0').lower()
+
+    def _human_readable_end_time(self):
+        """Format end time as one of these two formats:
+
+        1. ``"3:30am"``
+        2. ``"3pm"``
+
+        depending on whether or not the end time is on an even hour
+
+        :returns: The formatted date.
+        :rtype: str
+        """
+        if self.end_time is None:
+            return '??:??'
+        format = '%I:%M%p'
+        if self.end_time.minute == 0:
+            format = '%I%p'
+        return self.end_time.strftime(format).lstrip('0').lower()
 
     def human_readable_datetime(self):
         """Format the start and end date date in one of the following three
         formats:
 
         1. ``"Sunday, March 31 11pm - Monday, April 1 3am"``
-        2. ``"Sunday, March 31 11am - 2:15pm"``
-        3. ``"Sunday, March 31 3 - 7:30pm"``
+        2. ``"Sunday, March 31 11am-2:15pm"``
+        3. ``"Sunday, March 31 3-7:30pm"``
 
         Depending on whether or not the start / end times / dates are the same.
         All unkown values will be replaced by question marks.
@@ -280,36 +332,42 @@ class Event(db.Document):
         :returns: The formatted date.
         :rtype: str
         """
-        output = ""
         if self.start_date:
-            output += self.start_date.strftime("%A, %B %d ") \
-                .replace(" 0", " ").replace("/0", "/")
+            start_date = (self.start_date.strftime('%A, %B %d ')
+                          .replace(' 0', ' '))
         else:
-            output += "???, ??/?? "
+            start_date = '???, ??/?? '
 
         # Check times against None, because midnight is represented by 0.
         if self.start_time is not None:
-            if self._start_and_end_time_share_am_or_pm():
-                start_format = "%I:%M-"
-            else:
-                start_format = "%I:%M%p-"
-            output += self.start_time.strftime(start_format).lstrip("0").lower()
+            start_time = self._human_readable_start_time()
         else:
-            output += "??:?? - "
+            start_time = '??:??'
 
         if self.end_date:
-            if self.start_date and self.start_date != self.end_date:
-                output += self.end_date.strftime("%A, %B %d ") \
-                    .replace(" 0", " ").replace("/0", "/")
+            if not self.start_date or self.start_date != self.end_date:
+                end_date = (self.end_date.strftime('%A, %B %d ')
+                            .replace(' 0', ' '))
+            else:
+                end_date = ''
         else:
-            output += "???, ??/?? "
+            end_date = '???, ??/?? '
 
         # Check times against None, because midnight is represented by 0.
         if self.end_time is not None:
-            output += self.end_time.strftime("%I:%M%p").lower().lstrip("0")
+            end_time = self._human_readable_end_time()
         else:
-            output += "??:??"
-        return output
+            end_time = '??:??'
+
+        separator = ' - '
+        if not end_date:
+            separator = '-'
+
+        return '{}{}{}{}{}'.format(start_date,
+                                   start_time,
+                                   separator,
+                                   end_date,
+                                   end_time)
 
     def _start_and_end_time_share_am_or_pm(self):
         """Returns True if the start and end times for an event are both pm or
@@ -322,7 +380,25 @@ class Event(db.Document):
         # Check times against None, because midnight is represented by 0.
         return (self.start_time is not None and
                 self.end_time is not None and
-                self.start_time.strftime("%p")==self.end_time.strftime("%p"))
+                not self.is_multiday() and
+                self.start_time.strftime("%p") == self.end_time.strftime("%p"))
+
+    def to_jsonifiable(self):
+        """
+        Returns a jsonifiable dictionary of event attributes to values. The
+        dictionary only contains attributes whose types are jsonifiable.
+
+        :returns: A jsonifiable dictionary of event attributes to values.
+        :rtype: dict
+        """
+
+        attrs = ['date_created', 'date_modified', 'title', 'location', 'slug',
+                 'start_datetime', 'end_datetime', 'short_description',
+                 'long_description', 'short_description_markdown',
+                 'long_description_markdown', 'published', 'date_published',
+                 'is_recurring', 'facebook_url']
+
+        return dict(zip(list(attrs), [getattr(self, attr) for attr in attrs]))
 
     def __unicode__(self):
         """This event, as a unicode string.
@@ -340,5 +416,5 @@ class Event(db.Document):
         """
         return 'Event(title=%r, location=%r, creator=%r, start=%r, end=%r, ' \
             'published=%r)' % (self.title, self.location, self.creator,
-                             self.start_datetime(), self.end_datetime(),
-                             self.published)
+                               self.start_datetime, self.end_datetime,
+                               self.published)

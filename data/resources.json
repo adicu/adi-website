@@ -121,6 +121,12 @@
           "url": "https://docs.google.com/presentation/d/1-3ctZ2obbnF09CBcc2Q70cSUrwk08HT7zDGHSG3qqR8/edit?usp=sharing",
           "description": "Written and developed by Gilad Penn, covering syntax, Document Object Model manipulation, and a bit of jQuery.",
           "adi": true
+        },
+        {
+          "name": "Advanced Javascript",
+          "url": "https://github.com/freeslugs/advanced-js-talk/",
+          "description": "Written and developed by Gilad Penn, covering asynchronous javascript, callbacks, and promises.",
+          "adi": true
         }
       ]
     },
@@ -153,6 +159,12 @@
           "name": "Try jQuery",
           "url": "http://try.jquery.com",
           "description": "A combination of videos, interactive console challenges, and writing code in the browser. You'll need about 3 hours of time to make it through everything."
+        },
+        {
+          "name": "Build Modern Websites",
+          "url": "http://learn.adicu.com/websites",
+          "description": "Learn to make parallax scrolling websites with a modern feel.  Requires some knowledge of jQuery.",
+          "adi": true
         }
       ]
     },

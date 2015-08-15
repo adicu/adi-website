@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block title %}Write a Blog Post{% endblock %}
-{% block pagetitle %}Edit Post{% endblock %}
+{% block pagetitle %}<span class="no-mobile">Edit Post</span>{% endblock %}
 {% block pagelink %}{{ url_for('posts.index') }}{% endblock %}
 {% set active_page="Blog" %}
 
@@ -31,14 +31,16 @@
 {% endblock %}
 
 {% block barright %}
-<a class="text-button" href="#save">Save Draft</a>
-{% if user.can("publish") %}
-{% if post and post.published %}
-{{ macros.toggle("Publish", "Unpublish")}}
-{% else %}
-{{ macros.toggle("Publish", "Unpublish", start_on=False)}}
-{% endif %}
-{% endif %}
+<span class="edit-post-barright">
+    <a class="text-button" href="#save">Save Draft</a>
+    {% if user.can("publish") %}
+        {% if post and post.published %}
+            {{ macros.toggle("Publish", "Unpublish")}}
+        {% else %}
+            {{ macros.toggle("Publish", "Unpublish", start_on=False)}}
+        {% endif %}
+    {% endif %}
+</span>
 {% endblock %}
 
 {% block main %}
@@ -100,15 +102,23 @@
         <h6 class="permalink-title">Tags:</h6>
         <input id="tag-field" type="text">
         <ul class="tag-list">
-            {% for tag in tags %}
-            <li class="tag" data-tag="{{tag}}">{{tag}}  <a href="#remove-tag" data-tag="{{tag}}">x</a></li>
-            {% endfor %}
+            {% if post %}
+                {% for tag in post.post_tags %}
+                <li class="tag" data-tag="{{tag}}">{{tag}}  <a href="#remove-tag" data-tag="{{tag}}">x</a></li>
+                {% endfor %}
+            {% endif %}
         </ul>
+    </div>
+    <div>
+        <a class="preview-button" href="#preview-button">
+            <button type="button">Preview</button>
+        </a>
     </div>
 
     {{ macros.render_field(form.body, required="", placeholder="Body", hidden="hidden")}}
     {{ macros.render_field(form.images, hidden="hidden")}}
     {{ macros.render_field(form.featured_image, hidden="hidden")}}
+    {{ macros.render_field(form.preview, hidden="hidden")}}
     <div id="epiceditor"></div>
     <div class="image-help-text">
         <h3>Add Images</h3>

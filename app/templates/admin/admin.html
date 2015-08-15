@@ -35,9 +35,18 @@
 {% block body %}
 {% set active_page = active_page|default('Home') -%}
 <nav class="nav">
+    <div class="toggle">
+        <div class="ham">
+            <a href="#"><i class="fa fa-bars fa-2x"></i></a>
+        </div>
+        <div class="close">
+            <a href="#"><i class="fa fa-times fa-2x"></i></a>
+        </div>
+    </div>
+    </a>
     <ul>
         {% for href, label, icon, width in [
-            ('/admin/home',       'Home',      'home',        ''),
+            ('/admin/home',       'Home',      'home',        'home'),
             ('/admin/events',     'Events',    'calendar',    'w-6-5'),
             ('/admin/posts',      'Blog',      'quote-right', 'w-5'),
             ('/admin/users',      'Users',     'users',       'w-6'),
@@ -96,12 +105,12 @@
         {% endblock %}
 
         {% block flashes %}
-        {% with messages = get_flashed_messages() %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
             <div class="flashes">
-            {% for message in messages %}
+            {% for category, message in messages %}
                 <div class="flash-wrapper">
-                    <div class="flash">
+                    <div class="flash cat-{{ category }}">
                         <p>{{ message }}</p>
                         <a href="#dismiss-flash">
                             <i class="fa fa-times"></i>

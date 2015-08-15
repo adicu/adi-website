@@ -5,8 +5,8 @@ $pagination-height: 8rem;
 
 .pagination {
     @extends .clearfix;
-    margin-top: -2rem;
-    margin-bottom: 2rem;
+    margin-top: -1rem;
+    margin-bottom: -1rem;
     height: $pagination-height;
 
     a, a:hover {

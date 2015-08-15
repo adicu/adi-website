@@ -24,6 +24,7 @@ LONG_DESCRIPTION_PLACEHOLDER = ('Long Description.  This should be **four to '
 INVALID_SLUG = 'Post slug should only contain numbers, letters and dashes.'
 DATE_FORMAT = '%m/%d/%Y'
 
+
 class CreateEventForm(Form):
     """A form for the creation of a :class:`~app.models.Event` object.
 
@@ -71,10 +72,10 @@ class CreateEventForm(Form):
         the headline image.
     """
 
-    title = StringField('Title', 
+    title = StringField('Title',
                         [Required(message="Please provide an event title.")])
-    slug = StringField('Slug',[UniqueEvent(),
-                               Regexp(SLUG_REGEX, message=INVALID_SLUG)])
+    slug = StringField('Slug', [UniqueEvent(),
+                                Regexp(SLUG_REGEX, message=INVALID_SLUG)])
     location = StringField('Location')
     start_date = DateField('Start date', [Optional()], format=DATE_FORMAT)
     start_time = TimeField('Start time', [Optional()])
@@ -84,7 +85,7 @@ class CreateEventForm(Form):
     frequency = SelectField('Repeats', choices=[('weekly', 'Weekly')],
                             default="weekly")
     every = IntegerField('Every', [NumberRange(min=1, max=30)], default=1)
-    ends = RadioField('Ends', choices=[("after", "After"),("on", "On")],
+    ends = RadioField('Ends', choices=[("after", "After"), ("on", "On")],
                       default="after")
     num_occurrences = IntegerField('Every', [NumberRange(min=1)], default=1)
     recurrence_end_date = DateField('Repeat End Date', [Optional()],
@@ -98,21 +99,21 @@ class CreateEventForm(Form):
     facebook_url = StringField('Facebook  URL', [Optional(), URL()])
     event_image = StringField('Image', [image_with_same_name])
 
-    def post_validate(form, validation_stopped):
+    def post_validate(self, validation_stopped):
         """Make sure that the start datetime comes before the end datetime.
 
 
-        :param form: The form to validate
-        :type form: :class:`Form`
+        :param self: The form to validate
+        :type self: :class:`Form`
         :param bool validation_stopped: True if any validator raised
             :class:`~wtforms.validators.StopValidation`.
         :raises: :class:`wtforms.validators.ValidationError`
         """
         if not validation_stopped:
-            start_date = form.start_date.data
-            start_time = form.start_time.data
-            end_date = form.end_date.data
-            end_time = form.end_time.data
+            start_date = self.start_date.data
+            start_time = self.start_time.data
+            end_date = self.end_date.data
+            end_time = self.end_time.data
 
             # Start and end dates should be in order.
             if start_date and end_date and start_date > end_date:

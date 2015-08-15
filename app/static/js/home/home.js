@@ -13,24 +13,55 @@ $(function() {
         }, 200  );
     });
 
+    // Email regex
+    var pattern = new RegExp(/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i);
+    $('footer form input[type="email"]').keyup(function() {
+        if (pattern.test($(this).val())) {
+            $('footer form').addClass('valid');
+        } else {
+            $('footer form').removeClass('valid');
+        }
+    });
 
-    var $image = $('.hero i');
+
+
     var md = new MobileDetect(window.navigator.userAgent);
-    var $devfestbanner = $('.devfest-banner');
-    var $nav = $('nav');
-    var $hero = $('.hero');
     if (md.mobile() == null) {
-        $(window).scroll(function(e){
+        var scroll_factor = 0.333333; // Image moves 1/3 as fast as body
+        var $image = $('.hero i');
+        var $devfestbanner = $('.devfest-banner');
+        var $nav = $('nav');
+        var $hero = $('.hero');
+
+        var translateY = function(y) {
+            return 'translate3d(0px, -' + y + 'px, 0px)'
+        }
+
+        var scrollHandler = function() {
             var scrolled = $(window).scrollTop();
-            console.log(scrolled);
-            $image.css('transform','translateY(' + (scrolled/2) + 'px)');
+            var scrolled = Math.min(scrolled, $image.height());
+            $image.css({
+                'transform': translateY(scrolled * scroll_factor),
+                '-o-transform': translateY(scrolled * scroll_factor),
+                '-moz-transform': translateY(scrolled * scroll_factor),
+                '-webkit-transform': translateY(scrolled * scroll_factor)
+            });
+
             if ($devfestbanner !== undefined) {
                 if (scrolled > $hero.height()) {
                     $devfestbanner.addClass('up');
-                } else if (scrolled  <= 0) {
+                } else if (scrolled <= 0) {
                     $devfestbanner.removeClass('up');
                 }
             }
+        }
+
+        $(window).on('scroll', function() {
+           window.requestAnimationFrame(scrollHandler);
         });
+        $(window).on('resize', function() {
+            window.requestAnimationFrame(scrollHandler);
+        })
+        window.requestAnimationFrame(scrollHandler);
     }
 });

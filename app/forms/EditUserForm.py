@@ -11,6 +11,7 @@ from wtforms.validators import Required, Email
 
 EMAIL_ERROR = 'Please provide a valid email address.'
 
+
 class EditUserForm(Form):
     """A form for editing a :class:`~app.models.User`.
 
@@ -23,12 +24,12 @@ class EditUserForm(Form):
     """
     name = StringField('Full Name', [Required("Please type a name")])
     email = StringField('Email Address',
-                      [Email(message=EMAIL_ERROR),
-                       Required(message=EMAIL_ERROR)])
+                        [Email(message=EMAIL_ERROR),
+                         Required(message=EMAIL_ERROR)])
     image_url = StringField('Image URL')
     user_type = RadioField('User Type',
                            [Required(message="Please select a user type.")],
-                           choices=[('editor', "Editor"),
-                                    ('publisher', "Publisher"),
-                                    ('admin', "Admin"),
-                                    ("fake_user", "Fake User")])
+                           choices=[('editor', 'Editor'),
+                                    ('publisher', 'Publisher'),
+                                    ('admin', 'Admin'),
+                                    ('fake_user', 'Guest Writer')])

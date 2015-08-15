@@ -6,13 +6,14 @@
 """
 import re
 from datetime import datetime
-
+from operator import itemgetter
 from flask import url_for
 
 from app.models import Post
 from app.lib.text import truncate_html
 
 now = datetime.now
+
 
 class BlogPost(Post):
     """An subclass of :class:`Post` that provides methods specific to blog
@@ -53,6 +54,31 @@ class BlogPost(Post):
         """
         return url_for('blog.post', slug=self.slug)
 
+    def get_related_posts(self):
+        """Get blog posts that share tags with this blog post.
+
+        :returns: list of related posts
+        :rtype: list
+
+        """
+        related_posts = {}
+        for tag in self.post_tags:
+            for obj in BlogPost.objects(post_tags=tag,
+                                        published=True,
+                                        id__ne=self.id,
+                                        featured_image__ne=None):
+                if obj not in related_posts:
+                    related_posts[obj] = 1
+                else:
+                    related_posts[obj] += 1
+
+        sorted_posts = [x[0] for x in sorted(related_posts.items(),
+                                             key=itemgetter(1),
+                                             reverse=True)]  # sort posts by
+        # number of common tags
+
+        return sorted_posts
+
     def human_readable_date(self):
         """Retuns the date this post was published, formatted like Oct 08, 2014.
 
@@ -76,6 +102,7 @@ class BlogPost(Post):
         self.published = True
         self.date_published = now()
         self.save()
+
     def unpublish(self):
         self.published = False
         self.date_published = None

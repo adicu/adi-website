@@ -48,4 +48,12 @@
     .btn-choose {
         margin-right: 1rem;
     }
+    .error-message{
+        display: none;
+        background-color: $red;
+        color: $white;
+        height: 1.5rem;
+        padding-top: 0.25rem;
+        padding-left: 0.25rem;
+    }
 }

@@ -10,6 +10,7 @@ from datetime import datetime
 from app.models.User import USER_TYPE_REGEX
 now = datetime.now
 
+
 class Whitelist(db.Document):
     """A database model to hold an entry on the Whitelist.
 
@@ -35,7 +36,7 @@ class Whitelist(db.Document):
     redeemed = db.BooleanField(required=True, default=False)
 
     # MongoEngine ORM metadata
-    meta = { 'indexes': ['email'] }
+    meta = {'indexes': ['email']}
 
     def clean(self):
         """Called by Mongoengine on every ``.save()`` to the object.
@@ -50,7 +51,11 @@ class Whitelist(db.Document):
         :returns: The entry's details.
         :rtype: str
         """
-        return 'Whitelist(email=%r, user_type=%r, redeemed=%r)' % (self.email, self.user_type, self.redeemed)
+        return 'Whitelist(email={}, user_type={}, redeemed={})'.fomrat(
+            self.email,
+            self.user_type,
+            self.redeemed
+        )
 
     def __unicode__(self):
         """This Whitelist entry, as a unicode string.

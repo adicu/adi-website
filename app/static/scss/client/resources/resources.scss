@@ -84,8 +84,13 @@ section.with-sidebar {
 }
 
 .sidebar-wrapper {
+    width: 100%;
+    display: block;
+    padding: 0;
+}
+.sidebar-wrapper .full {
     position: relative;
-    margin:3rem auto 0;
+    margin: 0 auto;
     overflow-y: hidden;
     width: 100%;
     max-width: ($content-width + 2*$sidebar-width + 6rem) ;

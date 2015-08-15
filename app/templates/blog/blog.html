@@ -19,47 +19,49 @@
 {% endblock %}
 
 {% block main %}
-<section class="tagline">
-    <h1>Blog</h1>
-</section>
-<section class="card top-card">
-    <div class="content">
-        <div class="section-header">
-            <h4>Latest Posts</h4>
-            <span class="bar green"></span>
+<section>
+    <div class="card top-card">
+        <div class="content">
+            <h1 class="page-title">Blog</h1>
+            <div class="section-header">
+                <h4>Latest Posts</h4>
+                <span class="bar green"></span>
+            </div>
+            {% for post in posts[:5] %}
+            {{ macros.post(post) }}
+            {% endfor %}
         </div>
-        {% for post in posts[:5] %}
-        {{ macros.post(post) }}
-        {% endfor %}
     </div>
 </section>
-<section class="full yellow callout">
-    <div class="content">
-        <div class="callout-left">
-            <div class="section-header">
-                <h4>Interested in writing for the ADI Blog?</h4>
-                <span class="bar gray"></span>
+<section class="callout">
+    <div class="full yellow">
+        <div class="content">
+            <div class="callout-left">
+                <div class="section-header">
+                    <h4>Interested in writing for the ADI Blog?</h4>
+                    <span class="bar gray"></span>
+                </div>
+                <h3>Send your topic ideas to our blog team.</h3>
+                <h3>Once approved, we'll send you further steps!</h3>
+                <div class="button-group">
+                    <div class="button gray">
+                        <a href="mailto:blog@adicu.com?subject=Blog Topic Submission">
+                            blog@adicu.com
+                        </a>
+                    </div>
+                </div>
             </div>
-            <h3>Send your topic ideas to our blog team.</h3>
-            <h3>Once approved, we'll send you further steps!</h3>
-            <div class="button-group">
-                <div class="button gray">
-                    <a href="mailto:blog@adicu.com?subject=Blog Topic Submission">
-                        blog@adicu.com
+            <div class="callout-right">
+                <div class="card">
+                    <a href="{{ url_for('client.contact') }}">
+                        <i style="background-image:url({{ url_for('static', filename='img/hero/hello.jpg') }})"></i>
                     </a>
                 </div>
             </div>
         </div>
-        <div class="callout-right">
-            <div class="card">
-                <a href="{{ url_for('client.contact') }}">
-                    <i style="background-image:url({{ url_for('static', filename='img/hero/hello.jpg') }})"></i>
-                </a>
-            </div>
-        </div>
     </div>
 </section>
-<section class="card top-card">
+<section>
     <div class="content">
         {% for post in posts[5:] %}
         {{ macros.post(post) }}

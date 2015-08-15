@@ -5,14 +5,18 @@
 .. moduleauthor:: Dan Schlosser <dan@danrs.ch>
 """
 
+import PIL
+import re
+import os
 from flask import url_for
 from mongoengine import ValidationError, signals
 from app import db
-from config.flask_config import BASEDIR, RELATIVE_DELETE_FOLDER
+from config.flask_config import config
 from app.lib.regex import FULL_FILENAME_REGEX
 from datetime import datetime
-import PIL, re, os
 now = datetime.now
+
+VALID_PATHS = re.compile('^({}|http://|https://).*$'.format(config['BASEDIR']))
 
 
 class Image(db.Document):
@@ -69,18 +73,23 @@ class Image(db.Document):
 
         :raises: :class:`wtforms.validators.ValidationError`
         """
-        VALID_PATHS = re.compile("^(" + BASEDIR + "|http://|https://).*$")
+
         self.date_modified = now()
         if not VALID_PATHS.match(self.default_path):
-            self.default_path = os.path.join(BASEDIR, self.default_path)
-        if self.default_path and self.default_path not in self.versions.values():
+            self.default_path = os.path.join(config['BASEDIR'],
+                                             self.default_path)
+        if (self.default_path and
+                self.default_path not in self.versions.values()):
             try:
                 width, height = PIL.Image.open(self.default_path).size
-                self.versions['{width}x{height}'.format(width=width, height=height)] = self.default_path
+                version = '{width}x{height}'.format(width=width, height=height)
+                self.versions[version] = self.default_path
             except IOError:
-                raise ValidationError('File {} does not exist.'.format(self.default_path))
+                raise ValidationError(
+                    'File {} does not exist.'.format(self.default_path)
+                )
 
-    def pre_validate(form):
+    def pre_validate(self):
         """Called by Mongoengine before the validation occurs.
 
         Ensure that the versions dictionary contains keys of the form
@@ -89,25 +98,27 @@ class Image(db.Document):
 
         :raises: :class:`wtforms.validators.ValidationError`
         """
-        for size,path in form.versions:
+        for size, path in self.versions:
             try:
                 width, height = PIL.Image.open(path).size
-                if size != '{width}x{height}'.format(width=width, height=height):
-                    error = 'Key {size} improperly describes image {path}'.format(size=size, path=path)
+                if size != '{width}x{height}'.format(width=width,
+                                                     height=height):
+                    error = ('Key {size} improperly describes image '
+                             '{path}'.format(size=size, path=path))
                     raise ValidationError(error)
             except IOError:
-                error = 'File {} does not exist.'.format(form.default_path)
+                error = 'File {} does not exist.'.format(self.default_path)
                 raise ValidationError(error)
 
     @classmethod
-    def post_delete(klass, sender, document, **kwargs):
+    def post_delete(cls, sender, document, **kwargs):
         """Called by Mongoengine after the object has been delted.
 
         Moves the deleted image's assocaited files to the DELETED_FOLDER.
         """
         for size, old_path in document.versions.iteritems():
             _, filename = os.path.split(old_path)
-            delete_folder = RELATIVE_DELETE_FOLDER
+            delete_folder = config['RELATIVE_DELETE_FOLDER']
             if not os.path.isdir(delete_folder):
                 os.mkdir(delete_folder)
             new_path = os.path.join(delete_folder, filename)
@@ -130,8 +141,11 @@ class Image(db.Document):
         :returns: The image's details.
         :rtype: str
         """
-        rep = 'Photo(filename=%r, default_path=%r, caption=%r)' % \
-        (self.filename, self.default_path, self.caption)
+        rep = 'Photo(filename={}, default_path={}, caption={})'.format(
+            self.filename,
+            self.default_path,
+            self.caption
+        )
         return rep
 
 # Connects the ``post_delte`` method using the signals library.

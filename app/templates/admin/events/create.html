@@ -2,7 +2,7 @@
 {% import "macros.html" as macros %}
 
 {% block title %}Create a New Event{% endblock %}
-{% block pagetitle %}New Event{% endblock %}
+{% block pagetitle %}<span class="no-mobile">New Event</span>{% endblock %}
 {% block pagelink %}{{ url_for('events.index') }}{% endblock %}
 {% set active_page = "Events" %}
 
@@ -36,14 +36,19 @@
 {% endblock %}
 
 {% block barright %}
-<a class="text-button save-button" href="#save">Save Draft</a>
-{% if current_user.can("publish") %}
-    {% if event and event.published %}
-        {{ macros.toggle("Publish", "Unpublish")}}
-    {% else %}
-        {{ macros.toggle("Publish", "Unpublish", start_on=False)}}
+<div class="create-barright">
+    <a class="text-button save-button" href="#save">
+        <span class="no-mobile">Save Draft</span>
+        <span class="only-mobile">Save</span>
+    </a>
+    {% if current_user.can("publish") %}
+        {% if event and event.published %}
+            {{ macros.toggle("Publish", "Unpublish")}}
+        {% else %}
+            {{ macros.toggle("Publish", "Unpublish", start_on=False)}}
+        {% endif %}
     {% endif %}
-{% endif %}
+</div>
 {% endblock %}
 
 {% block main %}
@@ -95,16 +100,8 @@
 {% call macros.modal(modal="image") %}
 <h3>Add an Image</h3>
 {{ macros.upload_form(upload_form, uploaded_from=url_for('posts.new')) }}
-<ul class="image-grid clearfix">
-{% for image in images %}
-<li class="image" data-filename="{{ image.filename }}">
-    <a data-filename="{{ image.filename }}" data-url="{{ image.url() }}" href="#set-image">
-        <i style="background-image:url({{ image.url() }});"></i>
-        <div class="select"><i class="fa fa-plus fa-3x"></i></div>
-    </a>
-</li>
-{% endfor %}
-</ul>
+<div id='images-ajax-loadpoint'>
+</div>
 {% endcall %}
 {{ super() }}
 {% endblock %}
@@ -165,6 +162,12 @@
         </div>
     </div>
     <div class="event-image-and-descriptions">
+        <div class="descriptions">
+            <div id="epiceditor-short-description">
+            </div>
+            <div id="epiceditor-long-description">
+            </div>
+        </div>
         <div {% if event and event.image %}
              class="set-image event-image hidden"
              {% else %}
@@ -185,12 +188,6 @@
                 <i></i>
             </a>
         {% endif %}
-        </div>
-        <div class="descriptions">
-            <div id="epiceditor-short-description">
-            </div>
-            <div id="epiceditor-long-description">
-            </div>
         </div>
     </div>
     <div class="hidden">

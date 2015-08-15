@@ -8,6 +8,7 @@
 from app.models import User, Whitelist, Image
 from app.forms import AddToWhitelistForm, EditUserForm, UploadImageForm
 from app.lib.decorators import login_required, development_only
+from app.routes.base import MESSAGE_FLASH, ERROR_FLASH
 from apiclient.discovery import build
 from mongoengine import DoesNotExist
 from flask import Blueprint, render_template, request, \
@@ -17,6 +18,7 @@ from bson import ObjectId
 users = Blueprint('users', __name__)
 
 gplus_service = build('plus', 'v1')
+
 
 @users.route('/users', methods=['GET'])
 @login_required
@@ -40,6 +42,7 @@ def index():
                            images=Image.objects(),
                            current_user=g.user)
 
+
 @users.route('/users/me', methods=['GET'])
 @login_required
 def me():
@@ -50,6 +53,7 @@ def me():
     **Methods:** ``GET``
     """
     return redirect(url_for(".user", slug=g.user.slug))
+
 
 @users.route('/users/delete/<user_id>', methods=['POST'])
 @login_required
@@ -80,11 +84,12 @@ def delete(user_id):
 
     # Log out if a user is attempting to delete themselves
     if 'gplus_id' in session and user.gplus_id == session['gplus_id']:
-        flash('You deleted yourself successfully. Logging out.')
+        flash('You deleted yourself successfully. Logging out.', MESSAGE_FLASH)
         return redirect(url_for('.logout'), 303)
-    flash('User deleted successfully.')
+    flash('User deleted successfully.', MESSAGE_FLASH)
 
     return redirect(url_for('.index'), code=303)
+
 
 @users.route('/user/<slug>', methods=['GET', 'POST'])
 @login_required
@@ -98,7 +103,7 @@ def user(slug):
     try:
         user = User.objects().get(slug=slug)
     except DoesNotExist:
-        flash("Invalid user slug '{}'".format(slug))
+        flash("Invalid user slug '{}'".format(slug), ERROR_FLASH)
         return redirect(url_for('.index'))
 
     form = EditUserForm(request.form,
@@ -115,14 +120,15 @@ def user(slug):
             user.save()
             return redirect(url_for('.index'))
         else:
-            flash("Your Form had errors: {}".format(form.errors))
+            flash("Your Form had errors: {}".format(form.errors), ERROR_FLASH)
 
     return render_template('admin/users/user.html', user=user, form=form,
                            current_user=g.user)
 
-#============================================================
-# Development Only (quick and dirty ways to play with Users)
-#============================================================
+
+# ============================================================
+#  Development Only (quick and dirty ways to play with Users)
+# ============================================================
 @users.route('/become/<level>', methods=['GET'])
 @development_only
 @login_required
@@ -145,6 +151,7 @@ def become(level=0):
                    for k, v in admin_privileges.iteritems()))
     User.objects(gplus_id=session['gplus_id']).update(**db_dict)
     return redirect(url_for('.index'))
+
 
 @users.route('/super', methods=['GET'])
 @development_only

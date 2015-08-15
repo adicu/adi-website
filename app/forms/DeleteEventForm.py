@@ -8,6 +8,7 @@
 from flask.ext.wtf import Form
 from wtforms import BooleanField
 
+
 class DeleteEventForm(Form):
     """A form for deleting an event.
 

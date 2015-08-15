@@ -1,3 +1,4 @@
+# Folders
 /app/static/css/gen
 /app/static/img/uploaded/*
 !/app/static/img/uploaded/README.md
@@ -12,16 +13,23 @@ tmp
 /share
 *.pyc
 *.swp
-flask_config.py
+.Python
+.vagrant
+
+# Secrets / Authentication
 settings.dev
 settings.prod
+setup_consul_dev.sh
+setup_consul_prod.sh
+installed_app_client_secrets.json
+installed_app_credentials.json
 client_secrets.json
 credentials.json
+consul_data
+
+# SCSS
 .webassets-cache
-.lesshst
-.Python
 
 # Sphinx
 _build
 
-.vagrant

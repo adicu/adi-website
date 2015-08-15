@@ -2,7 +2,7 @@
 @import '../utils';
 
 $image-separation: 1.25rem;
-.triple {
+.triple, .double {
     width: 100%;
     &:after {
         @include clearfix;
@@ -12,9 +12,9 @@ $image-separation: 1.25rem;
     $small-image-height: 14.0625rem;
     .small {
         margin-top: 0;
+        margin-bottom: 0;
         float: left;
         display: inline-block;
-        width: 33.3333333%;
         position: relative;
 
         &:first-child > .inner {
@@ -40,7 +40,6 @@ $image-separation: 1.25rem;
             position: relative;
             left: 0;
             height: auto;
-            padding-bottom: 5rem;
             .details {
                 position: relative;
                 width: 100%;
@@ -52,15 +51,31 @@ $image-separation: 1.25rem;
             }
         }
     }
+    &:not(:last-child) {
+        .small .text {
+            padding-bottom: 5rem;
+        }
+    }
+}
+.triple .small {
+    width: 33.3333333%;
+}
+.double .small {
+    width: 50%;
 }
 
 @media screen and (max-width: $phone-max) {
-    .triple .small {
+    .triple .small, .double .small {
         width: 100%;
         padding: 0!important;
-        margin-bottom: 1rem;
         .text {
-            padding-bottom: 0;
+            padding-bottom: 2rem !important;
+        }
+        .inner {
+            padding: 0 !important;
+        }
+        &:not(:last-child) {
+            margin-bottom: 1rem;
         }
     }
 }

@@ -1,86 +1,105 @@
-from os import environ, path, pardir
-from sys import exit
+from os import path, pardir
 import json
+import requests
 
-try:
-    # basic flask settings
-    HOST = environ.get('HOST', '0.0.0.0')
-    PORT = int(environ.get('PORT', 5000))
-    SECRET_KEY = environ['SECRET_KEY']
-    DEBUG = True if environ['DEBUG'] == 'TRUE' else False
+# The Flask app configures itself from this dictionary
+# Values are initialized to default values, or `None`.
+config = {
 
-    # credentials that allow the app to modify calendars without using a
-    # without a user's login
-    INSTALLED_APP_SECRET_PATH = environ.get('INSTALLED_APP_CLIENT_SECRET_PATH',
-                                               'client_secrets.json')
-    # where the installed credentials are stored
-    INSTALLED_APP_CREDENTIALS_PATH = environ.get('INSTALLED_APP_CREDENTIALS_PATH',
-                                   'config/credentials.json')
+    # Flask configurations
+    'HOST': 'localhost',
+    'PORT': 5000,
+    'DEBUG': False,
+    'SECRET_KEY': None,
 
-    # Google Auth
-    # This is used for the webapp that allows Google+ login
-    GOOGLE_AUTH_ENABLED = True if environ['GOOGLE_AUTH_ENABLED'] == 'TRUE' \
-                            else False
-    CLIENT_SECRETS_PATH = environ.get('GOOGLE_AUTH_SECRETS',
-                                      'config/client_secrets.json')
-    # Setup Google Auth
-    if GOOGLE_AUTH_ENABLED:
-        try:
-            with open(CLIENT_SECRETS_PATH, 'r') as f:
-                _secrets_data = json.loads(f.read())['web']
-                GOOGLE_CLIENT_ID = _secrets_data['client_id']
-                if not _secrets_data.get('client_secret', None):
-                    print ('Google Auth config file, %s,'
-                           ' missing client secret', CLIENT_SECRETS_PATH)
-                    exit(1)
+    # Cross-site request forgery configurations
+    'CSRF_SESSION_KEY': None,
+    'CSRF_ENABLED': True,
 
-        except IOError:
-            print ("The Google client_secrets file was not found at"
-                   "'{}', check that it exists.".format(CLIENT_SECRETS_PATH))
-            exit(1)
+    # Google+, Google Auth, and Google Calendar configurations
+    'GOOGLE_AUTH_ENABLED': True,
+    'INSTALLED_APP_CLIENT_SECRET_PATH':
+        'config/installed_app_client_secrets.json',
+    'INSTALLED_APP_CREDENTIALS_PATH': 'config/installed_app_credentials.json',
+    'CLIENT_SECRETS_PATH': 'config/client_secrets.json',
+    'PRIVATE_CALENDAR_ID': None,
+    'PUBLIC_CALENDAR_ID': None,
 
-    # Cross-site request forgery settings
-    CSRF_ENABLED = True if environ['CSRF_ENABLED'] == 'TRUE' else False
-    CSRF_SESSION_KEY = environ['CSRF_SESSION_KEY']
+    # MongoDB configurations
+    'MONGO_DATABASE': 'eventum',
 
-    # Google Calendar credentials
-    PRIVATE_CALENDAR_ID = environ['PRIVATE_CALENDAR_ID']
-    PUBLIC_CALENDAR_ID =  environ['PUBLIC_CALENDAR_ID']
+    # Logging configurations
+    'LOG_FILE_MAX_SIZE': '256',
+    'APP_LOG_NAME': 'app.log',
+    'WERKZEUG_LOG_NAME': 'werkzeug.log',
+}
 
-    # Mongo configs
-    MONGODB_SETTINGS = {'DB': environ.get('MONGO_DATABASE', 'eventum')}
+from consul import Consul
+kv = Consul().kv  # initalize client to KV store
 
-    # Logging settings
-    LOG_FILE_MAX_SIZE = environ.get("LOG_FILE_MAX_SIZE")
-    APP_LOG_NAME = environ.get("APP_LOG_NAME")
-    WERKZEUG_LOG_NAME = environ.get("WERKZEUG_LOG_NAME")
+# get values from Consul and set the corresponding config variable to the
+# value retrieved from Consul.
+for key, value in config.iteritems():
+    try:
+        _, consul_value = kv.get("adi-website/{}".format(key.lower()))
+    except requests.ConnectionError:
+        raise Exception('Failed to connect to Consul.  You probably need to '
+                        'run: \n\n\t./config/run_consul.sh')
 
-except KeyError:
-    """ Throw an error if a setting is missing """
-    print ("Some of your settings aren't in the environment."
-    "You probably need to run:\n\n\tsource config/<your settings file>")
-    exit(1)
+    # We have a good value in Consul
+    if consul_value and consul_value.get('Value'):
+        config[key] = consul_value.get('Value')
+        continue
 
+    # We can use the default value if it's not None
+    if value is not None:
+        continue
+
+    # Fail if there is value cannot be found or it is an empty string
+    raise Exception(("No default value found in Consul for key "
+                     "adi-website/{}. You probably need to run: \n\n\t"
+                     "./config/setup_consul_<environment>.sh")
+                    .format(key))
+
+# Cast strings to appropiate types: int, bool, dictionary
+config['PORT'] = int(config['PORT'])
+config['DEBUG'] = (config['DEBUG'] == 'TRUE')
+config['GOOGLE_AUTH_ENABLED'] = (config['GOOGLE_AUTH_ENABLED'] == 'TRUE')
+config['CSRF_ENABLED'] = (config['CSRF_ENABLED'] == 'TRUE')
+config['MONGODB_SETTINGS'] = {'DB': config['MONGO_DATABASE']}
+
+# Setup Google Auth
+if config['GOOGLE_AUTH_ENABLED']:
+    try:
+        with open(config['CLIENT_SECRETS_PATH'], 'r') as f:
+            _secrets_data = json.loads(f.read())['web']
+            config['GOOGLE_CLIENT_ID'] = _secrets_data['client_id']
+            if not _secrets_data.get('client_secret', None):
+                raise Exception('Google Auth config file, {}, missing client '
+                                'secret'.format(config['CLIENT_SECRETS_PATH']))
+
+    except IOError:
+        raise Exception("The Google client_secrets file was not found at '{}',"
+                        " check that it exists.".format(
+                            config['CLIENT_SECRETS_PATH']))
 
 ############################################################################
 #  Constants in version control
 ############################################################################
 
 # Base directory
-BASEDIR = path.abspath(path.join(path.dirname(__file__), pardir))
+config['BASEDIR'] = path.abspath(path.join(path.dirname(__file__), pardir))
 
-RELATIVE_UPLOAD_FOLDER = 'app/static/img/uploaded/'
-UPLOAD_FOLDER = path.join(BASEDIR, RELATIVE_UPLOAD_FOLDER)
-RELATIVE_DELETE_FOLDER = 'app/static/img/uploaded/deleted/'
-DELETE_FOLDER = path.join(BASEDIR, RELATIVE_DELETE_FOLDER)
+config['RELATIVE_UPLOAD_FOLDER'] = 'app/static/img/uploaded/'
+config['UPLOAD_FOLDER'] = path.join(config['BASEDIR'],
+                                    config['RELATIVE_UPLOAD_FOLDER'])
+config['RELATIVE_DELETE_FOLDER'] = 'app/static/img/uploaded/deleted/'
+config['DELETE_FOLDER'] = path.join(config['BASEDIR'],
+                                    config['RELATIVE_DELETE_FOLDER'])
 
 # The file extensions that may be uploaded
-ALLOWED_UPLOAD_EXTENSIONS = set(['.txt',
-    '.pdf',
-    '.png',
-    '.jpg',
-    '.jpeg',
-    '.gif'
-])
+config['ALLOWED_UPLOAD_EXTENSIONS'] = set(['.png', '.jpg', '.jpeg', '.gif'])
 
-DEVFEST_BANNER = False
+config['DEFAULT_PROFILE_PICTURE'] = 'img/default_profile_picture.jpg'
+
+config['DEVFEST_BANNER'] = False
