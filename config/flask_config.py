@@ -41,7 +41,7 @@ kv = Consul().kv  # initalize client to KV store
 # value retrieved from Consul.
 for key, value in config.iteritems():
     try:
-        _, consul_value = kv.get("adi-website/{}".format(key.lower()))
+        _, consul_value = kv.get("adi-website/{}".format(key))
     except requests.ConnectionError:
         raise Exception('Failed to connect to Consul.  You probably need to '
                         'run: \n\n\t./config/run_consul.sh')
@@ -59,7 +59,7 @@ for key, value in config.iteritems():
     raise Exception(("No default value found in Consul for key "
                      "adi-website/{}. You probably need to run: \n\n\t"
                      "./config/setup_consul_<environment>.sh")
-                    .format(key.lower()))
+                    .format(key))
 
 # Cast strings to appropiate types: int, bool, dictionary
 config['PORT'] = int(config['PORT'])
