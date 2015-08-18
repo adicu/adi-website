@@ -23,7 +23,7 @@ config = {
     'INSTALLED_APP_CREDENTIALS_PATH': 'config/installed_app_credentials.json',
     'CLIENT_SECRETS_PATH': 'config/client_secrets.json',
     'PRIVATE_CALENDAR_ID': None,
-    'PUBLIC_CALENDAR_ID': None,
+    'PUBLIC_CALENDAR_ID': 'config/public_calendar_id',
 
     # MongoDB configurations
     'MONGO_DATABASE': 'eventum',
