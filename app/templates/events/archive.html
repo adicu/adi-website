@@ -4,11 +4,9 @@
 {% block header_image %}/static/img/hero/events.jpg{% endblock %}
 
 {% block main %}
-<section class="tagline">
-    <h1>Past Events</h1>
-</section>
 <section class="card top-card">
     <div class="content">
+        <h1 class="page-title">Past Events</h1>
         {% for event in events %}
             {{ macros.event(event) }}
         {% endfor %}
