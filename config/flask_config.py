@@ -59,7 +59,7 @@ for key, value in config.iteritems():
     raise Exception(("No default value found in Consul for key "
                      "adi-website/{}. You probably need to run: \n\n\t"
                      "./config/setup_consul_<environment>.sh")
-                    .format(key))
+                    .format(key.lower()))
 
 # Cast strings to appropiate types: int, bool, dictionary
 config['PORT'] = int(config['PORT'])
