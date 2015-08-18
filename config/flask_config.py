@@ -48,7 +48,7 @@ for key, value in config.iteritems():
 
     # We have a good value in Consul
     if consul_value and consul_value.get('Value'):
-        config[key] = consul_value.get('Value')
+        config[key.lower()] = consul_value.get('Value')
         continue
 
     # We can use the default value if it's not None
@@ -59,7 +59,7 @@ for key, value in config.iteritems():
     raise Exception(("No default value found in Consul for key "
                      "adi-website/{}. You probably need to run: \n\n\t"
                      "./config/setup_consul_<environment>.sh")
-                    .format(key))
+                    .format(key.lower()))
 
 # Cast strings to appropiate types: int, bool, dictionary
 config['PORT'] = int(config['PORT'])
