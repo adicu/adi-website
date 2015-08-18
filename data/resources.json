@@ -306,6 +306,11 @@
           "url": "http://learn.adicu.com/python/",
           "description": "Written and developed by ADI, this tutorial covers basics of programming in Python.",
           "adi": true
+        },
+        {
+          "name": "Udemy Beginners Guide to Python",
+          "url": "https://blog.udemy.com/python-tutorial/",
+          "description": "This is a guide developed for beginners by Udemy gives a short introduction to Python essentials and core concepts."
         }
       ]
     },
