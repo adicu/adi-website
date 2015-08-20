@@ -34,6 +34,11 @@
           "name": "Codecademy Web Fundamentals Track",
           "url": "http://www.codecademy.com/tracks/web",
           "description": "Interactive, online tutorial to learn to HTML and CSS. No experience necessary, and great for learning HTML and CSS together."
+        },
+        {
+          "name": "Udemy Learn the Foundations of HTML",
+          "url": "https://blog.udemy.com/learn-html-learn-the-foundations-of-html/",
+          "description": "This guide, developed for beginners, teaches you the foundations of HTML and what you can do with it."
         }
       ]
     },
@@ -192,6 +197,11 @@
           "name": "Flatstrap",
           "url": "http://flatstrap.org",
           "description": "Another flat version of Bootstrap. Looks similar, but with gradients and shadows gone. Also check out the \"flatstrap-sass\" and \"flatstrap-rails\" Ruby gems (easy to find on Google) for painless integraiton with Ruby on Rails (if you don't know what Rails is, disregard that last bit)."
+        },
+        {
+          "name": "Udemy Boostrap Guide For Beginners",
+          "url": "https://blog.udemy.com/bootstrap-tutorial-a-guide-for-beginners/",
+          "description": "This guide, developed by Udemy for complete beginners to Bootstrap, gives you a thorough introduction to its fundamental concepts."
         }
       ]
     },
@@ -310,7 +320,7 @@
         {
           "name": "Udemy Beginners Guide to Python",
           "url": "https://blog.udemy.com/python-tutorial/",
-          "description": "This is a guide developed for beginners by Udemy gives a short introduction to Python essentials and core concepts."
+          "description": "This, guide developed for beginners by Udemy, gives a short introduction to Python essentials and core concepts."
         }
       ]
     },
@@ -416,6 +426,11 @@
           "name": "Code School Rails for Zombies",
           "url": "https://www.codeschool.com/courses/rails-for-zombies-redux",
           "description": "Learn Ruby on Rails, an open-source framework for the Ruby programming language. Rails for Zombies will teach you all the Rails basics with a zombie flair."
+        },
+        {
+          "name": "Udemy Ruby on Rails Beginner Guide",
+          "url": "https://blog.udemy.com/ruby-on-rails-tutorial-learn-from-scratch/",
+          "description": "This guide, developed for beginners by Udemy, is a guide to Ruby on Rails essentials and core concepts and is designed to help you learn from scratch."
         }
       ]
     },
