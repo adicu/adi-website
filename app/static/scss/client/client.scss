@@ -181,7 +181,7 @@ $top-card-padding: 4rem 0 2.5rem;
         color: $white;
         margin: 1.5rem auto;
         position: absolute;
-        top: -14rem;
+        top: -12rem;
         width: 95%;
         z-index: 5;
         max-width: $content-width;
@@ -391,6 +391,10 @@ $large-hero-height: $hero-height + 7rem;
         width: 100%;
         max-width: 100%;
         border-radius: 0;
+    }
+    
+    h1.page-title{
+        top: -16rem !important;
     }
 
     .callout {
