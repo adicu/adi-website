@@ -5,18 +5,72 @@
 
 {% block main %}
 <section class="card top-card">
-   <div class="content">
-       <h1 class="page-title">ADI Labs</h1>
-       <div class="section-header">
-           <h4>About</h4>
-           <span class="bar green"></span>
-       </div>
-   </div>
-   <div class="content">
-        <h3>Learn software engineering by working on apps used by thousands of Columbia students! ADI Labs meets once a week for four hours to develop software intended to make life easier at Columbia.
+     <div class="content">
+         <h1 class="page-title">ADI Labs</h1>
+         <div class="section-header">
+             <h4>About</h4>
+             <span class="bar green"></span>
+         </div>
+     </div>
+     <div class="content">
+        <h3>ADI Labs is your opportunity to learn everything you can’t learn in class, from software engineering to UI/UX design to product management. At ADI Labs, you will build real projects like Density by ADI that you will ship. Along the way you’ll receive personalized mentorship from peers that have worked at Google, Facebook, Microsoft, LinkedIn, Coursera, and others. You’ll also join an awesome community of builders that love to bring ideas to life as well as have a good time doing so.
         </h3>
         <h3>As a member of Labs, you’ll learn to contribute to open source projects and to take your programming beyond problem sets. Paired with one of our student mentors, you’ll learn software engineering techniques used in industry.</h3>
-   </div>
+    </div>
+</section>
+<section>
+    <div class="content">
+         <div class="section-header">
+             <h4>How it Works</h4>
+             <span class="bar green"></span>
+         </div>
+         <h3>We meet every week for 4 hours to work on projects that we plan to release at the end of the semester. Each project receives a mentor that helps the team achieve what they want to achieve.</h3>
+    </div>
+</section>
+<section>
+    <div class="content">
+        <div class="section-header">
+            <h4>What We Offer</h4>
+            <span class="bar green"></span>
+        </div>
+        <div>
+            <h2>Thoughtful mentorship</h2>
+            <h3>What does good mentorship mean? To us, it means pushing you to learn what you didn’t think you could learn. It means supporting you when you are stuck trying to implement that tricky feature. It means making sure that you are doing what you want and learning exactly what you want. It means giving you the best resources out there for the problem you are trying to solve.</h3>
+        </div>
+        <br>
+        <div>
+            <h2>Learning by doing</h2>
+            <h3>What does good mentorship mean? To us, it means pushing you to learn what you didn’t think you could learn. It means supporting you when you are stuck trying to implement that tricky feature. It means making sure that you are doing what you want and learning exactly what you want. It means giving you the best resources out there for the problem you are trying to solve.</h3>
+        </div>
+        <br>
+        <div>
+            <h2>A community of driven people</h2>
+            <h3>What does good mentorship mean? To us, it means pushing you to learn what you didn’t think you could learn. It means supporting you when you are stuck trying to implement that tricky feature. It means making sure that you are doing what you want and learning exactly what you want. It means giving you the best resources out there for the problem you are trying to solve.</h3>
+        </div>
+    </div>
+</section>
+<section>
+    <div class="content">
+        <div class="section-header">
+            <h4>Who We Are Looking For</h4>
+            <span class="bar green"></span>
+            <h3>Below is a list of roles that are available at ADI Labs. If you’re interested in more than one, it is possible to have a hybrid role.</h3>
+        </div>
+        <div>
+            <h2>Developers</h2>
+            <h3>We are looking for people who are comfortable with the basics of programming. If you have not yet taken a programming course or have never programmed before, we recommend that you check out the other resources ADI has to offer first before applying to Labs. </h3>
+        </div>
+        <br>
+        <div>
+            <h2>Designers</h2>
+            <h3>If you’re interested in designing beautiful products and user experiences, ADI Labs is the perfect place for you. Bonus points for knowing how implement your designs in code!</h3>
+        </div>
+        <br>
+        <div>
+            <h2>Product managers</h2>
+            <h3>If you’ve ever been interested in what it means to actually manage a product, this is the perfect role for you. Product managers work with the developers to figure out what to build and figure out how to build the best product</h3>
+        </div>
+    </div>
 </section>
 <section>
     <div class="content projects">
@@ -24,7 +78,7 @@
             <h4>Projects</h4>
             <span class="bar green"></span>
         </div>
-        <h3>Open source projects built by Columbia students for Columbia students.</h3>
+        <h3>Check out some current and previous ADI Labs projects!</h3>
         <ul>
             {% for project in data.projects %}
             <div class="event large">
@@ -62,11 +116,13 @@
                     <h4>Apply</h4>
                     <span class="bar gray"></span>
                 </div>
-                <h3>Interested in taking your programming beyond problem sets?</h3>
-                <div class="button-group">
-                    <div class="button gray"><a target="_blank" href="https://bit.ly/ADILabsApp">Apply Now</a></div>
-                </div>
-                <p>Just getting started? <a href="/resources">Learn to Code</a></p>
+                <h3>Interested in building something awesome?</h3>
+                <h3>Check back soon for the application!</h3>
+                <!-- <div class="button-group"> -->
+                    <!-- <div class="button gray"><a target="_blank" href="https://bit.ly/ADILabsApp">Apply Now</a></div> -->
+                <!-- </div> -->
+                <p>Just getting started in terms of programming?</p> 
+                <p><a href="/resources">Learn to Code</a></p>
             </div>
             <div class="callout-right">
                 <div class="card">
@@ -84,8 +140,9 @@
            <h4>FAQ</h4>
            <span class="bar green"></span>
        </div>
+       <h3>Check back soon!</h3>
    </div>
-   <div class="content">
+<!--    <div class="content">
         <ul class="faqs">
             {% for faq in data.faqs %}
             {% if loop.index0 % 2 == 0 %}
@@ -100,6 +157,6 @@
             {% endif %}
             {% endfor %}
         </ul>
-   </div>
+   --> </div>
 </section>
 {% endblock main %}
