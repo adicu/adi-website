@@ -42,56 +42,36 @@
     ],
     "faqs": [
         {
-            "question": "What will I get out of ADI Labs?",
-            "answer": "Experienced developers will have the opportunity to mentor less experienced developers as well as perform architectural work on new projects. Less experienced developers will learn industry standard best practices and how to work in a large project."
-        },
-        {
-            "question": "What is the time commitment for ADI Labs? Will there be homework?",
-            "answer": "You’ll be expected to be at most of the four hour weekly sessions, and the more time you put into the projects the more you will get out of it.  We expect that you will be a part of ADI Labs for the whole semester, and you're welcome to continue in subsequent semesters."
-        },
-        {
-            "question": "Am I qualified enough to be a part of ADI Labs? Is it appropriate for me?",
-            "answer": "We think it will be most useful if you have some programming background. You’ll have the opportunity to learn more about the operations that go into launching software as well as monitoring it.  We also welcome experienced programmers that want to do more industry-style programming."
-        },
-        {
-            "question": "Is 1004, 1006 or 1007 sufficient?",
-            "answer": "If you’ve done prior web/mobile development outside of class or have had an internship in software engineering, you’re definitely qualified. If you haven’t, we suggest that you attend some <a href=\"http://adicu.com/events\">ADI Workshops</a> and learn basic web programming first. If you've done that, feel free to apply!"
-        },
-        {
-            "question": "Will I get course credit for this?  Is this something I can put on my resume?",
-            "answer": "While you can’t get course credit for this, companies love seeing big outside projects on your resume, so go ahead and talk about us!"
+            "question": "Am I qualified enough to be a part of ADI Labs?",
+            "answer": "If you’re planning on writing code during ADI Labs, you should be good if you’ve taken 1004, 1006 or 1007. Alternatively, if you have some programming experience from outside class, that should work too. If you’re proficient in a language like Java, Python, JavaScript or Objective-C, you should be fine. We will try to put you on a project that matches your skill level."
         },
         {
             "question": "Is ADI Labs the same as ADI Committee?",
-            "answer":"The ADI Committee organizes ADI events.  ADI Labs mentors and members may be a part of ADI Committee, but are not required to do so."
-        },
-        {
-            "question": "What are you looking for in the application?  Who will be admitted?",
-            "answer": "We’ll be bringing on people of all ability levels, not just the best programmers.  It’s most important that you’re willing to put in the time to participate."
-        },
-        {
-            "question": "What should I put down if I don't have any past projects? Are they mandatory?",
-            "answer": "Past projects are not mandatory, it’s just a way for us get a better idea of your experience level and what you might like to work on."
-        },
-        {
-            "question": "I don't know what GitHub is, or I don't have one.  Can I leave it blank?",
-            "answer": "Yes. We will teach you about Git and GitHub if you’re not familiar."
-        },
-        {
-            "question": "Is the admissions process rolling?",
-            "answer": "Yes, the application process is rolling. The dates serve as a guideline for when we’ll be done accepting applications."
-        },
-        {
-            "question": "Can I work on my own project?",
-            "answer": "Unfortunately not. The purpose of ADI Labs is to provide you with experience working on a project with others. This is easier to accomplish with projects that mentors are familar with."
-        },
-        {
-            "question": "Can I suggest a project?",
-            "answer": "Yes, we are always open to suggestions. We don't have the bandwidth to implement every idea we get, but we love getting new ideas!"
+            "answer": "Nope. ADI Labs is separate from ADI Committee but there are a ton of folks in both. Labs is hosted by ADI and its organizers are on the Committee. Labs is about you learning and building cool stuff whereas Committee organizes events for the student community. If you’re interested in joining Committee, sign up for the ADI Newsletter on <a href='https://adicu.com'>adicu.com</a>."
         },
         {
             "question": "When does ADI Labs meet?",
-            "answer": "For Spring 2015, we are meeting during 1:30-5:30pm on Fridays."
+            "answer": "Every Friday from 1-5 pm?"
+        },
+        {
+            "question": "Where is Labs located?",
+            "answer": "In the basement of the SIC House located at <a href='https://www.google.com/maps/place/619+W+113th+St,+New+York,+NY+10025/@40.8052344,-73.9537331,15z/data=!4m2!3m1!1s0x89c2f63be3e42e45:0xe4dd073599c635a'>619 West 113th Street</a>. You’ll need to be a CC or SEAS undergrad to access it. If you’re a Barnard, GS or graduate student, let us know and we’ll make provisions to sign you in."
+        },
+        {
+            "question": "I want to work on my own project. Can I do that?",
+            "answer": "Yes! ADI Labs is structured to help you achieve your goals and finish a real project. If you already have one in mind, let us know what your idea is in the application. Make sure to flesh out your idea and how you can accomplish it; the more detail the better! However, it is not guaranteed you will get to work on the project you propose."
+        },
+        {
+            "question": "I don’t program, but I’m interested in design, product management or marketing. Can I also get involved?",
+            "answer": "Yes!  When you apply, just indicate in which roles you’d see yourself.  We’ll work with you to place you on a team where you can be most effective!"
+        },
+        {
+            "question": "How much of a time commitment is Labs?",
+            "answer": "Labs is a serious time commitment, like taking an additional class. We expect members to spend 4 hours on Fridays working together in groups, but this is the bare minimum.  To get the most out of Labs, you should put in time outside allotted hours working."
+        },
+        {
+            "question": "I don’t have time to join Labs this semester. When can I join next?",
+            "answer": "That’s alright. ADI Labs holds applications on a semesterly basis. To stay up to date, you can sign up for the ADI Newsletter at <a href='https://adicu.com'>adicu.com</a>."
         }
     ]
 }
