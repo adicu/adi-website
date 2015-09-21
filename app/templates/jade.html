@@ -7,7 +7,7 @@
 {% block main %}
 <section class="card top-card">
    <div class="single content jobfair">
-       <h1 class="page-title">January Application Development Experience</h1>
+       <h1 class="page-title">JADE</h1>
        <div class="details">
             <div class="section-header">
                 <h4>Details</h4>
@@ -15,22 +15,17 @@
             </div>
             <p>
                 <i class="fa fa-calendar"></i><!-- Fix space on inline-block elements, do not remove
-             -->Sunday, October 11th
+             -->Sunday, January 10th to Friday, January 15th
             </p>
             <p>
                 <i class="fa fa-clock-o"></i><!-- Fix space on inline-block elements, do not remove
-             -->2:00-6:00pm
-            </p>
-            <p>
-                <i class="fa fa-map-marker"></i><!-- Fix space on inline-block elements, do not remove
-             --><span>Location TBA</span> <br />
-                <span>New York, NY</span>
+             -->
             </p>
         </div>
         <div class="text">
-            <p>Interested in getting a job or internship at a startup?  Join ADI at the 4th annual Startup Career Fair to meet some of the most exciting tech startups.</p>
-            <p>Bring your resumes!  Last year over 250 Columbia students met 20 tech startups and this year it's going to be even better.  Engineers will tell you about what it's like to work at a tech startup, and can even give you tips for how to interview and get a job!</p>
-            <p>Registration is will be open soon.</p>
+	    <p>Are you a first year student? Do you have some experience with computer programming? Want to learn more? 
+	    Apply to our winter break program January Application Development Experience (JADE). We are looking for 
+	    first years excited to learn more about technology. </p>  
         </div>
    </div>
 </section>
@@ -41,7 +36,12 @@
                 <h4>Register</h4>
                 <span class="bar gray"></span>
             </div>
-            <h3>Interested in attending? Registration for the 2015 Startup Career Fair opens soon!</h3>
+            <h3>Interested? Apply here!</h3>
+            <div class="button-group">
+                <div class="button gray">
+                    <a href="http://bit.ly/jade2016">Register Today</a>
+                </div>
+            </div>
             <!-- <div class="button-group">
                 <div class="button gray">
                     <a href="http://bit.ly/startupcareer2014">Register Today</a>
@@ -55,37 +55,6 @@
                 </a>
             </div>
         </div>
-    </div>
-</section>
-<section>
-    <div class="content companies">
-        <div class="section-header">
-            <h4>Companies</h4>
-            <span class="bar blue"></span>
-        </div>
-        <h3>Last year's attendees are below. We'll be confirming this year's companies shortly.</h3>
-        {% for triple in range(((companies|length) // 3) + 1) %}
-            <div class="triple">
-            {% for i in range(3) %}
-                {% with index = triple * 3 + i%}
-                {% if index < (companies | length) %}
-                    {% with company = companies[index] %}
-                    <div class="small company">
-                        <div class="inner">
-                            <div class="image-wrapper">
-                                <a href="{{ company.url }}">
-                                    <i style="background-image: url({{ url_for('static', filename= company.image) }});"></i>
-                                </a>
-                            </div>
-                            <p>{{ company.blurb }}</p>
-                        </div>
-                    </div>
-                    {% endwith %}
-                {% endif %}
-                {% endwith %}
-            {% endfor %}
-            </div>
-        {% endfor %}
     </div>
 </section>
 {% endblock %}
