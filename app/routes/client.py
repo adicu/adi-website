@@ -318,6 +318,7 @@ def _upcoming_events_triple(event):
                  .order_by('start_date')
                  .limit(ONE_TRIPLE))
 
+
 @client.route('/jade', methods=['GET'])
 def jade():
     return render_template('jade.html')
