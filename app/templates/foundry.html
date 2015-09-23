@@ -1,0 +1,55 @@
+{% extends "page.html" %}
+{% block title %}Foundry | {{ super() }}{% endblock %}
+
+{% block header_image %}/static/img/hero/events.jpg{% endblock %}
+
+{% block main %}
+<section class="card top-card">
+    <div class="content">
+        <h1 class="page-title">ADI Foundry</h1>
+        <div class="section-header">
+            <h4>About</h4>
+            <span class="bar blue"></span>
+        </div>
+    </div>
+    <div class="content">
+        <h3>ADI Foundry is an opportunity for you to give back to the community with your computer science skills. At Foundry, you'll be working on projects for civic tech organizations and get the opportunity to plan, write, and ship code for a client - an experience that you won't be able to find elsewhere at Columbia. At the end of the year, you'll get to see your code impact the lives of potentially thousands of Americans.
+    </div>
+</section>
+<section>
+    <div class="content">
+         <div class="section-header">
+             <h4>Who We Are Looking For</h4>
+             <span class="bar blue"></span>
+         </div>
+         <h3>We're looking for developers who have had prior experience in developing web or mobile apps. No knowledge of specific technologies is expected - we will be grouping applicants into teams based on similar skill sets and the needs of each project.</h3>
+         <h3>There may be roles for designers and product managers depending on the scope of the projects, so definitely still apply if you fall in this category!
+    </div>
+</section>
+<section class="callout">
+    <div class="full green">
+        <div class="content">
+            <div class="callout-left">
+                <div class="section-header">
+                    <h4>Apply</h4>
+                    <span class="bar gray"></span>
+                </div>
+                <h3>Applications are due by October 2nd, so apply soon!</h3>
+                <div class="button-group">
+                    <div class="button gray"><a target="_blank" href="http://bit.ly/adi-foundry-app">Apply Now</a></div>
+                </div>
+                <p>Just getting started in terms of programming?</p>
+                <p><a href="/resources">Learn to Code</a></p>
+            </div>
+            <div class="callout-right">
+                <div class="card">
+                    <a href="http://courses.adicu.com">
+                        <i style="background-image:url({{ url_for('static', filename='img/hero/contact.jpg') }})"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock main %}
