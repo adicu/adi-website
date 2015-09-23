@@ -89,6 +89,7 @@ def feedback():
     """
     return render_template('feedback.html')
 
+
 @client.route('/foundry', methods=['GET'])
 def foundry():
     '''View information about ADI foundry
@@ -98,6 +99,7 @@ def foundry():
     '''
 
     return render_template('foundry.html')
+
 
 @client.route('/jobfair', methods=['GET'])
 def jobfair():
