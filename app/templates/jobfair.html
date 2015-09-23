@@ -30,7 +30,7 @@
         <div class="text">
             <p>Interested in getting a job or internship at a startup?  Join ADI at the 4th annual Startup Career Fair to meet some of the most exciting tech startups.</p>
             <p>Bring your resumes!  Last year over 400 Columbia students met 20 tech startups and this year it's going to be even better.  Engineers will tell you about what it's like to work at a tech startup, and can even give you tips for how to interview and get a job!</p>
-            <p>Registration is will be open soon.</p>
+            <p>Registration is open now.</p>
         </div>
    </div>
 </section>
@@ -41,7 +41,7 @@
                 <h4>Register</h4>
                 <span class="bar gray"></span>
             </div>
-            <h3>Interested in attending? Registration for the 2015 Startup Career Fair opens soon!</h3>
+            <h3>Interested in attending? Registration for the 2015 Startup Career Fair below!</h3>
             <div class="button-group">
                 <div class="button gray">
                     <a href="http://bit.ly/startupcareerfair2015">Register Today</a>
@@ -63,7 +63,7 @@
             <h4>Companies</h4>
             <span class="bar blue"></span>
         </div>
-        <h3>Last year's attendees are below. We'll be confirming this year's companies shortly.</h3>
+        <h3>Here are the confirmed attendees of our 2015 fair! Click to read more about them. </h3>
         {% for triple in range(((companies|length) // 3) + 1) %}
             <div class="triple">
             {% for i in range(3) %}
@@ -73,11 +73,11 @@
                     <div class="small company">
                         <div class="inner">
                             <div class="image-wrapper">
-                                <a href="{{ company.url }}">
+                                <a target="_blank" href="{{ company.url }}">
                                     <i style="background-image: url({{ url_for('static', filename= company.image) }});"></i>
                                 </a>
                             </div>
-                            <p>{{ company.blurb }}</p>
+                            <!-- <p>{{ company.blurb }}</p> -->
                         </div>
                     </div>
                     {% endwith %}

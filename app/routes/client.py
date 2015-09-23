@@ -107,7 +107,7 @@ def _get_companies(force=False):
     global _companies
     if not _companies or force:
         with open(adi['COMPANIES_PATH']) as f:
-            _companies = json.loads(f.read()).get('companies')
+            _companies = json.loads(f.read()).get('2015')
     return _companies
 
 
