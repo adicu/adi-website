@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/adicu/adi-website.png?label=ready&title=Ready)](https://waffle.io/adicu/adi-website)
 # ADI Website ([adicu.com][adi])
 
 [![Build Status](https://travis-ci.org/adicu/adi-website.svg)](https://travis-ci.org/adicu/adi-website)
