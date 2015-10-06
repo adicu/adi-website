@@ -14,7 +14,7 @@ html, body {
     height: 100%;
 }
 
-p {
+p, .paragraph {
     margin-bottom: 0.3125rem;
     font-family: $slab;
     font-weight: $regular;
@@ -110,6 +110,38 @@ h6, .h6 {
     font-size: 0.875rem;
     line-height: 1rem;
     color: $gray;
+}
+
+table {
+    margin: 2rem auto 1rem;
+
+    &.blue {
+        thead {
+            background-color: $blue;
+        }
+    }
+
+    thead {
+        background-color: $gray;
+        tr th {
+            color: $white;
+            font-weight: $bold;
+        }
+    }
+
+    tbody, thead {
+        tr {
+            td, th {
+                padding: 1rem 1.5rem;
+                @extend .paragraph;
+                font-family: $sans;
+                text-align: left;
+            }
+            &:nth-child(even) {
+                background-color: $codebackground;
+            }
+        }
+    }
 }
 
 @media screen and (max-width: $xl-desktop-max) {
