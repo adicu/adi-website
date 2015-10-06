@@ -37,16 +37,16 @@ $content-padding: 0.625rem;
 
         i {
             position: absolute;
-            bottom: 0;
-            top: 0;
-            right: 0;
-            left: 0;
+            bottom: 1.5rem;
+            top: 1.5rem;
+            right: 3rem;
+            left: 3rem;
             background-position: center center;
             background-size: contain;
             background-repeat: no-repeat;
         }
 
-        
+
     }
 
 }
@@ -189,6 +189,10 @@ $top-card-padding: 4rem 0 2.5rem;
         z-index: 5;
         max-width: $content-width;
         text-align: center;
+    }
+
+    h2.subtitle {
+        margin: 0 0 2rem;
     }
 
     section {
@@ -395,7 +399,7 @@ $large-hero-height: $hero-height + 7rem;
         max-width: 100%;
         border-radius: 0;
     }
-    
+
     h1.page-title{
         top: -16rem !important;
     }
