@@ -122,6 +122,10 @@
             "image":"img/jobfair/etsy.png"
          },
          {
+            "url":"http://www.factual.com/",
+            "image":"img/jobfair/factual.png"
+         },
+         {
             "url":"http://www.foursquare.com/",
             "image":"img/jobfair/foursquare.png"
          },
@@ -138,8 +142,24 @@
             "image":"img/jobfair/mongodb.png"
          },
          {
+            "url":"https://www.omadahealth.com/",
+            "image":"img/jobfair/omadahealth.png"
+         },
+         {
+            "url":"https://www.seatserve.com/",
+            "image":"img/jobfair/seatserve.png"
+         },
+         {
             "url":"http://www.thesegovia.com/",
             "image":"img/jobfair/segovia.jpg"
+         },
+         {
+            "url":"https://www.thetake.com/",
+            "image":"img/jobfair/thetake.png"
+         },
+         {
+            "url":"https://www.textriley.com/",
+            "image":"img/jobfair/textriley.png"
          },
          {
             "url":"https://www.wework.com/",
