@@ -122,8 +122,20 @@
             "image":"img/jobfair/etsy.png"
          },
          {
+            "url":"http://www.foursquare.com/",
+            "image":"img/jobfair/foursquare.png"
+         },
+         {
+            "url":"http://www.insitevr.com/",
+            "image":"img/jobfair/insitevr.png"
+         },
+         {
             "url":"https://www.lyft.com/",
             "image":"img/jobfair/lyft.png"
+         },
+         {
+            "url":"https://www.mongodb.com/",
+            "image":"img/jobfair/mongodb.png"
          },
          {
             "url":"http://www.thesegovia.com/",
@@ -136,6 +148,10 @@
          {
             "url":"http://www.yext.com/",
             "image":"img/jobfair/yext.png"
+         },
+         {
+            "url":"http://www.zocdoc.com/",
+            "image":"img/jobfair/zocdoc.png"
          }
       ]
 }
