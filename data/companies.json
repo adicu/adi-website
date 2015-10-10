@@ -102,6 +102,10 @@
             "image":"img/jobfair/a16z.png"
          },
          {
+            "url":"http://www.classpass.com/",
+            "image":"img/jobfair/classpass.png"
+         },
+         {
             "url":"http://www.codecademy.com/",
             "image":"img/jobfair/codecademy.png"
          },
@@ -144,6 +148,10 @@
          {
             "url":"https://www.omadahealth.com/",
             "image":"img/jobfair/omadahealth.png"
+         },
+         {
+            "url":"http://www.redballoonsecurity.com/",
+            "image":"img/jobfair/redballoonsecurity.png"
          },
          {
             "url":"https://www.seatserve.com/",
