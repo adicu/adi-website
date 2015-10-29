@@ -132,6 +132,11 @@
           "url": "https://github.com/freeslugs/advanced-js-talk/",
           "description": "Written and developed by Gilad Penn, covering asynchronous javascript, callbacks, and promises.",
           "adi": true
+        },
+        {
+          "name": "Front-end Handbook",
+          "url": "https://frontendmasters.gitbooks.io/front-end-handbook/content/index.html",
+          "description": "Guide to learn about the practice of front-end development. It broadly outlines and discusses the practice of front-end engineering: how to learn it and what tools are used when practicing it"
         }
       ]
     },
