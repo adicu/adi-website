@@ -8,7 +8,7 @@
 
 import random
 from datetime import datetime, timedelta
-from app.models import BlogPost, Image
+from eventum.models import BlogPost, Image
 from mongoengine.queryset import DoesNotExist
 from lorem import LOREM_ADJECTIVES, LOREM_BLOG_POST
 

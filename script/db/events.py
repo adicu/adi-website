@@ -9,7 +9,7 @@
 import random
 from datetime import datetime, timedelta
 from mongoengine.queryset import DoesNotExist
-from app.models import Image, Event, EventSeries
+from eventum.models import Image, Event, EventSeries
 from lorem import LOREM_EVENT, LOREM_SNIPPET, LOREM_ADJECTIVES
 
 TIMEDELTAS = [timedelta(hours=4),   # upcoming

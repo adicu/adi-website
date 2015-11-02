@@ -5,7 +5,7 @@
 .. moduleauthor:: Dan Schlosser <dan@danrs.ch>
 """
 from test.base import TestingTemplate
-from app.lib.error import EventumError, _ERROR_DATA
+from eventum.lib.error import EventumError, _ERROR_DATA
 
 
 class TestErrorMethods(TestingTemplate):

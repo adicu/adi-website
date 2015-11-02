@@ -8,7 +8,7 @@
 
 import urllib
 from os.path import exists
-from app.models import Image
+from eventum.models import Image
 from config.flask_config import config
 
 BASE_URL = "http://lorempixel.com/{}/{}/"

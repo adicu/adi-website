@@ -1,4 +1,4 @@
-from app.models import Image, User
+from eventum.models import Image, User
 from config.flask_config import config
 from mongoengine import connect
 from mongoengine import ValidationError
