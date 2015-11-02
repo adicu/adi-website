@@ -5,7 +5,7 @@
 .. moduleauthor:: Dan Schlosser <dan@danrs.ch>
 """
 from test.base import TestingTemplate
-from app.lib.text import clean_markdown
+from eventum.lib.text import clean_markdown
 
 
 class TestTextHelpers(TestingTemplate):

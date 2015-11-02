@@ -10,7 +10,7 @@
 from mongoengine import connect
 from mongoengine.queryset import DoesNotExist
 from sys import argv, exit
-from app.models import User, Event, EventSeries, Image, BlogPost
+from eventum.models import User, Event, EventSeries, Image, BlogPost
 from script.cli import CLIColor, ProgressPrinter
 from config.flask_config import config
 from images import create_images

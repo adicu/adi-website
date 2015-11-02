@@ -46,14 +46,14 @@ class TestingTemplate(unittest.TestCase):
 
     def setUp(self):  # noqa
         """Before every test, make some example users."""
-        from app.models import User
+        from eventum.models import User
         for user_config in USERS.values():
             user = User(**user_config)
             user.save()
 
     def tearDown(self):  # noqa
         """After every test, delete users created in :func:`setUp`."""
-        from app.models import User
+        from eventum.models import User
         User.drop_collection()
 
     @classmethod
@@ -65,7 +65,7 @@ class TestingTemplate(unittest.TestCase):
             CSRF_ENABLED=False,
             WTF_CSRF_ENABLED=False
         )
-        from app.models import User
+        from eventum.models import User
         User.drop_collection()
 
     def request_with_role(self, path, method='GET', role='admin',

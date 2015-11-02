@@ -7,7 +7,7 @@
 
 from flask import Blueprint, render_template, abort, redirect, url_for
 
-from app.models import BlogPost, Tag
+from eventum.models import BlogPost, Tag
 
 blog = Blueprint('blog', __name__)
 

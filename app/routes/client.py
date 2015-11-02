@@ -8,7 +8,7 @@
 from app import adi
 import json
 from flask import Blueprint, render_template, abort, redirect, url_for, request
-from app.models import Event, BlogPost
+from eventum.models import Event, BlogPost
 from datetime import datetime, date, timedelta
 from mongoengine import Q
 
