@@ -1,5 +1,6 @@
 import logging
 from eventum.lib.google_calendar import GoogleCalendarAPIClient
+from eventum.lib.google_web_server_auth import set_web_server_client_id
 from eventum.config import eventum_config
 from flask.ext.mongoengine import MongoEngine
 
@@ -35,6 +36,9 @@ class Eventum(object):
 
         # Google Calendar API Client
         self.gcal_client = GoogleCalendarAPIClient()
+
+        # Google Web Server Application Setup
+        set_web_server_client_id()
 
         # Error handlers, before_request, after_request, context_processor, etc
         from eventum.routes.base import register_error_handlers
