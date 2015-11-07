@@ -43,7 +43,7 @@ def login():
     load_csrf_token_into_session()
     args_next = request.args.get('next')
     next = args_next if args_next else request.url_root
-    return render_template('admin/auth/login.html',
+    return render_template('auth/login.html',
                            client_id=app.config["GOOGLE_CLIENT_ID"],
                            state=session['state'],
                            # reauthorize=True,
@@ -176,7 +176,7 @@ def create_profile():
         # use code=303 to avoid POSTing to the next page.
         return redirect('/', code=303)
 
-    return render_template('admin/auth/create_profile.html',
+    return render_template('auth/create_profile.html',
                            image_url=request.args.get('image_url'), form=form)
 
 

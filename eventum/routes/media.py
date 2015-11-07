@@ -31,7 +31,7 @@ def index():
     """
     images = Image.objects()
     form = UploadImageForm()
-    return render_template('admin/media/media.html', images=images, form=form)
+    return render_template('media/media.html', images=images, form=form)
 
 
 def allowed_file(filename):
@@ -126,4 +126,4 @@ def view():
     **Methods:** ``GET``
     """
     images = Image.objects()
-    return render_template('admin/media/view.html', images=images)
+    return render_template('media/view.html', images=images)

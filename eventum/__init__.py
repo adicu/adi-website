@@ -1,14 +1,19 @@
+import json
 import logging
 from eventum.lib.google_calendar import GoogleCalendarAPIClient
 from eventum.lib.google_web_server_auth import set_web_server_client_id
 from eventum.config import eventum_config
 from flask.ext.mongoengine import MongoEngine
+from flask.ext.assets import Environment, Bundle
 
 
 class Eventum(object):
     EXTENSION_NAME = 'eventum'
 
     def __init__(self, app=None):
+        self._assets = None
+        self.db = None
+        self.gcal_client = None
         if app is not None:
             self.init_app(app)
 
@@ -26,13 +31,14 @@ class Eventum(object):
         self._setdefault_eventum_settings()
 
         # Mongoengine, and associated delete rules.
-        self.register_delete_rules()
         self.db = MongoEngine(app)
+        self.register_delete_rules()
 
         # Blueprints
         self.register_blueprints()
 
-        # TODO: SCSS for Eventum
+        # SCSS through Flask-Assets
+        self.register_scss()
 
         # Google Calendar API Client
         self.gcal_client = GoogleCalendarAPIClient()
@@ -59,14 +65,18 @@ class Eventum(object):
 
     def register_blueprints(self):
         from eventum.routes.admin import (admin, auth, events, media, posts,
-                                          users, whitelist, api)
+                                          users, whitelist, api, eventum)
         admin_blueprints = [admin, auth, events, media, posts, users,
-                            whitelist, api]
+                            whitelist, api, eventum]
 
+        url_prefix = self.app.config['EVENTUM_URL_PREFIX']
+        static_path = self.app.config['EVENTUM_RELATIVE_STATIC_FOLDER']
+        template_folder = self.app.config['EVENTUM_RELATIVE_TEMPLATE_FOLDER']
         for bp in admin_blueprints:
-            self.app.register_blueprint(
-                bp,
-                url_prefix=self.app.config['EVENTUM_URL_PREFIX'])
+            self.app.register_blueprint(bp,
+                                        url_prefix=url_prefix,
+                                        static_path=static_path,
+                                        template_folder=template_folder)
 
     def register_delete_rules(self):
         """Registers rules for how Mongoengine handles the deletion of objects
@@ -118,3 +128,33 @@ class Eventum(object):
         app_handler.setLevel(logging.INFO)
         app_handler.setFormatter(formatter)
         self.app.logger.addHandler(app_handler)
+
+    def register_scss(self, assets):
+        """Registers the Flask-Assets rules for scss compilation.  This reads
+        from ``eventum/config/scss.json`` to make these rules.
+        """
+        self.assets.append_path(
+            self.app.config['EVENTUM_RELATIVE_SCSS_FOLDER'],
+            self.app.config['EVENTUM_URL_PREFIX'] + '/static')
+        with open('eventum/config/scss.json') as f:
+            bundle_instructions = json.loads(f.read())
+            for _, bundle_set in bundle_instructions.iteritems():
+                output_folder = bundle_set['output_folder']
+                depends = bundle_set['depends']
+                for bundle_name, rules in bundle_set['rules'].iteritems():
+                    bundle = Bundle(*rules['inputs'],
+                                    output=output_folder + rules['output'],
+                                    depends=depends,
+                                    filters='scss')
+                    self.assets.register(bundle_name, bundle)
+
+    @property
+    def assets(self):
+        if self._assets is not None:
+            return self._assets
+        else:
+            if (not hasattr(self.app.jinja_env, 'assets_environment') or
+                    self.app.jinja_env.assets_environment):
+                self._assets = Environment(self.app)
+            self._assets = self.app.jinja_env.assets_environment
+        return self._assets

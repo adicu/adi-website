@@ -1,49 +1,4 @@
 {
-  "admin": {
-    "output_folder": "css/gen/admin/",
-    "depends": [
-      "scss/admin/*.scss",
-      "scss/common/*.scss"
-    ],
-    "rules": {
-
-      "scss_admin": {
-        "output": "admin.css",
-        "inputs": [
-          "scss/admin/*.scss",
-          "scss/common/*.scss",
-          "scss/admin/home/*.scss"
-        ]
-      },
-
-      "scss_auth": {
-        "output": "auth.css",
-        "inputs": [ "scss/admin/auth/*.scss" ]
-      },
-
-      "scss_users": {
-        "output": "users.css",
-        "inputs": [ "scss/admin/users/*.scss" ]
-      },
-
-      "scss_events": {
-        "output": "events.css",
-        "inputs": [ "scss/admin/events/*.scss" ]
-      },
-
-      "scss_posts": {
-        "output": "posts.css",
-        "inputs": [ "scss/admin/posts/*.scss" ]
-      },
-
-      "scss_media": {
-        "output": "media.css",
-        "inputs": [ "scss/admin/media/*.scss" ]
-      }
-    }
-  },
-
-
   "lib": {
     "output_folder": "css/lib/",
     "depends": [],
@@ -59,38 +14,35 @@
     }
   },
 
-
   "client": {
-    "output_folder": "css/gen/client/",
+    "output_folder": "css/gen/",
     "depends": [
-      "scss/client/*.scss",
-      "scss/client/components/*.scss",
-      "scss/common/*.scss"
+      "scss/*.scss",
+      "scss/components/*.scss"
     ],
     "rules": {
 
       "scss_client": {
         "output": "client.css",
         "inputs": [
-          "scss/client/*.scss",
-          "scss/client/components/*.scss",
-          "scss/common/*.scss"
+          "scss/*.scss",
+          "scss/components/*.scss"
         ]
       },
 
       "scss_blog": {
         "output": "blog.css",
-        "inputs": [ "scss/client/blog/*.scss" ]
+        "inputs": [ "scss/blog/*.scss" ]
       },
 
       "scss_single_event": {
         "output": "single_event.css",
-        "inputs": [ "scss/client/single_event/*.scss" ]
+        "inputs": [ "scss/single_event/*.scss" ]
       },
 
       "scss_resources": {
         "output": "single_event.css",
-        "inputs": [ "scss/client/resources/*.scss" ]
+        "inputs": [ "scss/resources/*.scss" ]
       }
     }
   }
