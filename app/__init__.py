@@ -40,19 +40,19 @@ def create_app(**config_overrides):
     app.config.update(**flask_config.config)
     app.config.update(config_overrides)
 
-    # Eventum
-    eventum = Eventum(app)
+    # Initialize assets
+    assets = Environment(app)
+    register_scss(assets)
 
     # load ADI specific configurations (ignore built-in methods)
     for attr in (x for x in dir(adi_config) if x[:2] != "__"):
         adi[attr] = getattr(adi_config, attr)
 
-    # Initialize assets
-    assets = Environment(app)
-    register_scss(assets)
-
     # Blueprints
     register_blueprints()
+
+    # Eventum
+    eventum = Eventum(app)
 
     return app
 

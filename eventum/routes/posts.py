@@ -10,7 +10,6 @@ from flask import Blueprint, render_template, request, send_from_directory, \
 
 from bson.objectid import ObjectId
 from bson.objectid import InvalidId
-from datetime import datetime
 from mongoengine.errors import DoesNotExist, ValidationError
 from app import app
 from eventum.models import BlogPost, Image, User, Tag
@@ -31,7 +30,7 @@ def index():
     **Methods:** ``GET``
     """
     all_posts = BlogPost.objects().order_by('published', '-date_published')
-    return render_template('admin/posts/posts.html', posts=all_posts)
+    return render_template('posts/posts.html', posts=all_posts)
 
 
 @posts.route('/posts/new', methods=['GET', 'POST'])
@@ -68,11 +67,11 @@ def new():
             post.unpublish()
 
         if form.preview.data is True:
-            return redirect(url_for('.preview', slug=post.slug))
+            return redirect(url_for('blog.preview', slug=post.slug))
 
         return redirect(url_for('.index'))
     images = Image.objects()
-    return render_template('admin/posts/edit.html', user=g.user, form=form,
+    return render_template('posts/edit.html', user=g.user, form=form,
                            images=images, upload_form=upload_form)
 
 
@@ -130,7 +129,7 @@ def edit(post_id):
                     flash('Blogpost unpublished', MESSAGE_FLASH)
 
             if form.preview.data is True:
-                return redirect(url_for('.preview', slug=post.slug))
+                return redirect(url_for('blog.preview', slug=post.slug))
 
     upload_form = UploadImageForm()
     feat_img = post.featured_image.filename if post.featured_image else None
@@ -149,33 +148,12 @@ def edit(post_id):
     form.author.default = str(g.user.id)
     images = [image for image in Image.objects() if image not in post.images]
 
-    return render_template('admin/posts/edit.html',
+    return render_template('posts/edit.html',
                            user=g.user,
                            form=form,
                            post=post,
                            images=images,
                            upload_form=upload_form)
-
-
-@posts.route('/posts/preview/<slug>')
-def preview(slug):
-    if BlogPost.objects(slug=slug).count() != 1:
-        abort(404)
-    post = BlogPost.objects().get(slug=slug)
-    if not post.date_published:
-        post.date_published = datetime.now()  # just used as placeholder to
-        # display in preview. Does not get saved to db.
-
-    recent_posts = BlogPost.objects(published=True,
-                                    id__ne=post.id,
-                                    featured_image__ne=None)\
-        .order_by('-date_published')[:3]
-
-    related_posts = post.get_related_posts()[:3]
-    return render_template('admin/posts/preview.html',
-                           post=post,
-                           recent_posts=recent_posts,
-                           related_posts=related_posts)
 
 
 @posts.route('/posts/delete/<post_id>', methods=['POST'])

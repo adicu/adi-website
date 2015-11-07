@@ -1,0 +1,42 @@
+{
+  "eventum": {
+    "output_folder": "css/gen/",
+    "depends": [
+      "scss/*.scss",
+    ],
+    "rules": {
+      "scss_eventum": {
+        "output": "eventum.css",
+        "inputs": [
+          "scss/*.scss",
+          "scss/home/*.scss"
+        ]
+      },
+
+      "scss_auth": {
+        "output": "auth.css",
+        "inputs": [ "scss/auth/*.scss" ]
+      },
+
+      "scss_users": {
+        "output": "users.css",
+        "inputs": [ "scss/users/*.scss" ]
+      },
+
+      "scss_events": {
+        "output": "events.css",
+        "inputs": [ "scss/events/*.scss" ]
+      },
+
+      "scss_posts": {
+        "output": "posts.css",
+        "inputs": [ "scss/posts/*.scss" ]
+      },
+
+      "scss_media": {
+        "output": "media.css",
+        "inputs": [ "scss/media/*.scss" ]
+      }
+    }
+  }
+}

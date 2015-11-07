@@ -34,7 +34,7 @@ def index():
 
     upload_form = UploadImageForm()
     whitelist_form = AddToWhitelistForm()
-    return render_template('admin/users/users.html',
+    return render_template('users/users.html',
                            whitelist_form=whitelist_form,
                            upload_form=upload_form,
                            whitelist=Whitelist.objects(redeemed=False),
@@ -122,7 +122,7 @@ def user(slug):
         else:
             flash("Your Form had errors: {}".format(form.errors), ERROR_FLASH)
 
-    return render_template('admin/users/user.html', user=user, form=form,
+    return render_template('users/user.html', user=user, form=form,
                            current_user=g.user)
 
 
