@@ -1,10 +1,34 @@
 import json
 import logging
-from eventum.lib.google_calendar import GoogleCalendarAPIClient
-from eventum.lib.google_web_server_auth import set_web_server_client_id
-from eventum.config import eventum_config
+from jinja2 import ChoiceLoader, FileSystemLoader
+from flask import current_app
 from flask.ext.mongoengine import MongoEngine
 from flask.ext.assets import Environment, Bundle
+from eventum.config import eventum_config
+
+
+class InternalEventum(object):
+    @property
+    def app(self):
+        return current_app
+
+    # @property
+    # def eventum(self):
+    #     return current_app.extensions[Eventum.EXTENSION_NAME]
+
+    @property
+    def gcal_client(self):
+        return self.eventum.gcal_client
+
+    @property
+    def db(self):
+        return self.eventum.db
+
+    @property
+    def config(self):
+        return self.app.config
+
+e = InternalEventum()
 
 
 class Eventum(object):
@@ -18,6 +42,10 @@ class Eventum(object):
             self.init_app(app)
 
     def init_app(self, app):
+        from eventum.lib.google_calendar import GoogleCalendarAPIClient
+        from eventum.lib.google_web_server_auth import set_web_server_client_id
+        from eventum.routes.base import configure_routing
+
         # Register ourselves as a Flask extension.
         app.extensions = getattr(app, 'extensions', {})
         if self.EXTENSION_NAME not in app.extensions:
@@ -26,9 +54,14 @@ class Eventum(object):
 
         self.app = app
 
+        e.eventum = self
+
         # Eventum Settings
         self._normalize_client_settings()
         self._setdefault_eventum_settings()
+
+        # Templates
+        self.register_templates()
 
         # Mongoengine, and associated delete rules.
         self.db = MongoEngine(app)
@@ -36,6 +69,8 @@ class Eventum(object):
 
         # Blueprints
         self.register_blueprints()
+        # before_request, after_request, context_processor
+        configure_routing(app)
 
         # SCSS through Flask-Assets
         self.register_scss()
@@ -44,11 +79,7 @@ class Eventum(object):
         self.gcal_client = GoogleCalendarAPIClient()
 
         # Google Web Server Application Setup
-        set_web_server_client_id()
-
-        # Error handlers, before_request, after_request, context_processor, etc
-        from eventum.routes.base import register_error_handlers
-        register_error_handlers(app)
+        set_web_server_client_id(app)
 
         # Logging
         self.register_logger()
@@ -64,19 +95,19 @@ class Eventum(object):
             self.app.config.setdefault(attr, getattr(eventum_config, attr))
 
     def register_blueprints(self):
-        from eventum.routes.admin import (admin, auth, events, media, posts,
-                                          users, whitelist, api, eventum)
+        from eventum.routes.base import register_error_handlers
+        from eventum.routes import (admin, auth, events, media, posts, users,
+                                    whitelist, api, eventum)
         admin_blueprints = [admin, auth, events, media, posts, users,
                             whitelist, api, eventum]
 
         url_prefix = self.app.config['EVENTUM_URL_PREFIX']
         static_path = self.app.config['EVENTUM_RELATIVE_STATIC_FOLDER']
-        template_folder = self.app.config['EVENTUM_RELATIVE_TEMPLATE_FOLDER']
         for bp in admin_blueprints:
+            register_error_handlers(bp)
             self.app.register_blueprint(bp,
                                         url_prefix=url_prefix,
-                                        static_path=static_path,
-                                        template_folder=template_folder)
+                                        static_path=static_path)
 
     def register_delete_rules(self):
         """Registers rules for how Mongoengine handles the deletion of objects
@@ -129,13 +160,21 @@ class Eventum(object):
         app_handler.setFormatter(formatter)
         self.app.logger.addHandler(app_handler)
 
-    def register_scss(self, assets):
+    def register_templates(self):
+
+        my_loader = ChoiceLoader([
+            self.app.jinja_loader,
+            FileSystemLoader(self.app.config['EVENTUM_TEMPLATE_FOLDER']),
+        ])
+        self.app.jinja_loader = my_loader
+
+    def register_scss(self):
         """Registers the Flask-Assets rules for scss compilation.  This reads
         from ``eventum/config/scss.json`` to make these rules.
         """
         self.assets.append_path(
-            self.app.config['EVENTUM_RELATIVE_SCSS_FOLDER'],
-            self.app.config['EVENTUM_URL_PREFIX'] + '/static')
+            self.app.config['EVENTUM_STATIC_FOLDER'],
+            '/static')
         with open('eventum/config/scss.json') as f:
             bundle_instructions = json.loads(f.read())
             for _, bundle_set in bundle_instructions.iteritems():
@@ -154,7 +193,7 @@ class Eventum(object):
             return self._assets
         else:
             if (not hasattr(self.app.jinja_env, 'assets_environment') or
-                    self.app.jinja_env.assets_environment):
+                    not self.app.jinja_env.assets_environment):
                 self._assets = Environment(self.app)
             self._assets = self.app.jinja_env.assets_environment
         return self._assets

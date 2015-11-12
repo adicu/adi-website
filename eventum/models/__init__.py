@@ -1,3 +1,4 @@
+from BaseEventumDocument import BaseEventumDocument
 from Whitelist import Whitelist
 from User import User
 from Post import Post
@@ -16,5 +17,6 @@ __all__ = [
     'Post',
     'User',
     'Whitelist',
-    'Tag'
+    'Tag',
+    'BaseEventumDocument'
 ]

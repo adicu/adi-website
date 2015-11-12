@@ -5,8 +5,7 @@
 .. moduleauthor:: Dan Schlosser <dan@danrs.ch>
 """
 
-from app import app
-from flask import url_for, redirect, session, request, g, abort
+from flask import url_for, redirect, session, request, g, abort, current_app
 from functools import wraps
 
 
@@ -114,7 +113,7 @@ def development_only(f):
         :params kwargs: Keyword arguments for ``f``.
         """
 
-        if not app.config['DEBUG']:
+        if not current_app.config['DEBUG']:
             abort(401)
         return f(*args, **kwargs)
 

@@ -5,9 +5,9 @@
 .. moduleauthor:: Dan Schlosser <dan@danrs.ch>
 """
 
-from app import adi
 import json
-from flask import Blueprint, render_template, abort, redirect, url_for, request
+from flask import (Blueprint, render_template, abort, redirect, url_for,
+                   request, current_app)
 from eventum.models import Event, BlogPost
 from datetime import datetime, date, timedelta
 from mongoengine import Q
@@ -117,7 +117,7 @@ def jobfair():
 def _get_companies(force=False):
     global _companies
     if not _companies or force:
-        with open(adi['COMPANIES_PATH']) as f:
+        with open(current_app.config['COMPANIES_PATH']) as f:
             _companies = json.loads(f.read()).get('2015')
     return _companies
 
@@ -138,7 +138,7 @@ def labs():
 def _get_labs_data(force=False):
     global _labs_data
     if not _labs_data or force:
-        with open(adi['LABS_DATA_PATH']) as f:
+        with open(current_app.config['LABS_DATA_PATH']) as f:
             _labs_data = json.loads(f.read())
     return _labs_data
 
@@ -171,7 +171,7 @@ def resources():
 def _get_resources(force=False):
     global _resources
     if not _resources or force:
-        with open(adi['RESOURCES_PATH']) as f:
+        with open(current_app.config['RESOURCES_PATH']) as f:
             _resources = json.loads(f.read())
     return _resources
 

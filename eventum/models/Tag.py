@@ -5,14 +5,14 @@
 .. moduleauthor:: Evan Goldstein
 """
 
-
-from app import db
 from datetime import datetime
+from mongoengine import Document, DateTimeField, StringField, DoesNotExist
+from eventum.models import BaseEventumDocument
 
 now = datetime.now
 
 
-class Tag(db.Document):
+class Tag(Document, BaseEventumDocument):
     """A generic tag object
 
     :ivar date_created: :class:`mongoengine.fields.DateTimeField` - The date
@@ -29,9 +29,9 @@ class Tag(db.Document):
         'ordering': []
     }
 
-    date_created = db.DateTimeField(default=now, required=True)
-    data_modified = db.DateTimeField(default=now, required=True)
-    tagname = db.StringField(unique=True, max_length=255, required=True)
+    date_created = DateTimeField(default=now, required=True)
+    data_modified = DateTimeField(default=now, required=True)
+    tagname = StringField(unique=True, max_length=255, required=True)
 
     def clean(self):
         """Called by Mongoengine on every ``.save()`` to the object.
@@ -54,7 +54,7 @@ class Tag(db.Document):
         for tagname in tagnames:
             try:
                 tags_list.append(cls.objects().get(tagname=tagname))
-            except db.DoesNotExist:
+            except DoesNotExist:
                 tag = Tag(tagname=tagname)
                 tag.save()
                 tags_list.append(tag)

@@ -5,13 +5,16 @@
 .. moduleauthor:: Dan Schlosser <dan@danrs.ch>
 """
 
-from app import db
 from datetime import datetime
+from mongoengine import (Document, DateTimeField, EmailField, StringField,
+                         BooleanField)
 from eventum.models.User import USER_TYPE_REGEX
+from eventum.models import BaseEventumDocument
+
 now = datetime.now
 
 
-class Whitelist(db.Document):
+class Whitelist(Document, BaseEventumDocument):
     """A database model to hold an entry on the Whitelist.
 
     Only users that are on the Whitelist may make accounts with Eventum. Once
@@ -29,11 +32,11 @@ class Whitelist(db.Document):
     :ivar redeemed: :class:`mongoengine.fields.BooleanField` - True if the user
         has authenticated with this email and made an account on Eventum.
     """
-    date_created = db.DateTimeField(required=True, default=now)
-    date_modified = db.DateTimeField(required=True, default=now)
-    email = db.EmailField(required=True, unique=True)
-    user_type = db.StringField(default='editor', regex=USER_TYPE_REGEX)
-    redeemed = db.BooleanField(required=True, default=False)
+    date_created = DateTimeField(required=True, default=now)
+    date_modified = DateTimeField(required=True, default=now)
+    email = EmailField(required=True, unique=True)
+    user_type = StringField(default='editor', regex=USER_TYPE_REGEX)
+    redeemed = BooleanField(required=True, default=False)
 
     # MongoEngine ORM metadata
     meta = {'indexes': ['email']}
