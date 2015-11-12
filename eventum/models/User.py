@@ -6,10 +6,13 @@
 """
 
 import re
-from app import db
-from eventum.lib.regex import SLUG_REGEX
 from datetime import datetime
-from flask import url_for
+from flask import url_for, current_app
+from mongoengine import (Document, StringField, ReferenceField, EmailField,
+                         ListField, URLField, DictField, DateTimeField)
+from eventum.lib.regex import Regex
+from eventum.models import BaseEventumDocument
+
 now = datetime.now
 
 # Maps valid values for the ``user_type`` field on the User object to
@@ -39,12 +42,11 @@ USER_TYPES = {
 USER_TYPE_REGEX = "({})".format('|'.join(USER_TYPES.keys()))
 
 
-class User(db.Document):
+class User(Document, BaseEventumDocument):
     """A user model.
 
     The :class:`User` object is only created once the user logs in for the
     first time and confirms the details of their account.
-
     :ivar date_created: :class:`mongoengine.fields.DateTimeField` - The date
         that this user was created.
     :ivar date_modified: :class:`mongoengine.fields.DateTimeField` - The date
@@ -74,22 +76,22 @@ class User(db.Document):
         this user's last logon.
     """
 
-    date_created = db.DateTimeField(required=True, default=now)
-    date_modified = db.DateTimeField(required=True, default=now)
-    gplus_id = db.StringField(required=True, unique=True)
-    name = db.StringField(required=True, max_length=510)
-    slug = db.StringField(required=True,
-                          max_length=510,
-                          unique=True,
-                          regex=SLUG_REGEX)
-    email = db.EmailField(required=True, unique=True)
-    roles = db.ListField(db.StringField(db_field="role"), default=list)
-    privileges = db.DictField(required=True, default={})
-    image_url = db.URLField()
-    image = db.ReferenceField('Image')
-    user_type = db.StringField(default='editor',
-                               regex=USER_TYPE_REGEX)
-    last_logon = db.DateTimeField()
+    date_created = DateTimeField(required=True, default=now)
+    date_modified = DateTimeField(required=True, default=now)
+    gplus_id = StringField(required=True, unique=True)
+    name = StringField(required=True, max_length=510)
+    slug = StringField(required=True,
+                       max_length=510,
+                       unique=True,
+                       regex=Regex.SLUG_REGEX)
+    email = EmailField(required=True, unique=True)
+    roles = ListField(StringField(db_field="role"), default=list)
+    privileges = DictField(required=True, default={})
+    image_url = URLField()
+    image = ReferenceField('Image')
+    user_type = StringField(default='editor',
+                            regex=USER_TYPE_REGEX)
+    last_logon = DateTimeField()
 
     # MongoEngine ORM metadata
     meta = {
@@ -121,9 +123,9 @@ class User(db.Document):
         if not self.image_url:
             # Import app in the function body to avoid importing `None` when
             # the module is first loaded.
-            from app import app
-            return url_for('static',
-                           filename=app.config['DEFAULT_PROFILE_PICTURE'])
+            return url_for(
+                'eventum.static',
+                filename=current_app.config['EVENTUM_DEFAULT_PROFILE_PICTURE'])
         if "googleusercontent.com" in self.image_url:
             return self.image_url + str(size)
         return self.image_url

@@ -33,7 +33,7 @@ def index():
                  .order_by('start_date'))
     posts = BlogPost.objects().order_by('published', '-date_published')[:5]
 
-    return render_template("home.html",
+    return render_template('eventum_home.html',
                            this_week=this_week,
                            recent_posts=posts)
 

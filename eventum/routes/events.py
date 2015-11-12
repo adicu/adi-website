@@ -45,7 +45,7 @@ def index():
      next_week,
      future_events) = _get_events_for_template(past, future)
 
-    return render_template('events/events.html',
+    return render_template('eventum_events/events.html',
                            past_events=past_events,
                            this_week=this_week,
                            next_week=next_week,
@@ -146,7 +146,7 @@ def create():
     upload_form = UploadImageForm()
     delete_form = DeleteEventForm()
     images = Image.objects()
-    return render_template('events/create.html', form=form,
+    return render_template('eventum_events/create.html', form=form,
                            delete_form=delete_form, upload_form=upload_form,
                            images=images)
 
@@ -188,7 +188,7 @@ def edit(event_id):
     upload_form = UploadImageForm()
     images = Image.objects()
 
-    return render_template('events/edit.html', form=form, event=event,
+    return render_template('eventum_events/edit.html', form=form, event=event,
                            delete_form=delete_form, upload_form=upload_form,
                            images=images)
 

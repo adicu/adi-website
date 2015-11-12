@@ -9,16 +9,12 @@
 """
 
 import json
-
 from flask import Flask
 from flask.ext.assets import Environment, Bundle
 from eventum import Eventum
 
-from config import adi_config
-
 
 app = None
-adi = dict()
 eventum = None
 
 
@@ -29,29 +25,27 @@ def create_app(**config_overrides):
     """
     # we want to modify the global app, not a local copy
     global app
-    global adi
     global eventum
 
     app = Flask(__name__)
 
     # Load config then apply overrides
-    from config import flask_config
-    app.config.update(**flask_config.config)
+    app.config.from_object('config.flask_config')
     app.config.update(config_overrides)
 
     # Initialize assets
     assets = Environment(app)
     register_scss(assets)
 
-    # load ADI specific configurations (ignore built-in methods)
-    for attr in (x for x in dir(adi_config) if x[:2] != "__"):
-        adi[attr] = getattr(adi_config, attr)
+    # Eventum
+    eventum = Eventum(app)
+
+    # # Augment Models
+    # from app.models import augment_models
+    # augment_models()
 
     # Blueprints
     register_blueprints()
-
-    # Eventum
-    eventum = Eventum(app)
 
     return app
 
@@ -74,7 +68,7 @@ def register_scss(assets):
     """Registers the Flask-Assets rules for scss compilation.  This reads from
     ``config/scss.json`` to make these rules.
     """
-    assets.url = app.static_url_path
+    assets.append_path(app.static_folder, app.static_url_path)
     with open('config/scss.json') as f:
         bundle_instructions = json.loads(f.read())
         for _, bundle_set in bundle_instructions.iteritems():

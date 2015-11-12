@@ -12,7 +12,7 @@ EVENTUM_LOG_FILE_MAX_SIZE = 256
 EVENTUM_URL_PREFIX = '/admin'
 EVENTUM_ALLOWED_UPLOAD_EXTENSIONS = set(['.png', '.jpg', '.jpeg', '.gif'])
 
-EVENTUM_BASEDIR = path.abspath(path.join(path.dirname(__file__), pardir))
+EVENTUM_BASEDIR = path.abspath(path.join(path.dirname(__file__), pardir, pardir))
 
 # Eventum folder
 EVENTUM_RELATIVE_EVENTUM_FOLDER = 'eventum'
@@ -37,9 +37,13 @@ EVENTUM_DELETE_FOLDER = path.join(EVENTUM_BASEDIR,
 # SCSS folder
 EVENTUM_RELATIVE_SCSS_FOLDER = path.join(EVENTUM_RELATIVE_STATIC_FOLDER,
                                          'scss/')
+EVENTUM_SCSS_FOLDER = path.join(EVENTUM_BASEDIR,
+                                EVENTUM_RELATIVE_SCSS_FOLDER)
 # Template folder
 EVENTUM_RELATIVE_TEMPLATE_FOLDER = path.join(EVENTUM_RELATIVE_EVENTUM_FOLDER,
                                              'templates/')
+EVENTUM_TEMPLATE_FOLDER = path.join(EVENTUM_BASEDIR,
+                                    EVENTUM_RELATIVE_TEMPLATE_FOLDER)
 
 
 ######################

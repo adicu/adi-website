@@ -1,19 +1,4 @@
 {
-  "lib": {
-    "output_folder": "css/lib/",
-    "depends": [],
-    "rules": {
-
-      "scss_datetime": {
-        "output": "datetime.css",
-        "inputs": [
-          "scss/lib/bootstrap-datepicker.scss",
-          "scss/lib/jquery.timepicker.scss"
-        ]
-      }
-    }
-  },
-
   "client": {
     "output_folder": "css/gen/",
     "depends": [
@@ -46,5 +31,4 @@
       }
     }
   }
-
 }
