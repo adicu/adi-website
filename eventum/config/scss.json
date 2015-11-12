@@ -2,40 +2,54 @@
   "eventum": {
     "output_folder": "css/gen/",
     "depends": [
-      "scss/*.scss",
     ],
     "rules": {
       "scss_eventum": {
-        "output": "eventum.css",
+        "output": "eventum/eventum.css",
         "inputs": [
-          "scss/*.scss",
-          "scss/home/*.scss"
+          "eventum_scss/admin.scss",
+          "eventum_scss/home/*.scss"
         ]
       },
 
       "scss_auth": {
-        "output": "auth.css",
-        "inputs": [ "scss/auth/*.scss" ]
+        "output": "eventum/auth.css",
+        "inputs": [ "eventum_scss/auth/*.scss" ]
       },
 
       "scss_users": {
-        "output": "users.css",
-        "inputs": [ "scss/users/*.scss" ]
+        "output": "eventum/users.css",
+        "inputs": [ "eventum_scss/users/*.scss" ]
       },
 
       "scss_events": {
-        "output": "events.css",
-        "inputs": [ "scss/events/*.scss" ]
+        "output": "eventum/events.css",
+        "inputs": [ "eventum_scss/events/*.scss" ]
       },
 
       "scss_posts": {
-        "output": "posts.css",
-        "inputs": [ "scss/posts/*.scss" ]
+        "output": "eventum/posts.css",
+        "inputs": [ "eventum_scss/posts/*.scss" ]
       },
 
       "scss_media": {
-        "output": "media.css",
-        "inputs": [ "scss/media/*.scss" ]
+        "output": "eventum/amedia.css",
+        "inputs": [ "eventum_scss/media/*.scss" ]
+      }
+    }
+  },
+
+  "lib": {
+    "output_folder": "css/lib/",
+    "depends": [],
+    "rules": {
+
+      "scss_datetime": {
+        "output": "datetime.css",
+        "inputs": [
+          "eventum_scss/lib/bootstrap-datepicker.scss",
+          "eventum_scss/lib/jquery.timepicker.scss"
+        ]
       }
     }
   }

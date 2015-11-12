@@ -10,9 +10,10 @@ parser = argparse.ArgumentParser(parents=[tools.argparser])
 FLAGS = parser.parse_args()
 SCOPE = 'https://www.googleapis.com/auth/calendar'
 
-FLOW = flow_from_clientsecrets(config['INSTALLED_APP_CLIENT_SECRET_PATH'],
-                               scope=SCOPE)
+FLOW = flow_from_clientsecrets(
+    config['EVENTUM_INSTALLED_APP_CLIENT_SECRET_PATH'],
+    scope=SCOPE)
 
 # Save the credentials file here for use by the app
-storage = Storage(config['INSTALLED_APP_CREDENTIALS_PATH'])
+storage = Storage(config['EVENTUM_INSTALLED_APP_CREDENTIALS_PATH'])
 run_flow(FLOW, storage, FLAGS)

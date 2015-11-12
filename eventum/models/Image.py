@@ -5,21 +5,19 @@
 .. moduleauthor:: Dan Schlosser <dan@danrs.ch>
 """
 
-import PIL
 import re
 import os
-from flask import url_for
-from mongoengine import ValidationError, signals
-from app import db
-from config.flask_config import config
-from eventum.lib.regex import FULL_FILENAME_REGEX
+import PIL
+from flask import url_for, current_app
 from datetime import datetime
+from mongoengine import (Document, DateTimeField, StringField, ReferenceField,
+                         DictField, ValidationError, signals)
+from eventum.models import BaseEventumDocument
+from eventum.lib.regex import Regex
 now = datetime.now
 
-VALID_PATHS = re.compile('^({}|http://|https://).*$'.format(config['BASEDIR']))
 
-
-class Image(db.Document):
+class Image(Document, BaseEventumDocument):
     """
     :ivar date_created: :class:`mongoengine.fields.DateTimeField` - The date
         when the document was created, localized to the server.
@@ -46,17 +44,17 @@ class Image(db.Document):
         'ordering': ['-date_created']
     }
 
-    date_created = db.DateTimeField(default=now, required=True)
-    date_modified = db.DateTimeField(default=now, required=True)
-    filename = db.StringField(unique=True,
-                              max_length=255,
-                              required=True,
-                              regex=FULL_FILENAME_REGEX)
-    creator = db.ReferenceField('User', required=True)
-    caption = db.StringField()
-    source = db.StringField()
-    default_path = db.StringField(required=True)
-    versions = db.DictField(required=True)
+    date_created = DateTimeField(default=now, required=True)
+    date_modified = DateTimeField(default=now, required=True)
+    filename = StringField(unique=True,
+                           max_length=255,
+                           required=True,
+                           regex=Regex.FULL_FILENAME_REGEX)
+    creator = ReferenceField('User', required=True)
+    caption = StringField()
+    source = StringField()
+    default_path = StringField(required=True)
+    versions = DictField(required=True)
 
     def url(self):
         """Returns the URL path that points to the image.
@@ -75,9 +73,10 @@ class Image(db.Document):
         """
 
         self.date_modified = now()
-        if not VALID_PATHS.match(self.default_path):
-            self.default_path = os.path.join(config['BASEDIR'],
-                                             self.default_path)
+        if not re.compile(Regex.VALID_PATHS).match(self.default_path):
+            self.default_path = os.path.join(
+                current_app.config['EVENTUM_BASEDIR'],
+                self.default_path)
         if (self.default_path and
                 self.default_path not in self.versions.values()):
             try:
@@ -118,7 +117,8 @@ class Image(db.Document):
         """
         for size, old_path in document.versions.iteritems():
             _, filename = os.path.split(old_path)
-            delete_folder = config['RELATIVE_DELETE_FOLDER']
+            delete_folder = (
+                current_app.config['EVENTUM_RELATIVE_DELETE_FOLDER'])
             if not os.path.isdir(delete_folder):
                 os.mkdir(delete_folder)
             new_path = os.path.join(delete_folder, filename)

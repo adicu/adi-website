@@ -10,7 +10,7 @@ from wtforms import (FieldList, StringField, TextAreaField, BooleanField,
 from flask.ext.wtf import Form
 from wtforms.validators import Regexp, Required
 from eventum.forms.validators import image_with_same_name
-from eventum.lib.regex import SLUG_REGEX
+from eventum.lib.regex import Regex
 
 INVALID_SLUG = 'Post slug should only contain numbers, letters and dashes.'
 BODY_DEFAULT = 'Type your post here.\n\nRendered in **Markdown**!'
@@ -46,7 +46,7 @@ class CreateBlogPostForm(Form):
     author = SelectField('Author')
     slug = StringField('Post Slug',
                        [Required(message="Please provide a post slug."),
-                        Regexp(SLUG_REGEX, message=INVALID_SLUG)])
+                        Regexp(Regex.SLUG_REGEX, message=INVALID_SLUG)])
     body = TextAreaField('Post Body',
                          [Required(message="Please provide a post body.")],
                          default=BODY_DEFAULT)

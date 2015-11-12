@@ -1,8 +1,8 @@
 # Folders
 /app/static/css/gen
-/app/static/img/uploaded/*
-!/app/static/img/uploaded/README.md
-/app/static/img/uploaded/*
+/eventum/static/css/gen
+/eventum/static/img/uploaded/*
+!/eventum/static/img/uploaded/README.md
 /lib
 /local
 /log/*

@@ -5,11 +5,31 @@
 .. moduleauthor:: Dan Schlosser <dan@danrs.ch>
 """
 
-from config.flask_config import config
+from flask import current_app
+from eventum.config import eventum_config
 
-SLUG_REGEX = r'[0-9a-zA-Z-]+'
-FILENAME_REGEX = r'[\w\-@\|\(\)]+'
-FULL_FILENAME_REGEX = "{fname}({ext})".format(
-    fname=FILENAME_REGEX,
-    ext="|".join(config['ALLOWED_UPLOAD_EXTENSIONS']))
-EXTENSION_REGEX = "|".join(config['ALLOWED_UPLOAD_EXTENSIONS'])
+
+class _LiveRegexCollection(object):
+
+    SLUG_REGEX = r'[0-9a-zA-Z-]+'
+    FILENAME_REGEX = r'[\w\-@\|\(\)]+'
+
+    @property
+    def FULL_FILENAME_REGEX(self):
+        return "{fname}({ext})".format(
+            fname=self.FILENAME_REGEX,
+            ext="|".join(
+                eventum_config.EVENTUM_ALLOWED_UPLOAD_EXTENSIONS))
+
+    @property
+    def EXTENSION_REGEX(self):
+        return "|".join(
+            eventum_config.EVENTUM_ALLOWED_UPLOAD_EXTENSIONS)
+
+    @property
+    def VALID_PATHS(self):
+        return r'^({}|http://|https://).*$'.format(
+            current_app.config['EVENTUM_BASEDIR'])
+
+
+Regex = _LiveRegexCollection()

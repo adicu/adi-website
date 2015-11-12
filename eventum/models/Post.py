@@ -5,15 +5,17 @@
 .. moduleauthor:: Dan Schlosser <dan@danrs.ch>
 """
 
-from app import db
-from eventum.models import User
-from eventum.lib.regex import SLUG_REGEX
-from datetime import datetime
 import markdown
+from datetime import datetime
+from mongoengine import (Document, DateTimeField, ReferenceField, StringField,
+                         BooleanField, ListField)
+from eventum.models import User, BaseEventumDocument
+from eventum.lib.regex import Regex
+
 now = datetime.now
 
 
-class Post(db.Document):
+class Post(Document, BaseEventumDocument):
     """A generic post object.
 
     :ivar date_created: :class:`mongoengine.fields.DateTimeField` - The date
@@ -56,22 +58,22 @@ class Post(db.Document):
         'ordering': ['-date_created']
     }
 
-    date_created = db.DateTimeField(required=True, default=now)
-    date_modified = db.DateTimeField(required=True, default=now)
-    title = db.StringField(required=True, max_length=255)
-    author = db.ReferenceField(User, required=True)
-    html_content = db.StringField()
-    markdown_content = db.StringField(required=True)
-    images = db.ListField(db.ReferenceField('Image'))
-    featured_image = db.ReferenceField('Image')
-    slug = db.StringField(required=True, regex=SLUG_REGEX)
-    categories = db.ListField(db.StringField(db_field='category',
-                                             max_length=255),
-                              default=list)
-    post_tags = db.ListField(db.ReferenceField('Tag'))
-    published = db.BooleanField(required=True, default=False)
-    date_published = db.DateTimeField()
-    posted_by = db.ReferenceField(User, required=True)
+    date_created = DateTimeField(required=True, default=now)
+    date_modified = DateTimeField(required=True, default=now)
+    title = StringField(required=True, max_length=255)
+    author = ReferenceField(User, required=True)
+    html_content = StringField()
+    markdown_content = StringField(required=True)
+    images = ListField(ReferenceField('Image'))
+    featured_image = ReferenceField('Image')
+    slug = StringField(required=True, regex=Regex.SLUG_REGEX)
+    categories = ListField(StringField(db_field='category',
+                                       max_length=255),
+                           default=list)
+    post_tags = ListField(ReferenceField('Tag'))
+    published = BooleanField(required=True, default=False)
+    date_published = DateTimeField()
+    posted_by = ReferenceField(User, required=True)
 
     def id_str(self):
         """The id of this object, as a string.

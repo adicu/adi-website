@@ -6,12 +6,11 @@
 """
 
 from flask import Blueprint, render_template, request, send_from_directory, \
-    abort, redirect, url_for, g, flash
+    abort, redirect, url_for, g, flash, current_app
 
 from bson.objectid import ObjectId
 from bson.objectid import InvalidId
 from mongoengine.errors import DoesNotExist, ValidationError
-from app import app
 from eventum.models import BlogPost, Image, User, Tag
 from eventum.forms import CreateBlogPostForm, UploadImageForm
 from eventum.lib.decorators import login_required, requires_privilege
@@ -30,7 +29,7 @@ def index():
     **Methods:** ``GET``
     """
     all_posts = BlogPost.objects().order_by('published', '-date_published')
-    return render_template('posts/posts.html', posts=all_posts)
+    return render_template('eventum_posts/posts.html', posts=all_posts)
 
 
 @posts.route('/posts/new', methods=['GET', 'POST'])
@@ -71,7 +70,7 @@ def new():
 
         return redirect(url_for('.index'))
     images = Image.objects()
-    return render_template('posts/edit.html', user=g.user, form=form,
+    return render_template('eventum_posts/edit.html', user=g.user, form=form,
                            images=images, upload_form=upload_form)
 
 
@@ -148,7 +147,7 @@ def edit(post_id):
     form.author.default = str(g.user.id)
     images = [image for image in Image.objects() if image not in post.images]
 
-    return render_template('posts/edit.html',
+    return render_template('eventum_posts/edit.html',
                            user=g.user,
                            form=form,
                            post=post,
@@ -201,6 +200,6 @@ def fetch_epiceditor_themes(folder, path):
     :param str path: The path of the file that EpicEditor wants.
     """
     return send_from_directory(
-        app.static_folder,
+        current_app.config['EVENTUM_STATIC_FOLDER'],
         "css/lib/epiceditor/{folder}/{path}".format(folder=folder, path=path)
     )

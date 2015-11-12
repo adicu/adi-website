@@ -7,9 +7,8 @@
 
 import uuid
 
-from flask import Blueprint, request, flash, redirect, url_for
+from flask import Blueprint, request, flash, redirect, url_for, current_app
 
-from app import app
 from eventum.models import User, Whitelist, Image
 from eventum.forms import AddToWhitelistForm
 from eventum.lib.decorators import login_required
@@ -67,7 +66,7 @@ def add():
                                  user_type=form.user_type.data)
             fake_user.save()
         else:
-            app.logger.warning(form.errors)
+            current_app.logger.warning(form.errors)
     else:
         user_exists = User.objects(email=form.email.data).count() != 0
         if form.validate_on_submit() and not user_exists:
@@ -75,5 +74,5 @@ def add():
                            user_type=form.user_type.data)
             wl.save()
         else:
-            app.logger.warning(form.errors)
+            current_app.logger.warning(form.errors)
     return redirect(url_for('users.index'))
