@@ -108,7 +108,7 @@ def post(slug):
 
 
 @blog.route('/blog/post/preview/<slug>', methods=['GET'])
-def post(slug):
+def preview(slug):
     if BlogPost.objects(slug=slug).count() != 1:
         abort(404)
     post = BlogPost.objects().get(slug=slug)
@@ -126,4 +126,3 @@ def post(slug):
                            post=post,
                            recent_posts=recent_posts,
                            related_posts=related_posts)
-

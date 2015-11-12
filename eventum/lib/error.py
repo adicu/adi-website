@@ -59,7 +59,7 @@ baseclass::
         # handles all above errors.
 
 """
-
+from flask import current_app
 import re
 
 HTTP_OK = 200
@@ -168,12 +168,11 @@ class EventumError(Exception):
         """
         # Import app in the function body to avoid importing `None` when
         # the module is first loaded.
-        from app import app
         message = '[{}]: {}'.format(self.error_type, self.message)
-        app.logger.error(message)
+        current_app.logger.error(message)
         if self.data:
-            app.logger.error('[{}][DATA]: {}'.format(self.error_type,
-                                                     self.data))
+            current_app.logger.error('[{}][DATA]: {}'.format(self.error_type,
+                                                             self.data))
 
     def _form_message(self, message, subs):
         """Apply subsitutions to the error message if any exist.  If there are
@@ -201,12 +200,11 @@ class EventumError(Exception):
         """
         # Import app in the function body to avoid importing `None` when
         # the module is first loaded.
-        from app import app
         n_subs = message.count('%s')
 
         # Extend subs if there aren't enough
         if n_subs > len(subs):
-            app.logger.warning(
+            current_app.logger.warning(
                 '[{}._form_message]: {}'.format(self.error_type,
                                                 'Not enough subs provided'))
             # extend tuple by appending a tuple of length (n_subs - len(subs))
@@ -214,7 +212,7 @@ class EventumError(Exception):
 
         # Shorten subs if there are too many
         if len(subs) > n_subs:
-            app.logger.warning(
+            current_app.logger.warning(
                 '[{}._form_message]: {}'.format(self.error_type,
                                                 'Too many subs provided'))
             subs = subs[:n_subs]

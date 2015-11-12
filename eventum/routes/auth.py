@@ -8,15 +8,13 @@
 import string
 import random
 import httplib2
-from app import app
 from eventum.lib.json_response import json_success, json_error_message
 from eventum.models import User, Whitelist
 from eventum.forms import CreateProfileForm
 from eventum.routes.base import MESSAGE_FLASH
 from apiclient.discovery import build
-from config.flask_config import config
 from flask import Blueprint, render_template, request, \
-    flash, session, g, redirect, url_for
+    flash, session, g, redirect, url_for, current_app
 from oauth2client.client import (FlowExchangeError,
                                  flow_from_clientsecrets,
                                  AccessTokenCredentials)
@@ -43,8 +41,9 @@ def login():
     load_csrf_token_into_session()
     args_next = request.args.get('next')
     next = args_next if args_next else request.url_root
-    return render_template('auth/login.html',
-                           client_id=app.config["GOOGLE_CLIENT_ID"],
+    client_id = current_app.config['EVENTUM_GOOGLE_CLIENT_ID']
+    return render_template('eventum_auth/login.html',
+                           client_id=client_id,
                            state=session['state'],
                            # reauthorize=True,
                            next=next)
@@ -78,8 +77,9 @@ def store_token():
 
     try:
         # Upgrade the authorization code into a credentials object
-        oauth_flow = flow_from_clientsecrets(config['CLIENT_SECRETS_PATH'],
-                                             scope='')
+        oauth_flow = flow_from_clientsecrets(
+            current_app.config['EVENTUM_CLIENT_SECRETS_PATH'],
+            scope='')
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
     except FlowExchangeError:
@@ -176,7 +176,7 @@ def create_profile():
         # use code=303 to avoid POSTing to the next page.
         return redirect('/', code=303)
 
-    return render_template('auth/create_profile.html',
+    return render_template('eventum_auth/create_profile.html',
                            image_url=request.args.get('image_url'), form=form)
 
 
@@ -232,7 +232,7 @@ def disconnect():
 
     else:
         # For whatever reason, the given token was invalid.
-        app.logger.error('Failed to revoke token for given user.')
+        current_app.logger.error('Failed to revoke token for given user.')
 
     # use code=303 to avoid POSTing to the next page.
     return redirect(url_for('.login'), code=303)

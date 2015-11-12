@@ -13,7 +13,7 @@ from wtforms import StringField, DateField, TextAreaField, BooleanField, \
 from wtforms.validators import Required, ValidationError, Optional, \
     NumberRange, Regexp, URL
 from eventum.forms.validators import UniqueEvent
-from eventum.lib.regex import SLUG_REGEX
+from eventum.lib.regex import Regex
 
 
 SHORT_DESCRIPTION_PLACEHOLDER = ('Short Description.  This should be **one to '
@@ -75,7 +75,8 @@ class CreateEventForm(Form):
     title = StringField('Title',
                         [Required(message="Please provide an event title.")])
     slug = StringField('Slug', [UniqueEvent(),
-                                Regexp(SLUG_REGEX, message=INVALID_SLUG)])
+                                Regexp(Regex.SLUG_REGEX,
+                                       message=INVALID_SLUG)])
     location = StringField('Location')
     start_date = DateField('Start date', [Optional()], format=DATE_FORMAT)
     start_time = TimeField('Start time', [Optional()])

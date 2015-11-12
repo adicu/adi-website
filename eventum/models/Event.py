@@ -5,17 +5,17 @@
 .. moduleauthor:: Dan Schlosser <dan@danrs.ch>
 """
 
-from flask import url_for
-from mongoengine import ValidationError
-from app import adi, db
-from eventum.models.fields import DateField, TimeField
 import markdown
-
+from flask import url_for, current_app
 from datetime import datetime, timedelta
+from mongoengine import (Document, DateTimeField, StringField, ReferenceField,
+                         BooleanField, IntField, ValidationError)
+from eventum.models.fields import DateField, TimeField
+from eventum.models import BaseEventumDocument
 now = datetime.now
 
 
-class Event(db.Document):
+class Event(Document, BaseEventumDocument):
     """The object that represents an individual event in Mongoengine.
 
     Recurring events also have a :class:`~app.models.EventSeries` instance that
@@ -78,28 +78,28 @@ class Event(db.Document):
         'ordering': ['-start_date']
     }
 
-    date_created = db.DateTimeField(required=True, default=now)
-    date_modified = db.DateTimeField(required=True, default=now)
-    title = db.StringField(required=True, max_length=255)
-    creator = db.ReferenceField("User", required=True)
-    location = db.StringField()
-    slug = db.StringField(required=True, max_length=255)
+    date_created = DateTimeField(required=True, default=now)
+    date_modified = DateTimeField(required=True, default=now)
+    title = StringField(required=True, max_length=255)
+    creator = ReferenceField("User", required=True)
+    location = StringField()
+    slug = StringField(required=True, max_length=255)
     start_date = DateField()
     end_date = DateField()
     start_time = TimeField()
     end_time = TimeField()
-    short_description = db.StringField()
-    long_description = db.StringField()
-    short_description_markdown = db.StringField()
-    long_description_markdown = db.StringField()
-    published = db.BooleanField(required=True, default=False)
-    date_published = db.DateTimeField()
-    is_recurring = db.BooleanField(required=True, default=False)
-    parent_series = db.ReferenceField("EventSeries")
-    image = db.ReferenceField("Image")
-    facebook_url = db.StringField()
-    gcal_id = db.StringField()
-    gcal_sequence = db.IntField()
+    short_description = StringField()
+    long_description = StringField()
+    short_description_markdown = StringField()
+    long_description_markdown = StringField()
+    published = BooleanField(required=True, default=False)
+    date_published = DateTimeField()
+    is_recurring = BooleanField(required=True, default=False)
+    parent_series = ReferenceField("EventSeries")
+    image = ReferenceField("Image")
+    facebook_url = StringField()
+    gcal_id = StringField()
+    gcal_sequence = IntField()
 
     def get_absolute_url(self):
         """Returns the URL path that points to the client-facing version of
@@ -113,16 +113,6 @@ class Event(db.Document):
                            slug=self.slug,
                            index=self.index)
         return url_for('client.event', slug=self.slug)
-
-    def image_url(self):
-        """Returns the URL path that points to the image for the event.
-
-        :returns: The URL path like ``"/static/img/cat.jpg"``.
-        :rtype: str
-        """
-        if self.image:
-            return self.image.url()
-        return url_for('static', filename=adi['DEFAULT_EVENT_IMAGE'])
 
     @property
     def index(self):
@@ -209,6 +199,18 @@ class Event(db.Document):
         :rtype: str
         """
         return str(self.id)
+
+    def image_url(self):
+        """Returns the URL path that points to the image for the event.
+
+        :returns: The URL path like ``"/static/img/cat.jpg"``.
+        :rtype: str
+        """
+        if self.image:
+            return self.image.url()
+        return url_for(
+            'static',
+            filename=current_app.config['EVENTUM_DEFAULT_EVENT_IMAGE'])
 
     def ready_for_publishing(self):
         """Returns True if the event has all necessary fields filled out.

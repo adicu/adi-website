@@ -5,14 +5,16 @@
 .. moduleauthor:: Dan Schlosser <dan@danrs.ch>
 """
 
-from mongoengine import ValidationError
-from eventum.models.fields import DateField
-from app import db
 from datetime import datetime
+from mongoengine import (Document, DateTimeField, ReferenceField, IntField,
+                         ListField, StringField, BooleanField, ValidationError)
+from eventum.models import BaseEventumDocument
+from eventum.models.fields import DateField
+
 now = datetime.now
 
 
-class EventSeries(db.Document):
+class EventSeries(Document, BaseEventumDocument):
     """A model that stores the recurrence information for a recurring event
     series.
 
@@ -57,18 +59,18 @@ class EventSeries(db.Document):
     # MongoEngine ORM metadata
     meta = {}
 
-    date_created = db.DateTimeField(required=True, default=now)
-    date_modified = db.DateTimeField(required=True, default=now)
-    slug = db.StringField(required=True, max_length=255)
-    events = db.ListField(db.ReferenceField("Event"))
-    frequency = db.StringField(default="weekly")
-    every = db.IntField(min_value=1, max_value=30)
-    ends_after = db.BooleanField(default=True)
-    ends_on = db.BooleanField(default=False)
-    num_occurrences = db.IntField(default=1)
+    date_created = DateTimeField(required=True, default=now)
+    date_modified = DateTimeField(required=True, default=now)
+    slug = StringField(required=True, max_length=255)
+    events = ListField(ReferenceField("Event"))
+    frequency = StringField(default="weekly")
+    every = IntField(min_value=1, max_value=30)
+    ends_after = BooleanField(default=True)
+    ends_on = BooleanField(default=False)
+    num_occurrences = IntField(default=1)
     recurrence_end_date = DateField()
-    recurrence_summary = db.StringField()
-    gcal_id = db.StringField()  # ID of the first event in the series
+    recurrence_summary = StringField()
+    gcal_id = StringField()  # ID of the first event in the series
 
     def delete_one(self, event):
         """Deletes ``event`` after removing it from the series.

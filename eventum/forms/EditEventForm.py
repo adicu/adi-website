@@ -10,7 +10,7 @@ from eventum.forms.CreateEventForm import INVALID_SLUG
 from eventum.forms.validators import UniqueEditEvent
 from wtforms import StringField, BooleanField
 from wtforms.validators import Regexp
-from eventum.lib.regex import SLUG_REGEX
+from eventum.lib.regex import Regex
 
 
 # We add the '# noqa' to avoid flake8 errors on the name of this function.
@@ -39,7 +39,8 @@ def EditEventForm(original, *args, **kwargs):  # noqa
             (``-``).
         """
         update_all = BooleanField('Update all', default=False)
-        slug = StringField('Slug', [Regexp(SLUG_REGEX, message=INVALID_SLUG),
+        slug = StringField('Slug', [Regexp(Regex.SLUG_REGEX,
+                                           message=INVALID_SLUG),
                                     UniqueEditEvent(original)])
 
     return EditEventForm(*args, **kwargs)

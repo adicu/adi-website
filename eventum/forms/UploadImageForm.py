@@ -9,8 +9,7 @@ from flask.ext.wtf import Form
 from wtforms import StringField, FileField
 from wtforms.validators import Regexp, Required
 from eventum.forms.validators import UniqueImage
-from eventum.lib.regex import FILENAME_REGEX
-from eventum.lib.regex import EXTENSION_REGEX
+from eventum.lib.regex import Regex
 
 
 class UploadImageForm(Form):
@@ -29,12 +28,12 @@ class UploadImageForm(Form):
     image = FileField('Image file')
     uploaded_from = StringField('Uploaded from')
     filename = StringField('Filename', [
-        Regexp(FILENAME_REGEX, message='Your filename should only contain '
-                                       'uppercase and lowercase letters, '
-                                       'numbers, and underscores.'),
+        Regexp(Regex.FILENAME_REGEX,
+               message='Your filename should only contain uppercase and '
+                       'lowercase letters, numbers, and underscores.'),
         Required('Please submit a filename.'),
         UniqueImage()])
     extension = StringField('Extension', [
-        Regexp(EXTENSION_REGEX, message='Only .png, .jpg, .jpeg, '
-                                        'and .gif files are allowed.'),
+        Regexp(Regex.EXTENSION_REGEX,
+               message='Only .png, .jpg, .jpeg, and .gif files are allowed.'),
         Required('Please ensure your file has an extension.')])

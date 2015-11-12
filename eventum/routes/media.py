@@ -8,10 +8,9 @@
 import os
 
 from flask import Blueprint, request, redirect, url_for, render_template, \
-    send_from_directory, g, flash, jsonify
+    send_from_directory, g, flash, jsonify, current_app
 from werkzeug.utils import secure_filename
 
-from app import app
 from eventum.lib.decorators import login_required, requires_privilege
 from eventum.forms import UploadImageForm
 from eventum.models import Image
@@ -31,7 +30,9 @@ def index():
     """
     images = Image.objects()
     form = UploadImageForm()
-    return render_template('media/media.html', images=images, form=form)
+    return render_template('eventum_media/media.html',
+                           images=images,
+                           form=form)
 
 
 def allowed_file(filename):
@@ -43,7 +44,7 @@ def allowed_file(filename):
     """
     return (
         '.' in filename and os.path.splitext(filename)[1] in
-        app.config['ALLOWED_UPLOAD_EXTENSIONS']
+        current_app.config['EVENTUM_ALLOWED_UPLOAD_EXTENSIONS']
     )
 
 
@@ -74,8 +75,11 @@ def upload():
         f = request.files['image']
         if f:
             filename = create_filename(f, request.form['filename'])
-            f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            default_path = app.config['RELATIVE_UPLOAD_FOLDER'] + filename
+            f.save(os.path.join(current_app.config['EVENTUM_UPLOAD_FOLDER'],
+                                filename))
+            default_path = (
+                current_app.config['EVENTUM_RELATIVE_UPLOAD_FOLDER'] +
+                filename)
             image = Image(filename=filename,
                           default_path=default_path,
                           creator=g.user)
@@ -96,7 +100,7 @@ def file(filename):
 
     :param str filename: The filename of the image to show.
     """
-    return send_from_directory(app.config['UPLOAD_FOLDER'],
+    return send_from_directory(current_app.config['EVENTUM_UPLOAD_FOLDER'],
                                filename)
 
 
@@ -126,4 +130,4 @@ def view():
     **Methods:** ``GET``
     """
     images = Image.objects()
-    return render_template('media/view.html', images=images)
+    return render_template('eventum_media/view.html', images=images)

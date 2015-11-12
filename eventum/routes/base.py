@@ -8,10 +8,8 @@
 
 import sys
 from flask import (g, session, render_template, request, redirect, flash,
-                   url_for)
+                   url_for, current_app)
 from mongoengine.queryset import DoesNotExist
-import requests
-
 from eventum.models import User
 
 SUPER_USER_GPLUS_ID = 'super'
@@ -25,9 +23,8 @@ def lookup_current_user():
 
     Note that it gets called before all requests, but not before decorators
     """
-    from app import app
     g.user = None
-    if not app.config.get('GOOGLE_AUTH_ENABLED'):
+    if not current_app.config.get('EVENTUM_GOOGLE_AUTH_ENABLED'):
         # bypass auth by mocking a super user
         session['gplus_id'] = SUPER_USER_GPLUS_ID
         try:
@@ -47,55 +44,46 @@ def lookup_current_user():
             pass  # Fail gracefully if the user is not in the database yet
 
 
-def register_error_handlers(app):
+def register_error_handlers(blueprint):
 
-    @app.errorhandler(Exception)
+    @blueprint.errorhandler(Exception)
     def exception_handler(error):
         """Handle uncaught exceptions."""
-        app.logger.error("Uncaught Exception", exc_info=sys.exc_info())
-        if not app.config['DEBUG'] and request.path.startswith('/admin'):
+        current_app.logger.error("Uncaught Exception", exc_info=sys.exc_info())
+        if (not current_app.config['DEBUG'] and
+                request.path.startswith('/admin')):
             flash('An uncaught error occured: {}'.format(error.strerror),
                   ERROR_FLASH)
             return redirect(url_for('admin.index'))
-        app.handle_exception(error)  # default error handler
+        current_app.handle_exception(error)  # default error handler
 
-    @app.errorhandler(400)
+    @blueprint.errorhandler(400)
     def bad_request(error):
         """Handle 400 errors."""
-        return render_template('error/400.html'), 400
+        return render_template('eventum_error/400.html'), 400
 
-    @app.errorhandler(401)
+    @blueprint.errorhandler(401)
     def not_authorized(error):
         """Handle 401 errors."""
-        return render_template('error/401.html'), 401
+        return render_template('eventum_error/401.html'), 401
 
-    @app.errorhandler(403)
+    @blueprint.errorhandler(403)
     def forbidden(error):
         """Handle 403 errors."""
-        return render_template('error/403.html'), 403
+        return render_template('eventum_error/403.html'), 403
 
-    @app.errorhandler(404)
+    @blueprint.errorhandler(404)
     def not_found(error):
         """Handle 404 errors."""
-        old_site_url = 'http://adicu.github.com' + request.path
-        try:
-            response = requests.head(old_site_url, allow_redirects=True)
-            if response.status_code == 200:
-                return redirect(old_site_url)
-        except requests.exceptions.ConnectionError:
-            pass
+        return render_template('eventum_error/404.html'), 404
 
-        return render_template('error/404.html'), 404
-
-    @app.errorhandler(405)
+    @blueprint.errorhandler(405)
     def method_not_allowed(error):
         """Handle 405 errors."""
-        return render_template('error/405.html', method=request.method), 405
+        return render_template('eventum_error/405.html', method=request.method), 405
 
-    @app.errorhandler(500)
-    def internal_server_error(error):
-        """Handle 500 errors."""
-        return render_template('error/500.html'), 500
+
+def configure_routing(app):
 
     @app.before_request
     def _lookup_current_user():

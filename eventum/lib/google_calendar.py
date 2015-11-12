@@ -5,15 +5,16 @@ from sys import exit, stderr
 from apiclient.discovery import build
 from apiclient.errors import HttpError
 from oauth2client.file import Storage
+from flask import current_app
 
-from app import app
+from eventum import e
 from eventum.models import Event
 from eventum.lib.google_calendar_resource_builder import (
     GoogleCalendarResourceBuilder)
 from eventum.lib.decorators import skip_and_return_if
 from eventum.lib.error import EventumError
+from eventum.config import eventum_config
 
-from config.flask_config import config
 
 NO_CREDENTIALS = (
     'Failed to find the Google Calendar credentials file at '
@@ -40,14 +41,14 @@ class GoogleCalendarAPIClient():
         except IOError:
 
             # Find the valueof the EVENTUM_GOOGLE_AUTH_ENABLED environment var
-            if app.config['EVENTUM_GOOGLE_AUTH_ENABLED']:
+            if e.eventum.app.config['EVENTUM_GOOGLE_AUTH_ENABLED']:
                 gae_environ = 'TRUE'
             else:
                 gae_environ = 'FALSE'
 
             # Print error message
             print >> stderr, NO_CREDENTIALS.format(
-                app.config['INSTALLED_APP_CREDENTIALS_PATH'],
+                e.eventum.app.config['EVENTUM_INSTALLED_APP_CREDENTIALS_PATH'],
                 gae_environ)
 
             # Quit
@@ -59,8 +60,10 @@ class GoogleCalendarAPIClient():
         beginning of running the app.
         """
         self.service = self._get_service()
-        self.private_calendar_id = app.config['PRIVATE_CALENDAR_ID']
-        self.public_calendar_id = app.config['PUBLIC_CALENDAR_ID']
+        self.private_calendar_id = (
+            e.eventum.app.config['EVENTUM_PRIVATE_CALENDAR_ID'])
+        self.public_calendar_id = (
+            e.eventum.app.config['EVENTUM_PUBLIC_CALENDAR_ID'])
 
     def _calendar_id_for_event(self, event):
         """Returns the ID for the public or private calendar, depending on
@@ -76,7 +79,7 @@ class GoogleCalendarAPIClient():
             return self.public_calendar_id
         return self.private_calendar_id
 
-    @skip_and_return_if(not config['GOOGLE_AUTH_ENABLED'])
+    @skip_and_return_if(not eventum_config.EVENTUM_GOOGLE_AUTH_ENABLED)
     def _get_service(self):
         """Create and return the Google Calendar service object, using the
         credentials file generated through the command::
@@ -90,7 +93,8 @@ class GoogleCalendarAPIClient():
 
         :returns: The Google Calendar service.
         """
-        storage = Storage(app.config['INSTALLED_APP_CREDENTIALS_PATH'])
+        storage = Storage(
+            e.eventum.app.config['EVENTUM_INSTALLED_APP_CREDENTIALS_PATH'])
         credentials = storage.get()
 
         if credentials is None:
@@ -104,7 +108,7 @@ class GoogleCalendarAPIClient():
 
         return build('calendar', 'v3', http=http)
 
-    @skip_and_return_if(not config['GOOGLE_AUTH_ENABLED'])
+    @skip_and_return_if(not eventum_config.EVENTUM_GOOGLE_AUTH_ENABLED)
     def create_event(self, event):
         """Creates the event in Google Calendar.
 
@@ -124,7 +128,7 @@ class GoogleCalendarAPIClient():
 
         calendar_id = self._calendar_id_for_event(event)
 
-        app.logger.info('[GOOGLE_CALENDAR]: Create Event')
+        current_app.logger.info('[GOOGLE_CALENDAR]: Create Event')
         request = self.service.events().insert(calendarId=calendar_id,
                                                body=resource)
 
@@ -137,7 +141,7 @@ class GoogleCalendarAPIClient():
         # Return the Google Calendar response dict
         return created_event
 
-    @skip_and_return_if(not config['GOOGLE_AUTH_ENABLED'])
+    @skip_and_return_if(not eventum_config.EVENTUM_GOOGLE_AUTH_ENABLED)
     def update_event(self, stale_event, as_exception=False):
         """Updates the event in Google Calendar.
 
@@ -190,7 +194,7 @@ class GoogleCalendarAPIClient():
             resource = instance
             event_id_for_update = instance['id']
 
-        app.logger.info('[GOOGLE_CALENDAR]: Update Event')
+        current_app.logger.info('[GOOGLE_CALENDAR]: Update Event')
         request = self.service.events().update(calendarId=calendar_id,
                                                eventId=event_id_for_update,
                                                body=resource)
@@ -208,7 +212,7 @@ class GoogleCalendarAPIClient():
         # Return the Google Calendar response dict
         return updated_event
 
-    @skip_and_return_if(not config['GOOGLE_AUTH_ENABLED'])
+    @skip_and_return_if(not eventum_config.EVENTUM_GOOGLE_AUTH_ENABLED)
     def publish_event(self, stale_event):
         """Publish an event, moving it to the public calendar.
 
@@ -238,7 +242,7 @@ class GoogleCalendarAPIClient():
         return self.move_event(event, from_id=self.private_calendar_id,
                                to_id=self.public_calendar_id)
 
-    @skip_and_return_if(not config['GOOGLE_AUTH_ENABLED'])
+    @skip_and_return_if(not eventum_config.EVENTUM_GOOGLE_AUTH_ENABLED)
     def unpublish_event(self, stale_event):
         """Unpublish an event, moving it to the private calendar.
 
@@ -268,7 +272,7 @@ class GoogleCalendarAPIClient():
         return self.move_event(event, from_id=self.public_calendar_id,
                                to_id=self.private_calendar_id)
 
-    @skip_and_return_if(not config['GOOGLE_AUTH_ENABLED'])
+    @skip_and_return_if(not eventum_config.EVENTUM_GOOGLE_AUTH_ENABLED)
     def move_event(self, event, from_id, to_id):
         """Move an event between calendars.
 
@@ -286,7 +290,7 @@ class GoogleCalendarAPIClient():
         if not event.gcal_id:
             raise EventumError.GCalAPI.MissingID()
 
-        app.logger.info('[GOOGLE_CALENDAR]: Move Event')
+        current_app.logger.info('[GOOGLE_CALENDAR]: Move Event')
         request = self.service.events().move(calendarId=from_id,
                                              eventId=event.gcal_id,
                                              destination=to_id)
@@ -298,7 +302,7 @@ class GoogleCalendarAPIClient():
             self.create_event(event)
             raise EventumError.GCalAPI.NotFound.MoveFellBackToCreate(uri=e.uri)
 
-    @skip_and_return_if(not config['GOOGLE_AUTH_ENABLED'])
+    @skip_and_return_if(not eventum_config.EVENTUM_GOOGLE_AUTH_ENABLED)
     def delete_event(self, event, as_exception=False):
         """Delete an event or series from Google Calendar, or cancel a single
         event from a series.
@@ -325,7 +329,8 @@ class GoogleCalendarAPIClient():
 
         # Create the request
         if as_exception:
-            app.logger.info('[GOOGLE_CALENDAR]: Delete Event (as exception)')
+            current_app.logger.info(
+                '[GOOGLE_CALENDAR]: Delete Event (as exception)')
             resource = GoogleCalendarResourceBuilder.event_resource(event)
             instance = self._instance_resource_for_event_in_series(event)
             instance.update(resource)
@@ -335,7 +340,7 @@ class GoogleCalendarAPIClient():
                                                    eventId=instance['id'],
                                                    body=instance)
         else:
-            app.logger.info('[GOOGLE_CALENDAR]: Delete Event')
+            current_app.logger.info('[GOOGLE_CALENDAR]: Delete Event')
             request = self.service.events().delete(calendarId=calendar_id,
                                                    eventId=event.gcal_id)
 
