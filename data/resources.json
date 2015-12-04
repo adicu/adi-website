@@ -419,7 +419,7 @@
       "resources": [
         {
           "name": "Official Ruby on Rails Tutorial",
-          "url": "http://ruby.railstutorial.org/ruby-on-rails-tutorial-book",
+          "url": "https://www.railstutorial.org/book",
           "description": "This tutorial will walk you through building your first app with Ruby on Rails."
         },
         {
