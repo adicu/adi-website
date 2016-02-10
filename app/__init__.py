@@ -14,6 +14,7 @@ import logging
 from flask import Flask
 from flask.ext.mongoengine import MongoEngine
 from flask.ext.assets import Environment, Bundle
+from webassets.filter import get_filter
 
 from config import adi_config
 
@@ -154,18 +155,28 @@ def register_delete_rules():
 def register_scss():
     """Registers the Flask-Assets rules for scss compilation.  This reads from
     ``config/scss.json`` to make these rules.
+
+    We expire files using filenames:
+    http://webassets.readthedocs.org/en/latest/expiring.html#expire-using-the-filename
     """
     assets.url = app.static_url_path
+    assets.config['SASS_PATH'] = app.config['SCSS_FOLDER']
+
     with open('config/scss.json') as f:
         bundle_instructions = json.loads(f.read())
         for _, bundle_set in bundle_instructions.iteritems():
             output_folder = bundle_set['output_folder']
             depends = bundle_set['depends']
             for bundle_name, instructions in bundle_set['rules'].iteritems():
+                # Use filename expiration
+
+                output_filename = (output_folder +
+                                   instructions['output'].rstrip('.css') +
+                                   '.%(version)s.css')
                 bundle = Bundle(*instructions['inputs'],
-                                output=output_folder + instructions['output'],
+                                output=output_filename,
                                 depends=depends,
-                                filters='scss')
+                                filters=('scss', 'cssmin'))
                 assets.register(bundle_name, bundle)
 
 

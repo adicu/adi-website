@@ -96,6 +96,9 @@ config['UPLOAD_FOLDER'] = path.join(config['BASEDIR'],
 config['RELATIVE_DELETE_FOLDER'] = 'app/static/img/uploaded/deleted/'
 config['DELETE_FOLDER'] = path.join(config['BASEDIR'],
                                     config['RELATIVE_DELETE_FOLDER'])
+config['RELATIVE_SCSS_FOLDER'] = 'app/scss/'
+config['SCSS_FOLDER'] = path.join(config['BASEDIR'],
+                                  config['RELATIVE_SCSS_FOLDER'])
 
 # The file extensions that may be uploaded
 config['ALLOWED_UPLOAD_EXTENSIONS'] = set(['.png', '.jpg', '.jpeg', '.gif'])
