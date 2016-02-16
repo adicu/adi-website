@@ -333,3 +333,8 @@ def _upcoming_events_triple(event):
 @client.route('/jade', methods=['GET'])
 def jade():
     return render_template('jade.html')
+
+
+# @client.route('/join', methods=['GET'])
+# def gbody():
+#     return render_template('join.html')
