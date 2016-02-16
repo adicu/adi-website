@@ -43,7 +43,7 @@
     "faqs": [
         {
             "question": "Am I qualified enough to be a part of ADI Labs?",
-            "answer": "If you’re planning on writing code during ADI Labs, you should be good if you’ve taken 1004, 1006 or 1007. Alternatively, if you have some programming experience from outside class, that should work too. If you’re proficient in a language like Java, Python, JavaScript or Objective-C, you should be fine. We will try to put you on a project that matches your skill level."
+            "answer": "If you’re planning on writing code during ADI Labs, you should have experience with web apps or mobile apps. For web developers, you should understand how a framework like Flask, Django, or Ruby on Rails works and be able to build a simple website using one of them. For mobile, you should be able to get a simple app up and running. In deciding projects, we will try to put you on a project that matches your skill level."
         },
         {
             "question": "Is ADI Labs the same as ADI Committee?",
