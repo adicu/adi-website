@@ -41,9 +41,9 @@ def index():
     # Ending on a future date, or today at a future time. The events should be
     # published, and should be chronological.
     # We limit to four events, one large event and one set of three events.
-    events = (Event.objects(Q(end_date__gt=today)
-                            |
-                            Q(end_date=today, end_time__gt=this_moment))
+    events = (Event.objects(Q(end_date__gte=today))
+                            # |
+                            # Q(end_date=today, end_time__gt=this_moment)) #
                    .filter(published=True)
                    .order_by('start_date', 'start_time')
                    .limit(ONE_LARGE_AND_TRIPLE))
