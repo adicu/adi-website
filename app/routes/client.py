@@ -35,13 +35,15 @@ def index():
     **Methods:** ``GET``
     """
     this_moment = datetime.now().time()
+    # cast date.today() to a datetime
+    today = datetime.combine(date.today(), datetime.min.time())
 
     # Ending on a future date, or today at a future time. The events should be
     # published, and should be chronological.
     # We limit to four events, one large event and one set of three events.
-    events = (Event.objects(Q(end_date__gt=date.today())
+    events = (Event.objects(Q(end_date__gt=today)
                             |
-                            Q(end_date=date.today(), end_time__gt=this_moment))
+                            Q(end_date=today, end_time__gt=this_moment))
                    .filter(published=True)
                    .order_by('start_date', 'start_time')
                    .limit(ONE_LARGE_AND_TRIPLE))
