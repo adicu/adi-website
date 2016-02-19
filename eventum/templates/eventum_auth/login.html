@@ -70,5 +70,5 @@ function render() {
 </div>
 <!-- Run check if logged in automatically on page load -->
 <script type="text/javascript">var STATE = "{{ state }}", NEXT = "{{ next }}";</script>
-<script type="text/javascript" src="{{url_for('static', filename='js/admin/auth/plus.js') }}"></script>
+<script type="text/javascript" src="{{url_for('eventum.static', filename='js/auth/plus.js') }}"></script>
 {% endblock %}
