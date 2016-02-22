@@ -27,7 +27,8 @@ COMPANIES_PATH = 'data/companies.json'
 # Eventum configurations #
 ##########################
 
-EVENTUM_GOOGLE_AUTH_ENABLED = environ.get('EVENTUM_GOOGLE_AUTH_ENABLED', True)
+EVENTUM_GOOGLE_AUTH_ENABLED = (environ.get('EVENTUM_GOOGLE_AUTH_ENABLED',
+                                           'TRUE') == 'TRUE')
 EVENTUM_INSTALLED_APP_CLIENT_SECRET_PATH = (
     environ.get('EVENTUM_INSTALLED_APP_CLIENT_SECRET_PATH',
                 'config/installed_app_client_secrets.json'))

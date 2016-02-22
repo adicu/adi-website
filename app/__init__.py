@@ -38,6 +38,8 @@ def create_app(**config_overrides):
     assets = Environment(app)
     register_scss(assets)
 
+    print "="*10, app.config['DEBUG'], '='*10
+
     # Eventum
     eventum = Eventum(app)
 
@@ -47,6 +49,8 @@ def create_app(**config_overrides):
 
     # Blueprints
     register_blueprints()
+
+    print "="*10, app.config['DEBUG'], '='*10
 
     return app
 
