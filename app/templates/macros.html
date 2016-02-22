@@ -33,7 +33,7 @@
         <a href="{{ event.get_absolute_url() }}">
             <h2>{{ event.title }}</h2>
         </a>
-        {% if show_description %}ros.h
+        {% if show_description %}
         <p class="description">{{ event.short_description | safe }}</p>
         {% endif %}
         <div class="details">
