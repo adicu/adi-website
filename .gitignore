@@ -13,6 +13,7 @@ tmp
 /share
 *.pyc
 *.swp
+*.log
 .Python
 .vagrant
 
