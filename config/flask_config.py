@@ -1,5 +1,5 @@
 from os import environ
-import os
+
 ########################
 # Flask configurations #
 ########################
