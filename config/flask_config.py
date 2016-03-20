@@ -1,5 +1,5 @@
 from os import environ
-
+import os
 ########################
 # Flask configurations #
 ########################
@@ -39,3 +39,6 @@ EVENTUM_CLIENT_SECRETS_PATH = environ.get('EVENTUM_CLIENT_SECRETS_PATH',
                                           'config/client_secrets.json')
 EVENTUM_PRIVATE_CALENDAR_ID = environ.get('EVENTUM_PRIVATE_CALENDAR_ID', None)
 EVENTUM_PUBLIC_CALENDAR_ID = environ.get('EVENTUM_PUBLIC_CALENDAR_ID', None)
+
+EVENTUM_UPLOAD_FOLDER = environ.get('EVENTUM_UPLOAD_FOLDER', 'app/static/img/uploaded/')
+EVENTUM_DELETE_FOLDER = environ.get('EVENTUM_DELETE_FOLDER', 'app/static/img/uploaded/deleted/')
