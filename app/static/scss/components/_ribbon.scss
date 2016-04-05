@@ -1,7 +1,3 @@
-@import '../utils';
-
-$ribbon-height: 0.3125rem;
-$ribbon-strip-width: 7.5rem;
 body { padding-top: $ribbon-height; }
 .ribbon {
     position: fixed;

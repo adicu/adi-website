@@ -38,8 +38,6 @@ def create_app(**config_overrides):
     assets = Environment(app)
     register_scss(assets)
 
-    print "="*10, app.config['DEBUG'], '='*10
-
     # Eventum
     eventum = Eventum(app)
 
@@ -49,8 +47,6 @@ def create_app(**config_overrides):
 
     # Blueprints
     register_blueprints()
-
-    print "="*10, app.config['DEBUG'], '='*10
 
     return app
 
@@ -77,23 +73,12 @@ def register_scss(assets):
     http://webassets.readthedocs.org/en/latest/expiring.html#expire-using-the-filename
     """
     assets.append_path(app.static_folder, app.static_url_path)
-    with open('config/scss.json') as f:
-        bundle_instructions = json.loads(f.read())
-        for _, bundle_set in bundle_instructions.iteritems():
-            output_folder = bundle_set['output_folder']
-            depends = bundle_set['depends']
-            for bundle_name, instructions in bundle_set['rules'].iteritems():
-                # Use filename expiration
 
-                output_filename = (output_folder +
-                                   instructions['output'].rstrip('.css') +
-                                   '.%(version)s.css')
-                bundle = Bundle(*instructions['inputs'],
-                                output=output_filename,
-                                depends=depends,
-                                filters=('scss', 'cssmin'))
-                assets.register(bundle_name, bundle)
-
+    bundle = Bundle('scss/client.scss',
+                    output='css/gen/client.css',
+                    depends=('**/*.scss'),
+                    filters='scss')
+    assets.register('scss_client', bundle)
 
 def run():
     """Runs the app."""
