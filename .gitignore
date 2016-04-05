@@ -17,6 +17,8 @@ tmp
 .Python
 .vagrant
 
+*.egg-info
+
 # Secrets / Authentication
 settings.dev
 settings.prod

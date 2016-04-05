@@ -41,6 +41,9 @@
 
     {%- block css-%}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/lib/reset.min.css') }}">
+    {% assets "scss_client" %}
+    <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
+    {% endassets %}
     {%- endblock css-%}
 
     {%- block js -%}
