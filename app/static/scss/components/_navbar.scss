@@ -1,11 +1,4 @@
-@import '../colors';
-@import '../utils';
-@import 'ribbon';
-@import '../media_queries';
-
-$navbar-height: 5.5rem;
-$navbar-scroll-height: 3.5rem;
-$logo-height: 1.75rem;
+$logo-height: 2.25rem;
 $speed: 0.3s;
 .navbar {
     @include transition($speed);
