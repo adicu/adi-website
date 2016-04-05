@@ -2,14 +2,7 @@
 {% block title %}{{ event.title}} | {{ super() }}{% endblock %}
 {% import "macros.html" as macros %}
 
-{% set should_include_hero = False%}
-
-{% block css %}
-{{ super() }}
-{% assets "scss_single_event" %}
-<link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
-{% endassets %}
-{% endblock %}
+{% set should_include_hero = False %}
 
 {% block heroclass %}hidden{% endblock %}
 {% block hero %}

@@ -1,0 +1,536 @@
+$content-padding: 0.625rem;
+
+$navbar-height: 5.5rem;
+$navbar-scroll-height: 3.5rem;
+
+$footer-height: 4rem;
+$footer-padding: 3rem;
+
+$ribbon-height: 0.3125rem;
+$ribbon-strip-width: 7.5rem;
+
+.content {
+    max-width: $content-width;
+    width: 95%;
+    margin: 0 auto;
+    padding: 0 $content-padding;
+    position: relative;
+
+    a, a:hover {
+        color: $blue;
+    }
+}
+.jobfair {
+    .button i {
+        display: inline;
+        margin-left: -0.8rem;
+        margin-right: 1rem;
+    }
+}
+
+.company {
+    margin-bottom: 2rem;
+    .image-wrapper {
+        margin-bottom: 1rem;
+        width: 100%;
+        height: 0;
+        padding-bottom: 56.25%;
+        position: relative;
+
+        i {
+            position: absolute;
+            bottom: 1.5rem;
+            top: 1.5rem;
+            right: 3rem;
+            left: 3rem;
+            background-position: center center;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+
+    }
+
+}
+
+.contact-options {
+    &:after {
+        @include clearfix;
+    }
+    li {
+        width: 48%;
+        margin: 2rem 0;
+        display: inline-block;
+        float: left;
+        text-align: center;
+        & + li {
+            float: right;
+        }
+    }
+    h3 {
+        text-align: center;
+    }
+    p {
+        font-family: $sans;
+    }
+}
+
+.projects {
+    h3 {
+        margin-bottom: 2rem;
+    }
+    h2 a {
+        color: $gray !important;
+    }
+    .image {
+        padding-bottom: 0 !important;
+    }
+    .text {
+        padding-left: 2rem !important;
+    }
+}
+
+.faqs {
+
+    .pair:after {
+        @extend .clearfix;
+    }
+
+    strong {
+        margin-bottom: 1rem;
+        display: block;
+    }
+
+    .faq {
+        margin-bottom: 2rem;
+        width: 50%;
+        float: left;
+        display: block;
+        box-sizing: border-box;
+        &:first-child {
+            padding-right: 1rem;
+        }
+        &:nth-child(2) {
+            padding-left: 1rem;
+        }
+    }
+
+    p {
+        font-family: $sans;
+    }
+}
+
+
+.post-image {
+    width: 600px;
+    display: block;
+}
+
+$hero-height: 38rem;
+$hero-offset: 5rem;
+.hero {
+    padding-top: $navbar-height;
+    position: relative;
+    height: $hero-height;
+
+    .scrim {
+        @include scrim;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        z-index: 3;
+    }
+
+    i {
+        z-index: 2;
+        display: block;
+        height: ($hero-height + $hero-offset);
+        width: 100%;
+        position: fixed;
+        background-position: center center;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+
+    .solid {
+        &.blue {
+            background-color: $blue;
+        }
+    }
+}
+
+.all-wrapper {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin-bottom: (-1*($footer-height + 2 * $footer-padding));
+}
+
+$callout-padding: 4rem 0;
+$section-padding: 2.5rem 0;
+$newsletter-padding: 3.75rem 0 1.25rem;
+$top-card-padding: 4rem 0 2.5rem;
+.main {
+    height: auto !important;
+    height: 100%;
+    position: relative;
+    z-index: 4;
+    background-color: $white;
+
+    &.no-hero {
+        padding-top: ($navbar-height + 3rem);
+        margin-top: 0;
+    }
+    h1.page-title {
+        color: $white;
+        margin: 1.5rem auto;
+        position: absolute;
+        top: -12rem;
+        width: 95%;
+        z-index: 5;
+        max-width: $content-width;
+        text-align: center;
+    }
+
+    h2.subtitle {
+        margin: 0 0 2rem;
+    }
+
+    section {
+        background-color: $white;
+        position: relative;
+        z-index: 5;
+
+        &:after {
+            @include clearfix;
+        }
+        &:not(:first-child) {
+            padding: $section-padding;
+        }
+
+        h3.no-events {
+            margin: 4rem 0;
+        }
+
+        .event.large:last-child {
+            margin-bottom: 0;
+        }
+
+        h3 + h3 {
+            margin-top: 1rem;
+        }
+
+
+        &:last-child{
+            padding: 2.5rem 0 5rem;
+        }
+    }
+
+    $radius: 0.625rem;
+    $card-gutter: 3.75rem;
+    $top-card-offset: -10rem;
+    .top-card {
+        z-index: 100;
+        width: ($content-width + 2*$card-gutter);
+        max-width: 95%;
+        position: relative;
+        margin: 0 auto;
+        @include transform(translateY($top-card-offset));
+        margin-bottom: $top-card-offset;
+        background-color: $white;
+        padding: $top-card-padding !important;
+        border-top-left-radius: $radius;
+        border-top-right-radius: $radius;
+        &+section{
+            background-color: $white;
+        }
+    }
+
+    .newsletter .top-card {
+        padding: $newsletter-padding !important;
+    }
+
+    .subscribe {
+        width: 95%;
+        max-width: 51.25rem;
+        margin: 0 auto;
+        position: relative;
+        &:after {
+            @include clearfix;
+        }
+
+        .submit {
+            background-color: $green;
+            color: $white;
+            float: right;
+            display: inline-block;
+            width: 6rem;
+            text-align: center;
+        }
+
+        label {
+            width: 8.125rem;
+        }
+        .left {
+            position: absolute;
+            left: 0;
+            right: 14rem;
+
+
+            input[type="email"] {
+                border: 0;
+                width: 100%;
+                margin-right: 8.25rem;
+                font-size: 1.875rem;
+                border-style: solid;
+                border-bottom: 1px solid $gray;
+
+                &:focus {
+                    border-bottom: 1px solid $green;
+                    outline: none;
+                }
+            }
+        }
+    }
+}
+.section-header {
+    margin-bottom: 2.1875rem;
+    .bar {
+        width: 3.75rem;
+        height: $ribbon-height;
+        display: block;
+        background-color: $yellow;
+
+        &.blue { background-color: $blue;  }
+        &.green { background-color: $green; }
+        &.yellow { background-color: $yellow; }
+        &.gray { background-color: $gray; }
+        &.white { background-color: $white; }
+    }
+}
+
+.callout {
+    position: relative;
+
+    .content:after {
+        @include clearfix;
+    }
+    .full {
+        padding: $callout-padding;
+    }
+    .callout-left {
+        width: 50%;
+        float: left;
+        display: inline-block;
+    }
+    .callout-right {
+        display: inline-block;
+        width: 50%;
+        padding-bottom: 33.33333%;
+        position: relative;
+        float: right;
+
+        i {
+            position: absolute;
+            left: 1rem;
+            right: 0;
+            background-position: bottom center;
+            height: 100%;
+            background-size: cover;
+        }
+    }
+
+    a, a:hover {
+        color: $white;
+    }
+
+    h3 {
+        width: 20rem;
+        margin-bottom: 2rem;
+    }
+}
+.button-group {
+    margin: 1rem 0;
+    &.centered {
+        text-align: center;
+    }
+    .button {
+        margin-right: 1.25rem;
+    }
+}
+.full {
+    &.yellow {
+        background-color: $yellow !important;
+        color: $gray !important;
+    }
+    &.blue {
+        background-color: $blue !important;
+        color: $gray !important;
+    }
+    &.green {
+        background-color: $green !important;
+        color: $gray !important;
+    }
+    &.white {
+        background-color: $green !important;
+        color: $gray !important;
+    }
+    &.yellow, &.blue, &.green {
+        p a {
+            text-decoration: underline;
+            color: $gray !important;
+        }
+    }
+}
+
+$large-hero-height: $hero-height + 7rem;
+@media screen and (min-width: $desktop-min) {
+    .hero {
+        height: $large-hero-height;
+
+        i {
+            height: ($large-hero-height + $hero-offset);
+        }
+    }
+}
+
+@media screen and (max-width: $phone-max) {
+    .main .top-card {
+        width: 100%;
+        max-width: 100%;
+        border-radius: 0;
+    }
+
+    h1.page-title{
+        top: -16rem !important;
+    }
+
+    .callout {
+        h3 {
+            width: 100%;
+        }
+        .callout-right {
+            display: none;
+        }
+        .callout-left {
+            width: 100%;
+        }
+    }
+
+    .hero {
+        height: ($hero-height - 10rem);
+
+        i {
+            height: ($hero-height + $navbar-height - 10rem);
+        }
+
+
+    }
+
+    .main .subscribe {
+        .submit {
+            display: block;
+            margin: 0 auto;
+            float: none;
+            margin-top: 1rem;
+        }
+        .left  {
+            position:relative;
+
+            input[type="email"] {
+                width: 100%;
+                margin-right: 0;
+            }
+        }
+    }
+
+    .contact-options {
+        li {
+            width: 100%;
+        }
+    }
+}
+
+$banner-height: 8rem;
+.devfest-banner {
+    height: $banner-height;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: $offgray;
+    @include transition(0.3s);
+
+    & + .ribbon {
+        top: $banner-height;
+        @include transition(0.3s);
+
+        & + .navbar {
+            top: ($banner-height + $ribbon-height);
+            @include transition(0.3s);
+
+            & + .hero {
+                padding-top: ($banner-height + $navbar-height);
+                @include transition(0.3s);
+                & + .no-hero {
+                    @include transition(0.3s);
+                    padding-top: ($banner-height + $navbar-height + 3rem);
+                }
+            }
+        }
+    }
+
+    &.up {
+        top: -$banner-height;
+
+        & + .ribbon {
+            top: 0;
+
+            & + .navbar {
+                top: $ribbon-height;
+
+                & + .hero {
+                    padding-top: ($navbar-height);
+                    & + .no-hero {
+                        padding-top: ($navbar-height + 3rem);
+                    }
+                }
+            }
+        }
+    }
+
+    .devfest-button {
+        border: 2px solid $white;
+        padding: 0.5rem 1rem;
+        @extend .h5;
+        float: right;
+        height: 2rem;
+        line-height: 2rem;
+        margin-top: ($banner-height/2 - 1.5rem);
+        color: $white;
+
+    }
+    img {
+        height: ($banner-height - 1rem);
+        padding: 0.5rem 0;
+        @include border-box;
+        display: inline-block;
+    }
+    .message {
+        text-align: center;
+        position: absolute;
+        top: 2rem;
+        bottom: 2rem;
+        left: 25%;
+        right: 25%;
+        color: $white;
+    }
+}
+
+
+@media screen and (max-width: $phone-max) {
+    .devfest-banner .message {
+        display: none;
+    }
+}
