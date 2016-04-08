@@ -17,5 +17,5 @@ WORKDIR /
 # expose the port and start the server
 EXPOSE 6000
 
-CMD gunicorn run:app -b 0.0.0.0:6000 --log-file /opt/logs/gunicorn.log --log-level debug
+CMD gunicorn run:app -b 0.0.0.0:6000 --log-file /opt/logs/gunicorn.log
 
