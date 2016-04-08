@@ -2,13 +2,6 @@
 {% block title %}ADI | The Application Development Initiative{% endblock %}
 {% import "macros.html" as macros %}
 
-{% block css %}
-{{ super() }}
-{% assets "scss_client" %}
-<link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
-{% endassets %}
-{% endblock %}
-
 {% block js %}
 {{ super() }}
 <script src="//cdn.jsdelivr.net/mobile-detect.js/0.4.3/mobile-detect.min.js"></script>

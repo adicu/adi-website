@@ -1,8 +1,3 @@
-@import '../colors';
-@import '../utils';
-
-$footer-height: 4rem;
-$footer-padding: 3rem;
 footer {
     .content:after {
         @extend .clearfix;

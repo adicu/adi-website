@@ -1,12 +1,5 @@
 {% extends "page.html" %}
 
-{% block css %}
-{{ super() }}
-{% assets "scss_blog" %}
-<link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
-{% endassets %}
-{% endblock %}
-
 
 {% block main %}
 <section class="newsletter">

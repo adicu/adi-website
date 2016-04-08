@@ -2,13 +2,6 @@
 {% block title %}Resources | {{ super() }}{% endblock %}
 {% block header_image %}/static/img/hero/puzzled.jpg{% endblock %}
 
-{% block css %}
-{{ super() }}
-{% assets "scss_resources" %}
-<link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
-{% endassets %}
-{% endblock %}
-
 {% block js %}
 {{ super() }}
 <script type="text/javascript" src="{{ url_for('static', filename='js/resources/resources.js')}}"></script>
