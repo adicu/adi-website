@@ -6,7 +6,7 @@ Flask-Script==0.6.7
 Flask-WTF==0.9.5
 Jinja2==2.8
 Markdown==2.4
-MarkupSafe==0.23
+MarkupSafe==0.19
 Pygments==1.6
 Sphinx==1.2.3
 WTForms==1.0.5
