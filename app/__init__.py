@@ -11,7 +11,6 @@
 import json
 from flask import Flask
 from flask.ext.assets import Environment, Bundle
-from webassets.filter import get_filter
 from eventum import Eventum
 
 
