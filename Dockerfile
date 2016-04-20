@@ -15,7 +15,7 @@ ADD ./ /
 WORKDIR /
 
 # expose the port and start the server
-EXPOSE 6000
+EXPOSE 8181
 
-CMD gunicorn run:app -b 0.0.0.0:6000 --log-file /opt/logs/gunicorn.log
-
+CMD /bin/bash -c "source /config/secrets.prod \
+    && gunicorn run:app -b 0.0.0.0:8181"

@@ -1,4 +1,4 @@
-# ADI Website ([adicu.com][adi])
+# ADI Website ([https://adicu.com][adi])
 
 [![Build Status](https://travis-ci.org/adicu/adi-website.svg)](https://travis-ci.org/adicu/adi-website)
 
