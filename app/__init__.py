@@ -11,6 +11,7 @@
 import json
 from flask import Flask
 from flask.ext.assets import Environment, Bundle
+from webassets.filter import get_filter
 from eventum import Eventum
 
 
@@ -72,11 +73,12 @@ def register_scss(assets):
     http://webassets.readthedocs.org/en/latest/expiring.html#expire-using-the-filename
     """
     assets.append_path(app.static_folder, app.static_url_path)
+    assets.config['SASS_PATH'] = 'app/scss'
 
     bundle = Bundle('scss/client.scss',
-                    output='css/gen/client.css',
+                    output='css/gen/client.%(version)s.css',
                     depends=('**/*.scss'),
-                    filters='scss')
+                    filters=('scss', 'cssmin'))
     assets.register('scss_client', bundle)
 
 def run():
