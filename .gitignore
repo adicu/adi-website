@@ -1,13 +1,11 @@
 # Folders
 /app/static/css/gen
-/app/static/css/gen
 /app/static/img/uploaded/
 /lib
 /local
 /log/*
 /bin
 /include
-tmp
 /man
 /share
 *.pyc
@@ -21,13 +19,9 @@ tmp
 # Secrets / Authentication
 secrets.dev
 secrets.prod
-setup_consul_dev.sh
-setup_consul_prod.sh
 installed_app_client_secrets.json
 installed_app_credentials.json
 client_secrets.json
-credentials.json
-consul_data
 
 # SCSS
 .webassets-cache

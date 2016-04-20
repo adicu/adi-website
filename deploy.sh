@@ -1,8 +1,8 @@
 #! /bin/bash
 
-ADI_WWWW=/srv/new-adi-website/www
+ADI_WWWW=/srv/adi-website/www
 DOCKERFILE=Dockerfile
-NAME="new-adi-website"
+NAME="adi-website"
 
 # Validate nginx configurations
 nginx -t
@@ -30,7 +30,7 @@ docker build -t $NAME .
 docker run \
     --net=host \
     --restart=always \
-    -v $ADI_WWW/../logs:/opt/logs \
-    --volumes-from uploaded-images \
+    -v $ADI_WWWW/../logs:/logs \
+    -v $ADI_WWWW/app/static/img/uploaded:/app/static/img/uploaded \
     -d \
     --name="$NAME" $NAME

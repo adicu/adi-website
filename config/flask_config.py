@@ -10,6 +10,10 @@ DEBUG = (environ.get('DEBUG', 'FALSE') == 'TRUE')
 SECRET_KEY = environ.get('SECRET_KEY', None)
 CSRF_SESSION_KEY = environ.get('CSRF_SESSION_KEY', None)
 
+MONGODB_SETTINGS = {
+    'DB': environ.get('MONGODB_DB', 'eventum')
+}
+
 ######################
 # ADI configurations #
 ######################
