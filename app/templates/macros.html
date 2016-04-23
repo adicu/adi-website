@@ -8,12 +8,29 @@
             </a>
             <div class="right">
                 <ul class="menu">
-                    {% for label, url in navbar_items %}
+                    {% for label, target in navbar_items %}
+                    {% if target is string %}
                     <li>
-                        <a href="{{url}}">
+                        <a href="{{target}}">
                             <div>{{ label }}</div>
                         </a>
                     </li>
+                    {% else %}
+                    <li class="navbar-dropdown">
+                        <div class="dropdown-label">
+                            {{label}}
+                        </div>
+                        <ul class="dropdown-items">
+                            {% for label, url in target %}
+                            <li>
+                                <a href="{{url}}">
+                                    <div>{{ label }}</div>
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    {% endif %}
                     {% endfor %}
                 </ul>
             </div>

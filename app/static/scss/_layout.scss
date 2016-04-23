@@ -1,5 +1,4 @@
 $content-padding: 0.625rem;
-
 $navbar-height: 5.5rem;
 $navbar-scroll-height: 3.5rem;
 
@@ -8,6 +7,8 @@ $footer-padding: 3rem;
 
 $ribbon-height: 0.3125rem;
 $ribbon-strip-width: 7.5rem;
+
+$radius: 0.625rem;
 
 .content {
     max-width: $content-width;
@@ -227,7 +228,6 @@ $top-card-padding: 4rem 0 2.5rem;
         }
     }
 
-    $radius: 0.625rem;
     $card-gutter: 3.75rem;
     $top-card-offset: -10rem;
     .top-card {
