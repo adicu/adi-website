@@ -8,8 +8,8 @@
 
 from argparse import ArgumentParser
 
-from script.migrate import backfill_blog, import_images
-from script.db.gen import TestDataGenerator, ACTIONS, FLAGS
+from eventum.script.migrate import backfill_blog, import_images
+from eventum.script.db.gen import TestDataGenerator, ACTIONS, FLAGS
 
 COMMAND_MIGRATE = 'migrate'
 MIGRATE_DESCRIPTION = """

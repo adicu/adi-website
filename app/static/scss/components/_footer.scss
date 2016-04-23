@@ -1,0 +1,122 @@
+footer {
+    .content:after {
+        @extend .clearfix;
+    }
+    background-color: $offgray;
+    color: $white;
+    padding: $footer-padding 0;
+    position: absolute;
+    width: 100%;
+    z-index: 100000;
+    p {
+        font-size: 1rem;
+        a {
+            color :$white;
+            &:hover {
+                color: $blue;
+            }
+        }
+    }
+
+    h4, h3 {
+        color: $white;
+    }
+
+    form {
+        margin-bottom: 0.25rem;
+        font-size: 0;
+        position: relative;
+        .left {
+            width: 100%;
+            display: inline-block;
+            padding-right: 0rem;
+            @include border-box;
+            @include transition(0.2s);
+
+        }
+        input[type=email] {
+            @extends .p;
+            padding: 0 0 0.25rem;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+            line-height: 1.5rem;
+            @include border-box;
+            display: inline;
+            color: $white;
+            background-color: rgba(0,0,0,0);
+            border: 0;
+            border-bottom: 1px solid $white;
+            border-top: 1px solid transparent;
+            outline: none;
+            &:focus {
+                border-bottom: 1px solid $blue;
+                outline: none;
+            }
+            margin-right: 1rem;
+        }
+        .button {
+            z-index: 1;
+            display: inline-block;
+            opacity: 0;
+            position: absolute;
+            right: 0;
+            top: -0.25rem;
+            border-radius: 0;
+            margin: 0;
+            font-family: $slab;
+            width: 25%;
+            text-align: center;
+            font-size: 1rem;
+            padding: 0.25rem 0.75rem;
+            border: 1px solid $white;
+            @include border-box;
+            @include transition-with-delay(0.2s, 0s);
+        }
+        &.valid {
+            .button {
+                opacity: 1;
+                @include transition-with-delay(0.2s, 0.2s);
+            }
+            .left {
+                padding-right: 1rem;
+                width: 75%;
+                @include transition-with-delay(0.2s, 0s);
+            }
+
+        }
+    }
+    .small.right {
+        float: right;
+    }
+    ul.inline {
+        li {
+            display: inline-block;
+            padding: 0 0.5rem;
+            text-align: center;
+            line-height: 2rem;
+            vertical-align: baseline;
+            &:first-child {
+                padding-left: 0;
+            }
+        }
+    }
+}
+
+.hax {
+    @include transform(translateY(1px));
+}
+.footer-spacer {
+    height: ($footer-height + 2*$footer-padding);
+}
+
+@media screen and (max-width: $phone-max) {
+    .right {
+        float: none;
+        margin-bottom: 1.5rem;
+    }
+
+    form {
+        margin-bottom: 0.5rem !important;
+    }
+}

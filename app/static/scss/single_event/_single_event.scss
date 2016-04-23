@@ -1,0 +1,32 @@
+.single-event {
+    .text {
+        margin-left: 33%;
+    }
+
+    .details {
+        i {
+            margin-right: 0;
+        }
+        .button i {
+            display: inline;
+            margin-right: 1rem;
+
+            &.fa-facebook {
+                margin-left: -0.8rem;
+                margin-right: 0.8rem;
+            }
+
+            &.fa-comment {
+                margin-left: -1.1rem;
+                margin-right: 0.4rem;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: $phone-max) {
+    .single-event .text {
+        margin-left: 0;
+    }
+}
+

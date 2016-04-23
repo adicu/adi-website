@@ -6,8 +6,8 @@
 """
 
 from flask import Blueprint, render_template, abort, redirect, url_for
-
-from app.models import BlogPost, Tag
+from eventum.models import BlogPost, Tag
+from datetime import datetime
 
 blog = Blueprint('blog', __name__)
 
@@ -102,6 +102,27 @@ def post(slug):
     if not post.published:
         abort(404)
     return render_template('blog/post.html',
+                           post=post,
+                           recent_posts=recent_posts,
+                           related_posts=related_posts)
+
+
+@blog.route('/blog/post/preview/<slug>', methods=['GET'])
+def preview(slug):
+    if BlogPost.objects(slug=slug).count() != 1:
+        abort(404)
+    post = BlogPost.objects().get(slug=slug)
+    if not post.date_published:
+        post.date_published = datetime.now()  # just used as placeholder to
+        # display in preview. Does not get saved to db.
+
+    recent_posts = BlogPost.objects(published=True,
+                                    id__ne=post.id,
+                                    featured_image__ne=None)\
+        .order_by('-date_published')[:3]
+
+    related_posts = post.get_related_posts()[:3]
+    return render_template('blog/preview.html',
                            post=post,
                            recent_posts=recent_posts,
                            related_posts=related_posts)

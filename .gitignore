@@ -1,31 +1,27 @@
 # Folders
 /app/static/css/gen
-/app/static/img/uploaded/*
-!/app/static/img/uploaded/README.md
-/app/static/img/uploaded/*
+/app/static/img/uploaded/
 /lib
 /local
 /log/*
 /bin
 /include
-tmp
 /man
 /share
 *.pyc
 *.swp
+*.log
 .Python
 .vagrant
 
+*.egg-info
+
 # Secrets / Authentication
-settings.dev
-settings.prod
-setup_consul_dev.sh
-setup_consul_prod.sh
+secrets.dev
+secrets.prod
 installed_app_client_secrets.json
 installed_app_credentials.json
 client_secrets.json
-credentials.json
-consul_data
 
 # SCSS
 .webassets-cache

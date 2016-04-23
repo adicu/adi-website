@@ -109,7 +109,7 @@ class TestModelEvent(TestingTemplate):
         """Test that :func:`~app.models.Event.human_readable_datetime` properly
         formats event dates and times into human readable date/time strings.
         """
-        from app.models import Event
+        from eventum.models import Event
         for (start_date,
                 start_time,
                 end_date,
@@ -129,7 +129,7 @@ class TestModelEvent(TestingTemplate):
         """Test that :func:`~app.models.Event.human_readable_date` properly
         formats event dates into human readable date strings.
         """
-        from app.models import Event
+        from eventum.models import Event
         for event_date, string in self.DATES:
             event = Event(start_date=event_date,
                           start_time=None,
@@ -145,7 +145,7 @@ class TestModelEvent(TestingTemplate):
         """Test that :func:`~app.models.Event.human_readable_time` properly
         formats event times into human readable time strings.
         """
-        from app.models import Event
+        from eventum.models import Event
         any_date = date(2015, 03, 31)
         for start_time, end_time, string in self.TIMES:
             event = Event(start_date=any_date,
@@ -160,7 +160,7 @@ class TestModelEvent(TestingTemplate):
 
     def test_event_ending_on_midnight(self):
         """Test that events ending on midnight are properly formatted."""
-        from app.models import Event
+        from eventum.models import Event
         start_date, start_time = date(2015, 03, 31), time(22)
         end_date, end_time = date(2015, 04, 01), time(0)
 
@@ -176,7 +176,7 @@ class TestModelEvent(TestingTemplate):
 
     def test_event_starting_on_midnight(self):
         """Test that events starting on midnight are properly formatted."""
-        from app.models import Event
+        from eventum.models import Event
         start_date, start_time = date(2015, 04, 01), time(00)
         end_date, end_time = date(2015, 04, 01), time(05, 30)
 
