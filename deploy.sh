@@ -4,13 +4,6 @@ ADI_WWWW=/srv/adi-website/www
 DOCKERFILE=Dockerfile
 NAME="adi-website"
 
-# Validate nginx configurations
-nginx -t
-if [ $? -ne 0 ]; then
-    echo "Nginx config failed!"
-    exit
-fi
-
 # Kill the old container
 docker kill $NAME
 docker rm $NAME

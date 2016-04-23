@@ -4,43 +4,14 @@
 
 [ADI][adi] is the tech club at [Columbia][columbia].  The ADI website is built on [Eventum][eventum], a content management system for an event-driven blog that syncs with Google Calendar.
 
-## Stack
-- Built in [Flask][flask]
-- [Flask-Mongoengine][flask-mongoengine] and [Mongoengine][mongoengine] are used to interface with [MongoDB][mongodb]  
-- Authentication is done with [Google+ server-side flow][google-plus-server-side-flow]
-- Forms and validation are done through [Flask-WTForms][flask-wtforms] and [WTForms][wtforms]
-- CSS is generated from [SCSS][scss] and managed with [Flask-Assets][flask-assets]
-- Configurations are managed using [Consul][consul].
-- Development is done using [Vagrant][vagrant].
-- Deployment is done using [Docker][docker].
-
 ## First-Time Setup
 
-Eventum can be run locally on your machine, or in a virtual environment, using [Vagrant][vagrant].  Default to use Vagrant, unless you have some reason to run Eventum locally.
-
-#### Using Vagrant 
+The ADI website runs natively on Linux and OSX.  To get it up an running, follow these steps:
 
 1.  Generate secrets files:
-    - **ADI:** Download the [ADI website secrets][adi-website-secrets] from GitHub. Unzip the folder, and copy its **contents** into the `config` directory.  
+    Download the [ADI website secrets][adi-website-secrets] from GitHub. Unzip the folder, and copy its **contents** into the `config` directory.  
 
-        > If the link gives a 404 error, ask someone within the ADI GitHub organization for access
-    
-    - **non-ADI:** Copy `config/setup_consul_no_secrets.sh` to `config/setup_consul_dev.sh`, and fill in the four parameters that are set to empty strings.  Then, either setup Google Auth yourself, or [disable it](#disabling-google-auth).
-
-2. Install [Virtual box](https://www.virtualbox.org/wiki/Downloads).
-
-3. Once Vagrant is installed, install [Vagrant][vagrant-install].
-
-#### Without Vagrant
-
-Eventum runs natively on Linux and OSX.  To get it up an running, follow these steps:
-
-1.  Generate secrets files:
-    - **ADI:** Download the [ADI website secrets][adi-website-secrets] from GitHub. Unzip the folder, and copy its **contents** into the `config` directory.  
-
-        > If the link gives a 404 error, ask someone within the ADI GitHub organization for access
-    
-    - **non-ADI:** Copy `config/setup_consul_no_secrets.sh` to `config/setup_consul_dev.sh`, and fill in the four parameters that are set to empty strings.  Then, either setup Google Auth yourself, or [disable it](#disabling-google-auth).
+    > If the link gives a 404 error, ask someone within the ADI GitHub organization for access
     
 2.  Install [MongoDB][mongodb] ([Ubuntu Linux][mongodb-linux], [OSX][mongodb-osx]).
 
@@ -51,72 +22,126 @@ Eventum runs natively on Linux and OSX.  To get it up an running, follow these s
     sudo pip install virtualenv
     ```
 
-4.  Install [Consul][consul-install].
-
-5.  Install SASS gem `gem install sass`
+4.  Install SASS gem `gem install sass`
     
     > Otherwise, you will see an intermittent `OSError` 
 
 ## Developing
 
-#### Using Vagrant
-
 ```bash
-vagrant up                      # Wait for installation
-vagrant ssh                     # Enter your virtual machine
-cd /vagrant                     # Enter your project directory
-./config/setup_consul_dev.sh    # Populate Consul with values
-python run.py                   # Run the application
-```
-
-Finally, go to `localhost:5000` in your web browser.
-
-#### Without Vagrant
-
-```bash
-./develop.sh                    # MongoDB, Consul, and Pip
-source bin/activate             # Enter the virtual environment
-./config/setup_consul_dev.sh    # Populate Consul with values
-python run.py                   # Run the application
+./develop.sh                  # Setup MongoDB, Virtualenv, and Pip
+source bin/activate           # Enter the virtual environment
+source config/secrets.dev     # Set your enviornment variables to "development"
+python run.py                 # Run the application
 ```
 
 Finally, go to `localhost:5000` in your web browser.
 
 #### Disabling Google Auth
 
-It is possible to run Eventum without logging in using Google+ or authenticating with Google Calendar.  To do so, edit `config/setup_consul_dev.sh` and change the line:
+It is possible to run Eventum without logging in using Google+ or authenticating with Google Calendar.  To do so, edit `config/secrets.dev` and change the line:
 
 ```bash
-consul_set GOOGLE_AUTH_ENABLED 'FALSE'
+export EVENTUM_GOOGLE_AUTH_ENABLED='TRUE'
 ```
 
 to:
 
 ```bash
-consul_set GOOGLE_AUTH_ENABLED 'TRUE'
+export EVENTUM_GOOGLE_AUTH_ENABLED='FALSE'
 ```
 
-Then, re-run the consul configurations:
+Then, reset the environment variables:
 
 ```bash
-./config/setup_consul_dev.sh    # Populate Consul with values
+source config/secrets.dev     # Set your enviornment variables to "development"
 ```
 
-## Documentation
+#### Developing with [Eventum][eventum]
 
-Eventum uses [Sphinx](http://sphinx-doc.org/) to compile documentation to an HTML website.  This documentation is generated from the source code.
+Eventum is the content management system (CMS) that we use to create and edit events, blog posts, user accounts, and more. Eventum is a python package that lives at a different GitHub repository.  If you want to make changes to our admin interface (anything at under `/admin`), you will have to work on both repositories at the same time.  Here's how:
 
-First, enter your development environment.  See "Developing" for more.  Then, generate the docs:
+1. Clone both repositories from the same folder. You will now have an `adi-website` folder and an `eventum` folder next to each other.
+
+2. Open two terminal windows:
+
+    **Terminal window 1**
+
+    ```bash
+    cd adi-website
+    ./develop.sh                  # Setup MongoDB, Virtualenv, and Pip
+    source bin/activate           # Enter the virtual environment
+    source config/secrets.dev     # Set your enviornment variables
+    cd ../eventum
+    python setup.py develop       # Use this local version of Eventum.
+    ```
+
+    This last command will run once and exit. But if it runs without errors, ADI Website will use the local version of the `eventum` package.  If you make changes in the `/eventum` folder, they will be reflected live.
+
+    **Terminal window 2**
+
+    ```bash
+    cd adi-website
+    source bin/activate           # Enter the virtual environment
+    python run.py                 # Run the ADI Website.
+    ```
+
+## Deployment
+
+_Note: In order to deploy the ADI website, you must have SSH access to our DigitalOcean server (instructions below)._
+
+First, add our DigitalOcean server as a Git remote:
 
 ```bash
-cd docs
-make html                       # Generate docs in /docs/_build/html
-cd _build/html
-python -m SimpleHTTPServer .    # Host the docs on localhost:8000
+git remote add deploy adi-webiste:~/adi-website.git
 ```
 
+Then, you should be able to deploy using Git:
+
+```bash
+git push deploy master
+```
+
+#### Getting SSH Access
+
+1. You need SSH keys. [Check for existing keys](https://help.github.com/articles/checking-for-existing-ssh-keys/) and if you don't have an `~/.ssh/id_rsa` file and a `~/.ssh/id_rsa.pub` file, [create them](https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/#generating-a-new-ssh-key).
+
+2. Next, create or edit `~/.ssh/config`.  Add the following lines:
+
+    ```
+    Host adi-website
+      HostName 162.243.116.41
+      User root
+      IdentityFile ~/.ssh/id_rsa
+    ```
+
+    This creates an ssh alias called `adi-website`, that allows us to easily log into this server.
+
+3. Next, send your public key (`~/.ssh/id_rsa.pub`) to someone who has access to the server.
+
+    > Protip, you can type `cat ~/.ssh/id_rsa.pub | pbcopy` to copy it to your clipboard.
+
+4. On the server, they should append your public key to the `~/.ssh/authorized_keys` file.
+
+5. Then you should be done!  To test it out, try logging in:
+
+    ```
+    ssh adi-website
+    ```
+    
+    You shouldn't need any password or any additional steps.
+
+#### How our deployment works:
+
+Here's a short intro into what happens when you type `git push deploy master`.
+
+1. The lastest changes are pushed to our DigitalOcean server, into a git repo located at `~/adi-website.git`.
+2. Once that git repo receives the changes, it runs a script we wrote, called `~/adi-website.git/hooks/post-receive`.  This script copies the latest changes into the folder where the live code is (`/srv/adi-website/www/`).
+3. Then, that script changes directory to the root of our project, and runs `./deploy.sh`, which kills the live docker container, and builds a new one with the new code.
 
 ## Testing
+
+#### _Warning: Our tests need some love, and may be broken..._
 
 Tests live in the `test` directory, and can be run via `nosetests`.  We also use `flake8` for linting `.py` files.
 
@@ -127,16 +152,22 @@ flake8 app config test script   # Run the flake8 linter on our python files
 nosetests --with-progressive    # Run test scripts
 ```
 
-## Organization / Structure
+## About ADI Website
+
+#### Tech Stack
+- Built in [Flask][flask], using [Eventum][eventum] as a CMS.
+- [Flask-Mongoengine][flask-mongoengine] and [Mongoengine][mongoengine] are used to interface with [MongoDB][mongodb]  
+- Authentication is done with [Google+ server-side flow][google-plus-server-side-flow]
+- Forms and validation are done through [Flask-WTForms][flask-wtforms] and [WTForms][wtforms]
+- CSS is generated from [SCSS][scss] and managed with [Flask-Assets][flask-assets]
+- Deployment is done using [Docker][docker].
+
+#### Organization / Structure
 
 ```bash
 .
 ├── .travis.yml      # Configurations for Travis-CI continuous integration
 ├── app              # All code related to the running of the app
-│   ├── forms        # Flask-WTForms models, used for generating forms in 
-│   │                #     HTML and validating input
-│   ├── lib          # Misc helpers, tasks, and modular libraries
-│   ├── models       # Mongoengine Models
 │   ├── routes       # All Flask routes, using Blueprints
 │   ├── static       # Static files.  Note: All files in here are public
 │   │   ├── css      # CSS
@@ -147,26 +178,20 @@ nosetests --with-progressive    # Run test scripts
 │   │   └── scss     # Stylesheets
 │   ├── templates    # HTML templates
 │   └── __init__.py  # All app-wide setup.  Called by `run.py`
-├── authorize.py     # Used for authorizing the app with Google Calendar
 ├── config           # Configuration files
 ├── data             # Backup data
-├── deploy.sh        # Run on our deployment server to deploy a new version
+├── deploy.sh        # Run by our deployment server to deploy a new version
 ├── develop.sh       # Used for non-Vagrant local Development
 ├── Dockerfile       # Holds Docker configurations
-├── docs             # Eventum documentation, generated using Sphinx
-├── log              # Log Files
 ├── manage.py        # Various scripts. Run `python manage.py` to view usage
 ├── run.py           # Runs the app!
 ├── script           # Scripts run by `manage.py` outside of the app
-├── test             # Unit tests
-└── Vagrantfile      # Configurations for Vagrant
+└── test             # Unit tests
 ```
 
 [adi]: https://adicu.com
 [adi-website-secrets]: https://github.com/adicu/secrets/raw/master/adi-website/config.zip
 [columbia]: http://www.columbia.edu
-[consul]: https://www.consul.io
-[consul-install]: https://www.consul.io/intro/getting-started/install.html
 [docker]: http://www.docker.com/
 [eventum]: https://github.com/danrschlosser/eventum
 [flask]: http://flask.pocoo.org/
