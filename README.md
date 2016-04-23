@@ -4,6 +4,8 @@
 
 [ADI][adi] is the tech club at [Columbia][columbia].  The ADI website is built on [Eventum][eventum], a content management system for an event-driven blog that syncs with Google Calendar.
 
+![](https://static.schlosser.io/ss/adi/website.png)
+
 ## First-Time Setup
 
 The ADI website runs natively on Linux and OSX.  To get it up an running, follow these steps:
