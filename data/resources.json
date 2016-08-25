@@ -573,6 +573,19 @@
       ]
     },
     {
+      "name": "Machine Learning",
+      "id": "machine-learning",
+      "description": "Make your computer smarter and create Skynet. Alternatively, you could also identify cat images in videos.",
+      "resources": [
+        {
+          "name": "Accessible ML: Dimensionality Reduction",
+          "url": "http://bitly.com/adi-pca-slides",
+          "description": "An introduction to dimensionality reduction using PCA (Principal Components Analysis) so that you can run your ML agorithms on your massive datasets.",
+          "adi": true
+        }
+      ]
+    },
+    {
       "name": "Interview Prep",
       "id": "data-structures",
       "description": "Data structures and algorithms are essential for your general computer science knowledge, solving problems, and acing your technical interviews.",
