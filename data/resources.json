@@ -578,6 +578,12 @@
       "description": "Data structures and algorithms are essential for your general computer science knowledge, solving problems, and acing your technical interviews.",
       "resources": [
         {
+          "name": "Data Structures for Interviews 2.0",
+          "url": "http://www.raymondxu.io/datastructures.pdf",
+          "description": "An overview of all the essential data structures for interviews, complete with practice problems and common interview themes.",
+          "adi": true
+        },
+        {
           "name": "Data Structures for Interviews",
           "url": "http://www.columbia.edu/~jxz2101/",
           "description": "Assumes you already know Java, and gives a solid run down for data structures and algorithms in presentation format.",
