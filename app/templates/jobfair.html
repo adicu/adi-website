@@ -15,11 +15,11 @@
             </div>
             <p>
                 <i class="fa fa-calendar"></i><!-- Fix space on inline-block elements, do not remove
-             -->Sunday, October 11th
+             -->Friday, October 7th
             </p>
             <p>
                 <i class="fa fa-clock-o"></i><!-- Fix space on inline-block elements, do not remove
-             -->2:00-6:00pm
+             -->12:00-4:00pm
             </p>
             <p>
                 <i class="fa fa-map-marker"></i><!-- Fix space on inline-block elements, do not remove
@@ -28,9 +28,9 @@
             </p>
         </div>
         <div class="text">
-            <p>Interested in getting a job or internship at a startup?  Join ADI at the 4th annual Startup Career Fair to meet some of the most exciting tech startups.</p>
-            <p>Bring your resumes!  Last year over 400 Columbia students met 20 tech startups and this year it's going to be even better.  Engineers will tell you about what it's like to work at a tech startup, and can even give you tips for how to interview and get a job!</p>
-            <p>Registration is open now.</p>
+            <p>Interested in getting a job or internship at a startup?  Join ADI at our 5th annual Startup Career Fair to meet some of the most exciting tech startups around&mdash;and make sure to bring a resume!</p>
+            <p>Last year over 400 Columbia students met 21 tech startups and this year it's going to be even better.  Engineers will tell you about what it's like to work at a tech startup, and can give you tips for how to interview and get a job!</p>
+            <p>Registration will open soon.</p>
         </div>
    </div>
 </section>
@@ -42,18 +42,12 @@
                     <h4>Register</h4>
                     <span class="bar gray"></span>
                 </div>
-                <h3>Interested in attending? Registration for the 2015 Startup Career Fair below!</h3>
-                <div class="button-group">
-                    <div class="button gray">
-                        <a href="http://bit.ly/startupcareerfair2015">Register Today</a>
-                    </div>
-                </div>
+                <h3>Interested in attending the 2016 Startup Career fair? Check back soon to register!</h3>
             </div>
             <div class="callout-right">
                 <div class="card">
-                    <a href="http://bit.ly/startupcareerfair2015">
-                        <i style="background-image:url({{ url_for('static', filename='img/jobfair/cc_welcome.jpg') }})"></i>
-                    </a>
+                    <!-- TODO once 2016 form has been created: make this image a link to the form -->
+                    <i style="background-image:url({{ url_for('static', filename='img/jobfair/cc_welcome.jpg') }})"></i>
                 </div>
             </div>
         </div>
@@ -62,10 +56,10 @@
 <section>
     <div class="content companies">
         <div class="section-header">
-            <h4>Companies</h4>
+            <h4>Past Companies</h4>
             <span class="bar blue"></span>
         </div>
-        <h3>Here are the confirmed attendees of our 2015 fair! Click to read more about them. </h3>
+        <h3>Here's a sample of past attendees. If you're a company interested in participating this year, <a href="mailto:hello@adicu.com">get in touch with us</a>!</h3>
         {% for triple in range(((companies|length) // 3) + 1) %}
             <div class="triple">
             {% for i in range(3) %}
