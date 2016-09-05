@@ -19,5 +19,4 @@ before_script:
   - mkdir log
 script:
   - flake8
-  - nosetests
-
+  - pytest --verbose app/

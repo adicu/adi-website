@@ -14,6 +14,8 @@ MONGODB_SETTINGS = {
     'DB': environ.get('MONGODB_DB', 'eventum')
 }
 
+TESTING = environ.get("TESTING", "FALSE") == "TRUE"
+
 ######################
 # ADI configurations #
 ######################
