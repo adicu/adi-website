@@ -8,10 +8,8 @@
 .. moduleauthor:: Dan Schlosser <dan@danrs.ch>
 """
 
-import json
 from flask import Flask
 from flask.ext.assets import Environment, Bundle
-from webassets.filter import get_filter
 from eventum import Eventum
 
 
@@ -40,10 +38,6 @@ def create_app(**config_overrides):
 
     # Eventum
     eventum = Eventum(app)
-
-    # # Augment Models
-    # from app.models import augment_models
-    # augment_models()
 
     # Blueprints
     register_blueprints()
@@ -80,6 +74,7 @@ def register_scss(assets):
                     depends=('**/*.scss'),
                     filters=('scss', 'cssmin'))
     assets.register('scss_client', bundle)
+
 
 def run():
     """Runs the app."""

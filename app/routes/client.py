@@ -34,7 +34,6 @@ def index():
 
     **Methods:** ``GET``
     """
-    this_moment = datetime.now().time()
     # cast date.today() to a datetime
     today = datetime.combine(date.today(), datetime.min.time())
 
@@ -42,8 +41,6 @@ def index():
     # published, and should be chronological.
     # We limit to four events, one large event and one set of three events.
     events = (Event.objects(Q(end_date__gte=today))
-                            # |
-                            # Q(end_date=today, end_time__gt=this_moment)) #
                    .filter(published=True)
                    .order_by('start_date', 'start_time')
                    .limit(ONE_LARGE_AND_TRIPLE))
