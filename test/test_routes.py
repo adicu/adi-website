@@ -4,8 +4,9 @@
 
 .. moduleauthor:: Dan Schlosser <dan@danrs.ch>
 """
+from __future__ import absolute_import
 
-from base import TestingTemplate
+from .base import TestingTemplate
 
 
 class TestRoutes(TestingTemplate):

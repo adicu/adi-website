@@ -24,63 +24,59 @@ class TestModelEvent(TestingTemplate):
 
     DATETIMES = [
         (   # Multi-day event
-            date(2015, 03, 31), time(23),
-            date(2015, 04, 01), time(03),
+            date(2015, 3, 31), time(23),
+            date(2015, 4, 1), time(3),
             'Tuesday, March 31 11pm - Wednesday, April 1 3am'
         ),
         (   # Multi-day event that shares am/pm
-            date(2015, 03, 31), time(23),
-            date(2015, 04, 01), time(23),
+            date(2015, 3, 31), time(23),
+            date(2015, 4, 1), time(23),
             'Tuesday, March 31 11pm - Wednesday, April 1 11pm'
         ),
         (   # Single day event
-            date(2015, 03, 31), time(11, 00),
-            date(2015, 03, 31), time(14, 15),
+            date(2015, 3, 31), time(11, 0),
+            date(2015, 3, 31), time(14, 15),
             'Tuesday, March 31 11am-2:15pm'
         ),
         (   # Single day event that shares am/pm
-            date(2015, 03, 31), time(15, 00),
-            date(2015, 03, 31), time(19, 30),
+            date(2015, 3, 31), time(15, 0),
+            date(2015, 3, 31), time(19, 30),
             'Tuesday, March 31 3-7:30pm'
         ),
         (   # None start date
             None, time(23),
-            date(2015, 04, 01), time(03),
+            date(2015, 4, 1), time(3),
             '???, ??/?? 11pm - Wednesday, April 1 3am'
         ),
         (   # None start time
-            date(2015, 03, 31), None,
-            date(2015, 04, 01), time(03),
+            date(2015, 3, 31), None,
+            date(2015, 4, 1), time(3),
             'Tuesday, March 31 ??:?? - Wednesday, April 1 3am'
         ),
         (   # None end date
-            date(2015, 03, 31), time(23),
-            None, time(03),
+            date(2015, 3, 31), time(23), None, time(3),
             'Tuesday, March 31 11pm - ???, ??/?? 3am'
         ),
         (   # None start time
-            date(2015, 03, 31), time(23),
-            date(2015, 04, 01), None,
+            date(2015, 3, 31), time(23), date(2015, 4, 1), None,
             'Tuesday, March 31 11pm - Wednesday, April 1 ??:??'
         ),
         (   # Single day event with None start time
-            date(2015, 03, 31), None,
-            date(2015, 03, 31), time(19, 30),
+            date(2015, 3, 31), None, date(2015, 3, 31), time(19, 30),
             'Tuesday, March 31 ??:??-7:30pm'
         ),
         (   # Single day event with None end time
-            date(2015, 03, 31), time(15, 00),
-            date(2015, 03, 31), None,
+            date(2015, 3, 31), time(15, 0), date(2015, 3, 31), None,
             'Tuesday, March 31 3pm-??:??'
         ),
     ]
 
     DATES = [
         (   # Some date
-            date(2015, 03, 31), 'Tuesday, March 31'
+            date(2015, 3, 31), 'Tuesday, March 31'
         ),
         (   # Some other date
-            date(2015, 04, 01), 'Wednesday, April 1'
+            date(2015, 4, 1), 'Wednesday, April 1'
         ),
         (   # Missing date
             None, '??? ??/??'
@@ -89,13 +85,13 @@ class TestModelEvent(TestingTemplate):
 
     TIMES = [
         (   # Not sharing am/pm
-            time(23), time(03, 30), '11pm-3:30am'
+            time(23), time(3, 30), '11pm-3:30am'
         ),
         (   # Sharing am/pm
             time(21), time(22), '9-10pm'
         ),
         (   # Missing start time
-            None, time(03, 30), '??:??-3:30am'
+            None, time(3, 30), '??:??-3:30am'
         ),
         (   # Missing end time
             time(23), None, '11pm-??:??'
@@ -146,7 +142,7 @@ class TestModelEvent(TestingTemplate):
         formats event times into human readable time strings.
         """
         from eventum.models import Event
-        any_date = date(2015, 03, 31)
+        any_date = date(2015, 3, 31)
         for start_time, end_time, string in self.TIMES:
             event = Event(start_date=any_date,
                           start_time=start_time,
@@ -161,8 +157,8 @@ class TestModelEvent(TestingTemplate):
     def test_event_ending_on_midnight(self):
         """Test that events ending on midnight are properly formatted."""
         from eventum.models import Event
-        start_date, start_time = date(2015, 03, 31), time(22)
-        end_date, end_time = date(2015, 04, 01), time(0)
+        start_date, start_time = date(2015, 3, 31), time(22)
+        end_date, end_time = date(2015, 4, 1), time(0)
 
         event = Event(start_date=start_date,
                       start_time=start_time,
@@ -177,8 +173,8 @@ class TestModelEvent(TestingTemplate):
     def test_event_starting_on_midnight(self):
         """Test that events starting on midnight are properly formatted."""
         from eventum.models import Event
-        start_date, start_time = date(2015, 04, 01), time(00)
-        end_date, end_time = date(2015, 04, 01), time(05, 30)
+        start_date, start_time = date(2015, 4, 1), time(00)
+        end_date, end_time = date(2015, 4, 1), time(5, 30)
 
         event = Event(start_date=start_date,
                       start_time=start_time,

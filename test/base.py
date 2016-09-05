@@ -6,6 +6,7 @@
 
 .. moduleauthor:: Dan Schlosser <dan@danrs.ch>
 """
+from __future__ import print_function
 
 import unittest
 import os
@@ -100,10 +101,10 @@ class TestingTemplate(unittest.TestCase):
             pass
         cov.stop()
         cov.save()
-        print "\n\nCoverage Report:\n"
+        print("\n\nCoverage Report:\n")
         cov.report()
-        print "HTML version: " + \
-            os.path.join(config['BASEDIR'], "tmp/coverage/index.html")
+        print("HTML version:",
+              os.path.join(config['BASEDIR'], "tmp/coverage/index.html"))
         cov.html_report(directory='tmp/coverage')
         cov.erase()
 
