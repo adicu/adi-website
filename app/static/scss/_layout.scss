@@ -349,6 +349,10 @@ $top-card-padding: 4rem 0 2.5rem;
         width: 20rem;
         margin-bottom: 2rem;
     }
+
+    &.borderless {
+        padding: 0 !important;
+    }
 }
 .button-group {
     margin: 1rem 0;

@@ -1,0 +1,68 @@
+{% extends "page.html" %}
+{% block title %}Foundry | {{ super() }}{% endblock %}
+
+{% block header_image %}/static/img/hero/mentorship.jpg{% endblock %}
+
+{% block main %}
+<section class="card top-card">
+    <div class="content">
+        <h1 class="page-title">CS Mentorship Program</h1>
+        <div class="section-header">
+            <h4>About</h4>
+            <span class="bar blue"></span>
+        </div>
+    </div>
+    <div class="content">
+        <h3>The Columbia CS Mentorship Program pairs students interested in computer science & technology with passionate and experienced students in a wide array of fields. Pairs are chosen based on the compatibility of the mentor and mentee’s personal, academic, and professional interests. Our goal is to foster a strong network and support system for students within the greater CS community at Columbia. The events help students learn about what it's like to be a CS major on campus, meet peers of diverse backgrounds within the CS community to earn advice, and build friendships!</h3>
+
+		<h3>Mentees are generally first- and second-years, while mentors can be anyone with experience who is willing provide one-on-one feedback with mentees.</h3>
+    </div>
+</section>
+<section class="callout borderless">
+    <div class="full yellow">
+        <div class="content">
+            <div class="callout-left">
+                <div class="section-header">
+                    <h4>Mentors</h4>
+                    <span class="bar gray"></span>
+                </div>
+                <h3>Interested in helping students learn more about the wonderful world of CS at Columbia? Apply now!</h3>
+                <div class="button-group">
+                    <div class="button gray"><a target="_blank" href="http://adicu.us4.list-manage1.com/track/click?u=62d8b690f349b99dd7e0f3205&id=69125ce317&e=4e3399353f">Apply</a></div>
+                </div>
+            </div>
+            <div class="callout-right">
+                <div class="card">
+                    <a href="http://adicu.us4.list-manage1.com/track/click?u=62d8b690f349b99dd7e0f3205&id=69125ce317&e=4e3399353f">
+                        <i style="background-image:url({{ url_for('static', filename='img/hero/test7.jpg') }})"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="callout borderless">
+    <div class="full blue">
+        <div class="content">
+            <div class="callout-left">
+                <div class="section-header">
+                    <h4>Mentees</h4>
+                    <span class="bar gray"></span>
+                </div>
+                <h3>Want to meet other budding CS students and learn from seasoned Columbia programmers? Apply now!</h3>
+                <div class="button-group">
+                    <div class="button gray"><a target="_blank" href="http://adicu.us4.list-manage.com/track/click?u=62d8b690f349b99dd7e0f3205&id=185b39b1c4&e=4e3399353f">Apply</a></div>
+                </div>
+            </div>
+            <div class="callout-right">
+                <div class="card">
+                    <a href="http://adicu.us4.list-manage.com/track/click?u=62d8b690f349b99dd7e0f3205&id=185b39b1c4&e=4e3399353f">
+                        <i style="background-image:url({{ url_for('static', filename='img/hero/circle.jpg') }})"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock main %}

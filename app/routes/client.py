@@ -102,6 +102,16 @@ def foundry():
 
     return render_template('foundry.html')
 
+@client.route('/mentorship', methods=['GET'])
+def mentorship():
+    '''View information about mentorship program
+    **Route:** ``/mentorship``
+
+    **Methods:** ``GET``
+    '''
+
+    return render_template('mentorship.html')
+
 
 @client.route('/jobfair', methods=['GET'])
 def jobfair():
