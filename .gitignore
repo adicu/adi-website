@@ -13,6 +13,9 @@
 *.log
 .Python
 .vagrant
+venv/
+
+.cache
 
 *.egg-info
 

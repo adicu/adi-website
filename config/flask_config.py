@@ -14,6 +14,8 @@ MONGODB_SETTINGS = {
     'DB': environ.get('MONGODB_DB', 'eventum')
 }
 
+TESTING = environ.get("TESTING", "FALSE") == "TRUE"
+
 ######################
 # ADI configurations #
 ######################
@@ -44,5 +46,7 @@ EVENTUM_CLIENT_SECRETS_PATH = environ.get('EVENTUM_CLIENT_SECRETS_PATH',
 EVENTUM_PRIVATE_CALENDAR_ID = environ.get('EVENTUM_PRIVATE_CALENDAR_ID', None)
 EVENTUM_PUBLIC_CALENDAR_ID = environ.get('EVENTUM_PUBLIC_CALENDAR_ID', None)
 
-EVENTUM_UPLOAD_FOLDER = environ.get('EVENTUM_UPLOAD_FOLDER', 'app/static/img/uploaded/')
-EVENTUM_DELETE_FOLDER = environ.get('EVENTUM_DELETE_FOLDER', 'app/static/img/uploaded/deleted/')
+EVENTUM_UPLOAD_FOLDER = environ.get('EVENTUM_UPLOAD_FOLDER',
+                                    'app/static/img/uploaded/')
+EVENTUM_DELETE_FOLDER = environ.get('EVENTUM_DELETE_FOLDER',
+                                    'app/static/img/uploaded/deleted/')
