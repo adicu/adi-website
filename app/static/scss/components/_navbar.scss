@@ -30,21 +30,65 @@ $speed: 0.3s;
     .right {
         float: right;
     }
-    ul {
+    .menu {
         font-size: 0;
         li {
             font-size: 1rem;
+        }
+
+        > li {
             display: inline-block;
-            a div {
+            div {
                 @include transition($speed);
                 padding: 0 1.25rem;
                 height: $navbar-height;
                 line-height: $navbar-height;
             }
+
+            &.navbar-dropdown {
+                position: relative;
+                .dropdown-items {
+                    @include shadow;
+                    position: absolute;
+                    display: none;
+                    left: 0;
+                    overflow: visible;
+                    white-space: nowrap;
+
+                    &:before {
+                        position: absolute;
+                        left: -0.5rem;
+                        right: -0.5rem;
+                        top: -0.5rem;
+                        height: 0.5rem;
+                        background-color: $white;
+                        content: ' ';
+                        display: block;
+                    }
+
+                    li {
+                        background-color: $white;
+                        display: block;
+
+                        a div {
+                            line-height: 3rem;
+                            height: 3rem;
+                        }
+                    }
+                }
+
+                &:hover {
+                    .dropdown-items {
+                        display: block;
+                    }
+                }
+            }
+
+            &:last-child a div {
+                margin-right: -1.25rem;
+            }
         }
-        li:last-child a div {
-            margin-right: -1.25rem;
-        }
+
     }
 
     a, a:hover {
@@ -62,9 +106,14 @@ $speed: 0.3s;
             top: 0;
         }
 
-        ul li{
-            a div {
+        .menu > li {
+            div {
                 padding: 0 0.75rem;
+            }
+
+            &.navbar-dropdown .dropdown-items li a div {
+                line-height: 4rem;
+                height: 4rem;
             }
 
             &:last-child a div {

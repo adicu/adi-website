@@ -14,11 +14,24 @@
 <link href='//fonts.googleapis.com/css?family=Roboto+Slab|Merriweather+Sans:300,400,700,400italic' rel='stylesheet' type='text/css'>
 {% endblock %}
 
-{% set navbar_items = [('Events', '/events'),
-('Resources', '/resources'),
-('Labs', '/labs'),
-('Blog', '/blog'),
-('Contact', '/contact')] %}
+{% set navbar_items = [
+    ('Events', [
+        ('Weekly Events', '/events'),
+        ('DevFest', 'http://devfe.st'),
+        ('Startup Career Fair', '/jobfair'),
+    ]),
+    ('Resources', [
+        ('Learn to Code', '/resources'),
+        ('README', 'http://readme.adicu.com')
+    ]),
+    ('Programs', [
+        ('Labs', '/labs'),
+        ('JADE', '/jade'),
+        ('Foundry', '/foundry'),
+        ('Mentorship', '/mentorship'),
+    ]),
+    ('Contact', '/contact')
+] %}
 
 {%- block body -%}
 <div class="all-wrapper">
