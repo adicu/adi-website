@@ -95,7 +95,7 @@ _Note: In order to deploy the ADI website, you must have SSH access to our Digit
 First, add our DigitalOcean server as a Git remote:
 
 ```bash
-git remote add deploy adi-webiste:~/adi-website.git
+git remote add deploy adi-website:~/adi-website.git
 ```
 
 Then, you should be able to deploy using Git:
