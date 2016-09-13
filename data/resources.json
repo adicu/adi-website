@@ -566,6 +566,12 @@
           "description": "Assumes you already know Java, and teaches you how to write really good Java."
         },
         {
+          "name": "Intermediate Java",
+          "url": "https://github.com/RaymondXu/JavaWorkshop",
+          "description": "Learn about variables, abstraction, and design patterns with this Java workshop. Recommended for 1004 and 1007 students.",
+          "adi": true
+        },
+        {
           "name": "Java Concurrency in Practice",
           "url": "http://www.amazon.com/Java-Concurrency-Practice-Brian-Goetz/dp/0321349601",
           "description": "Java has a battlehardened concurrency library that is very basic and widely imitated. This is the standard book on Java concurrency."
