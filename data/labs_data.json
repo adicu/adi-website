@@ -43,7 +43,7 @@
     "faqs": [
         {
             "question": "Am I qualified enough to be a part of ADI Labs?",
-            "answer": "If you’re planning on writing code during ADI Labs, you should have experience with web apps or mobile apps. For web developers, you should understand how a framework like Flask, Django, or Ruby on Rails works and be able to build a simple website using one of them. For mobile, you should be able to get a simple app up and running. In deciding projects, we will try to put you on a project that matches your skill level."
+            "answer": "If you’re planning on writing code during ADI Labs, you should have experience with data structures and have some exposure to web apps or mobile apps. You'll have to learn how a framework like Flask, Django, or Ruby on Rails works and be able to build a website using one of them. In deciding projects, we will try to put you on a project that matches your skill level. Most importantly, we are looking for strongly committed participants."
         },
         {
             "question": "Is ADI Labs the same as ADI Committee?",
@@ -51,7 +51,7 @@
         },
         {
             "question": "When does ADI Labs meet?",
-            "answer": "Every Friday from 1-5 pm?"
+            "answer": "Every Friday from 2-6 pm. You are expected to attend all of these meetings."
         },
         {
             "question": "Where is Labs located?",
@@ -62,7 +62,7 @@
             "answer": "Yes! ADI Labs is structured to help you achieve your goals and finish a real project. If you already have one in mind, let us know what your idea is in the application. Make sure to flesh out your idea and how you can accomplish it; the more detail the better! However, it is not guaranteed you will get to work on the project you propose."
         },
         {
-            "question": "I don’t program, but I’m interested in design and/or product. Can I also get involved?",
+            "question": "I don’t want to program, but I’m interested in design and/or product. Can I also get involved?",
             "answer": "Yes! When you apply, just indicate in which roles you’d see yourself.  We’ll work with you to place you on a team where you can be most effective!"
         },
         {
