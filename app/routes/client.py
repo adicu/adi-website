@@ -99,6 +99,7 @@ def foundry():
 
     return render_template('foundry.html')
 
+
 @client.route('/mentorship', methods=['GET'])
 def mentorship():
     '''View information about mentorship program
