@@ -181,5 +181,47 @@
             "url":"http://www.zocdoc.com/",
             "image":"img/jobfair/zocdoc.png"
          }
+      ],
+      "2016":[
+         {
+            "url":"http://www.a16z.com/",
+            "image":"img/jobfair/a16z.png"
+         },
+         {
+            "url":"http://www.codecademy.com/",
+            "image":"img/jobfair/codecademy.png"
+         },
+         {
+            "url":"http://www.digitalocean.com/",
+            "image":"img/jobfair/digitalocean.png"
+         },
+         {
+            "url":"http://dots.co/",
+            "image":"img/jobfair/dots.png"
+         },
+         {
+            "url":"http://www.jopwell.com/",
+            "image":"img/jobfair/jopwell.png"
+         },
+         {
+            "url":"http://www.max2.com/",
+            "image":"img/jobfair/max2inc.png"
+         },
+         {
+            "url":"http://www.nylas.com/",
+            "image":"img/jobfair/nylas.png"
+         },
+         {
+            "url":"http://www.skurt.com/",
+            "image":"img/jobfair/skurt.png"
+         },
+         {
+            "url":"https://www.gotinder.com/",
+            "image":"img/jobfair/tinder.png"
+         },
+         {
+            "url":"https://www.wework.com/",
+            "image":"img/jobfair/wework.png"
+         }
       ]
 }

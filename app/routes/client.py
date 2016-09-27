@@ -128,7 +128,7 @@ def _get_companies(force=False):
     global _companies
     if not _companies or force:
         with open(current_app.config['COMPANIES_PATH']) as f:
-            _companies = json.loads(f.read()).get('2015')
+            _companies = json.loads(f.read()).get('2016')
     return _companies
 
 
