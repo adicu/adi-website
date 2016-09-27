@@ -30,7 +30,7 @@
         <div class="text">
             <p>Interested in getting a job or internship at a startup?  Join ADI at our 5th annual Startup Career Fair to meet some of the most exciting tech startups around&mdash;and make sure to bring a resume!</p>
             <p>Last year over 400 Columbia students met 21 tech startups and this year it's going to be even better.  Engineers will tell you about what it's like to work at a tech startup, and can give you tips for how to interview and get a job!</p>
-            <p>Registration will open soon.</p>
+            <p>Register now!</p>
         </div>
    </div>
 </section>
@@ -42,12 +42,18 @@
                     <h4>Register</h4>
                     <span class="bar gray"></span>
                 </div>
-                <h3>Interested in attending the 2016 Startup Career fair? Check back soon to register!</h3>
+                <h3>Interested in attending the 2016 Startup Career fair? Register here!</h3>
+                <div class="button-group">
+                    <div class="button gray">
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLScOaagoj9Wkumq8T__jZ8evxfncVoTkmLfgp_bmHbnsc97OdQ/viewform?c=0&w=1">Register Today</a>
+                    </div>
+                </div>
             </div>
             <div class="callout-right">
                 <div class="card">
-                    <!-- TODO once 2016 form has been created: make this image a link to the form -->
-                    <i style="background-image:url({{ url_for('static', filename='img/jobfair/cc_welcome.jpg') }})"></i>
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLScOaagoj9Wkumq8T__jZ8evxfncVoTkmLfgp_bmHbnsc97OdQ/viewform?c=0&w=1">
+                        <i style="background-image:url({{ url_for('static', filename='img/jobfair/cc_welcome.jpg') }})"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -56,10 +62,10 @@
 <section>
     <div class="content companies">
         <div class="section-header">
-            <h4>Past Companies</h4>
+            <h4>Companies</h4>
             <span class="bar blue"></span>
         </div>
-        <h3>Here's a sample of past attendees. If you're a company interested in participating this year, <a href="mailto:hello@adicu.com">get in touch with us</a>!</h3>
+        <h3>Here are some of the confirmed attendees joining us this year. If you're a company interested in participating, <a href="mailto:hello@adicu.com">get in touch with us</a>!</h3>
         {% for triple in range(((companies|length) // 3) + 1) %}
             <div class="triple">
             {% for i in range(3) %}
