@@ -3,7 +3,7 @@ Jinja2==2.8
 Werkzeug==0.11.11
 coverage==4.2
 cssmin==0.2.0
-eventum==0.2.6
+eventum==0.2.7
 flake8==3.0.4
 flask-mongoengine==0.7.0
 mongoengine==0.10.6
