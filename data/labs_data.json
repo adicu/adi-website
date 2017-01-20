@@ -43,7 +43,7 @@
     "faqs": [
         {
             "question": "Am I qualified enough to be a part of ADI Labs?",
-            "answer": "If you’re planning on writing code during ADI Labs, you should have experience with data structures and have some exposure to web apps or mobile apps. You'll have to learn how a framework like Flask, Django, or Ruby on Rails works and be able to build a website using one of them. In deciding projects, we will try to put you on a project that matches your skill level. Most importantly, we are looking for strongly committed participants."
+            "answer": "If you’re planning on writing code during ADI Labs, you should be familiar with data structures and have some experience building web apps or mobile apps. You'll have to use Python or Javascript with a framework like Flask or Express and be able to build a website using one of them. In deciding projects, we will try to put you on a project that matches your skill level. Most importantly, we are looking for strongly committed participants."
         },
         {
             "question": "Is ADI Labs the same as ADI Committee?",
@@ -55,15 +55,7 @@
         },
         {
             "question": "Where is Labs located?",
-            "answer": "In the basement of the SIC House located at <a href='https://www.google.com/maps/place/619+W+113th+St,+New+York,+NY+10025/@40.8052344,-73.9537331,15z/data=!4m2!3m1!1s0x89c2f63be3e42e45:0xe4dd073599c635a'>619 West 113th Street</a>. You’ll need to be a CC or SEAS undergrad to access it. If you’re a Barnard, GS or graduate student, let us know and we’ll make provisions to sign you in."
-        },
-        {
-            "question": "I want to work on my own project. Can I do that?",
-            "answer": "Yes! ADI Labs is structured to help you achieve your goals and finish a real project. If you already have one in mind, let us know what your idea is in the application. Make sure to flesh out your idea and how you can accomplish it; the more detail the better! However, it is not guaranteed you will get to work on the project you propose."
-        },
-        {
-            "question": "I don’t want to program, but I’m interested in design and/or product. Can I also get involved?",
-            "answer": "Yes! When you apply, just indicate in which roles you’d see yourself.  We’ll work with you to place you on a team where you can be most effective!"
+            "answer": "In the basement of the SIC House located at <a href='https://www.google.com/maps/place/619+W+113th+St,+New+York,+NY+10025/@40.8052344,-73.9537331,15z/data=!4m2!3m1!1s0x89c2f63be3e42e45:0xe4dd073599c635a'>619 West 113th Street</a>. You’ll need to be a CC or SEAS undergrad to access it. If you’re a BC, GS, or graduate student, let us know and we’ll make provisions to sign you in."
         },
         {
             "question": "How much of a time commitment is Labs?",
