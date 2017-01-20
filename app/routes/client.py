@@ -340,11 +340,6 @@ def _upcoming_events_triple(event):
                  .limit(ONE_TRIPLE))
 
 
-@client.route('/jade', methods=['GET'])
-def jade():
-    return render_template('jade.html')
-
-
 # @client.route('/join', methods=['GET'])
 # def gbody():
 #     return render_template('join.html')
