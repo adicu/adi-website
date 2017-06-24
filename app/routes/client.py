@@ -15,7 +15,6 @@ from mongoengine import Q
 client = Blueprint('client', __name__)
 
 _resources = None
-_labs_data = None
 _companies = None
 
 now = datetime.now()
@@ -89,17 +88,6 @@ def feedback():
     return render_template('feedback.html')
 
 
-@client.route('/foundry', methods=['GET'])
-def foundry():
-    '''View information about ADI foundry
-    **Route:** ``/foundry``
-
-    **Methods:** ``GET``
-    '''
-
-    return render_template('foundry.html')
-
-
 @client.route('/mentorship', methods=['GET'])
 def mentorship():
     '''View information about mentorship program
@@ -130,27 +118,6 @@ def _get_companies(force=False):
         with open(current_app.config['COMPANIES_PATH']) as f:
             _companies = json.loads(f.read()).get('2016')
     return _companies
-
-
-@client.route('/labs', methods=['GET'])
-def labs():
-    """View information about ADI Labs
-
-    **Route:** ``/labs``
-
-    **Methods:** ``GET``
-    """
-    force = request.args.get('force') is not None
-    labs_data = _get_labs_data(force=force)
-    return render_template('labs.html', data=labs_data)
-
-
-def _get_labs_data(force=False):
-    global _labs_data
-    if not _labs_data or force:
-        with open(current_app.config['LABS_DATA_PATH']) as f:
-            _labs_data = json.loads(f.read())
-    return _labs_data
 
 
 @client.route('/learn', methods=['GET'])
