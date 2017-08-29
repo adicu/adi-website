@@ -22,6 +22,7 @@ venv/
 # Secrets / Authentication
 secrets.dev
 secrets.prod
+secrets.travis
 installed_app_client_secrets.json
 installed_app_credentials.json
 client_secrets.json
