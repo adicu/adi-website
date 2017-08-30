@@ -1,10 +1,9 @@
-FROM python:2.7-alpine
+FROM python:2.7
 MAINTAINER ADI <hello@adicu.com>
 
-RUN apk update && apk upgrade
-RUN apk add ruby ruby-irb ruby-rdoc
+RUN apt-get update && apt-get upgrade --yes
+RUN apt-get install --yes ruby ruby-dev
 RUN gem install sass
-
 ENV GOOGLE_APPLICATION_CREDENTIALS=./config/adi-secrets.json
 
 
@@ -15,5 +14,5 @@ ADD ./ /deploy
 WORKDIR /deploy
 
 EXPOSE 8181
-CMD source /deploy/config/secrets.prod && \
-       gunicorn run:app -b 0.0.0.0:8181
+CMD /bin/bash -c "source /deploy/config/secrets.prod && \
+       gunicorn run:app -b 0.0.0.0:8181"
