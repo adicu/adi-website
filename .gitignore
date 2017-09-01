@@ -25,6 +25,7 @@ secrets.prod
 installed_app_client_secrets.json
 installed_app_credentials.json
 client_secrets.json
+adi-secrets.json
 
 # SCSS
 .webassets-cache
