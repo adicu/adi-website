@@ -227,5 +227,19 @@
             "url":"https://www.wework.com/",
             "image":"img/jobfair/wework.png"
          }
-      ]
+      ],
+      "2017":[
+         {
+             "url":"http://vimeo.com/",
+             "image":"img/jobfair/vimeo.png"
+         },
+         {
+             "url":"http://www.a16z.com/",
+             "image":"img/jobfair/a16z.png"
+         },
+         {
+             "url":"http://www.lyft.com",
+             "image":"img/jobfair/lyft.png"
+         }
+     ]
 }
